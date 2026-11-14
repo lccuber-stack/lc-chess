@@ -944,6 +944,20 @@
       flex-direction: column;
       gap: 16px;
       touch-action: pan-y;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .modal-card::-webkit-scrollbar,
+    #desktop-move-list::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    #desktop-move-list {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
     .modal-header {
@@ -1601,6 +1615,10 @@
             <span class="persona-name">♟ Andrea Botez</span>
             <span class="persona-elo">1800</span>
           </button>
+          <button class="persona-btn" data-persona="alexandra" data-elo="2050">
+            <span class="persona-name">♜ Alexandra Botez</span>
+            <span class="persona-elo">2050</span>
+          </button>
           <button class="persona-btn" data-persona="anna" data-elo="2100">
             <span class="persona-name">♞ Anna Cramling</span>
             <span class="persona-elo">2100</span>
@@ -1613,7 +1631,7 @@
             <span class="persona-name">♛ Hikaru</span>
             <span class="persona-elo">2800</span>
           </button>
-          <button class="persona-btn" data-persona="magnus" data-elo="2850" style="grid-column: span 2;">
+          <button class="persona-btn" data-persona="magnus" data-elo="2850">
             <span class="persona-name">♚ Magnus</span>
             <span class="persona-elo">2850</span>
           </button>
@@ -3512,6 +3530,7 @@
 
     const PERSONA_MAP = {
       andrea: { name: 'Andrea Botez', elo: 1800 },
+      alexandra: { name: 'Alexandra Botez', elo: 2050 },
       anna: { name: 'Anna Cramling', elo: 2100 },
       gotham: { name: 'GothamChess', elo: 2350 },
       hikaru: { name: 'Hikaru', elo: 2800 },
