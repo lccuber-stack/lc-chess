@@ -1056,9 +1056,27 @@
     }
 
     .opt-main {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       font-size: 13px;
       font-weight: 700;
+    }
+
+    .opt-icon {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .opt-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .opt-sub {
@@ -1326,11 +1344,17 @@
         <span class="setting-label">Opponent</span>
         <div id="mode-selector" class="seg-grid-2">
           <button type="button" class="opt-btn selected" data-mode="ai">
-            <span class="opt-main">vs Computer</span>
-            <span class="opt-sub">300 – 2850 ELO</span>
+            <span class="opt-main">
+              <span class="opt-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+              vs Computer
+            </span>
+            <span class="opt-sub">100 – 3000 ELO</span>
           </button>
           <button type="button" class="opt-btn" data-mode="friend">
-            <span class="opt-main">vs Friend</span>
+            <span class="opt-main">
+              <span class="opt-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+              vs Friend
+            </span>
             <span class="opt-sub">Pass &amp; Play</span>
           </button>
         </div>
@@ -1341,20 +1365,32 @@
         <span class="setting-label">Computer Strength</span>
         <div id="difficulty-selector" class="seg-grid-2">
           <button type="button" class="opt-btn" data-diff="easy">
-            <span class="opt-main">Easy</span>
+            <span class="opt-main">
+              <span class="opt-icon" style="color: #34d399;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>
+              Easy
+            </span>
             <span class="opt-sub">300 ELO</span>
           </button>
           <button type="button" class="opt-btn selected" data-diff="intermediate">
-            <span class="opt-main">Intermediate</span>
+            <span class="opt-main">
+              <span class="opt-icon" style="color: #38bdf8;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></span>
+              Intermediate
+            </span>
             <span class="opt-sub">1200 ELO</span>
           </button>
           <button type="button" class="opt-btn" data-diff="hard">
-            <span class="opt-main">Hard</span>
+            <span class="opt-main">
+              <span class="opt-icon" style="color: #fb923c;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
+              Hard
+            </span>
             <span class="opt-sub">1800 ELO</span>
           </button>
           <button type="button" class="opt-btn" data-diff="custom">
-            <span class="opt-main">Custom</span>
-            <span class="opt-sub">300 – 2900 ELO</span>
+            <span class="opt-main">
+              <span class="opt-icon" style="color: #fbbf24;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg></span>
+              Custom
+            </span>
+            <span class="opt-sub">100 – 3000 ELO</span>
           </button>
         </div>
 
@@ -1367,28 +1403,28 @@
             </div>
             <div class="elo-step-controls">
               <button type="button" id="btn-elo-minus" class="elo-step-btn" aria-label="Decrease ELO by 100">−</button>
-              <input type="range" id="custom-elo-slider" min="300" max="2900" step="100" value="2800" />
+              <input type="range" id="custom-elo-slider" min="100" max="3000" step="100" value="2800" />
               <button type="button" id="btn-elo-plus" class="elo-step-btn" aria-label="Increase ELO by 100">+</button>
             </div>
           </div>
           <button type="button" class="opt-btn" data-custom="botez">
-            <span class="opt-main">Andrea Botez</span>
+            <span class="opt-main"><span class="opt-icon" style="color:#f472b6;">♛</span>Andrea Botez</span>
             <span class="opt-sub">1800 ELO</span>
           </button>
           <button type="button" class="opt-btn" data-custom="cramling">
-            <span class="opt-main">Anna Cramling</span>
+            <span class="opt-main"><span class="opt-icon" style="color:#38bdf8;">♝</span>Anna Cramling</span>
             <span class="opt-sub">2100 ELO</span>
           </button>
           <button type="button" class="opt-btn" data-custom="gotham">
-            <span class="opt-main">GothamChess</span>
+            <span class="opt-main"><span class="opt-icon" style="color:#a78bfa;">♞</span>GothamChess</span>
             <span class="opt-sub">2350 ELO</span>
           </button>
           <button type="button" class="opt-btn" data-custom="hikaru">
-            <span class="opt-main">Hikaru</span>
+            <span class="opt-main"><span class="opt-icon" style="color:#fb923c;">⚡</span>Hikaru</span>
             <span class="opt-sub">2800 ELO</span>
           </button>
           <button type="button" class="opt-btn selected" data-custom="magnus">
-            <span class="opt-main">Magnus</span>
+            <span class="opt-main"><span class="opt-icon" style="color:#fbbf24;">👑</span>Magnus</span>
             <span class="opt-sub">2850 ELO</span>
           </button>
         </div>
@@ -1436,17 +1472,29 @@
       <div id="color-group" class="setting-group">
         <span class="setting-label">Play As</span>
         <div id="color-selector" class="seg-grid-3">
-          <button type="button" class="opt-btn selected" data-color="w">
-            <span class="opt-main">White</span>
-            <span class="opt-sub">First Move</span>
+          <button type="button" class="opt-btn selected" data-color="w" style="padding: 11px 8px;">
+            <span class="opt-main">
+              <span class="opt-icon" style="width: 18px; height: 18px;" aria-hidden="true">
+                <svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 11.63V6M20 8h5" stroke="#ffffff"/><path d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5" fill="#ffffff"/><path d="M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10V37z" fill="#ffffff"/></g></svg>
+              </span>
+              White
+            </span>
           </button>
-          <button type="button" class="opt-btn" data-color="random">
-            <span class="opt-main">Random</span>
-            <span class="opt-sub">50 / 50</span>
+          <button type="button" class="opt-btn" data-color="random" style="padding: 11px 8px;">
+            <span class="opt-main">
+              <span class="opt-icon" style="width: 18px; height: 18px;" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4.5" fill="#f8fafc" stroke="#273244" stroke-width="1.6"/><circle cx="8.5" cy="8.5" r="1.45" fill="#18181b"/><circle cx="15.5" cy="8.5" r="1.45" fill="#18181b"/><circle cx="12" cy="12" r="1.45" fill="#18181b"/><circle cx="8.5" cy="15.5" r="1.45" fill="#18181b"/><circle cx="15.5" cy="15.5" r="1.45" fill="#18181b"/></svg>
+              </span>
+              Random
+            </span>
           </button>
-          <button type="button" class="opt-btn" data-color="b">
-            <span class="opt-main">Black</span>
-            <span class="opt-sub">Second</span>
+          <button type="button" class="opt-btn" data-color="b" style="padding: 11px 8px;">
+            <span class="opt-main">
+              <span class="opt-icon" style="width: 18px; height: 18px;" aria-hidden="true">
+                <svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 11.63V6M20 8h5"/><path d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5" fill="#18181b"/><path d="M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10V37z" fill="#18181b"/></g></svg>
+              </span>
+              Black
+            </span>
           </button>
         </div>
       </div>
@@ -1703,10 +1751,7 @@
 
       getPositionKey() {
         let key = this.board.map(p => p || '..').join('');
-        key += `|${this.turn}|`;
-        key += (this.castling.wK ? 'K' : '') + (this.castling.wQ ? 'Q' : '') +
-               (this.castling.bK ? 'k' : '') + (this.castling.bQ ? 'q' : '');
-        key += `|${this.epSquare}`;
+        key += `|${this.turn}|${this.castling.wK ? 'K' : ''}${this.castling.wQ ? 'Q' : ''}${this.castling.bK ? 'k' : ''}${this.castling.bQ ? 'q' : ''}|${this.epSquare}`;
         return key;
       }
 
@@ -1716,7 +1761,9 @@
       }
 
       sqToAlgebraic(sq) {
-        return FILES[sq % 8] + (8 - Math.floor(sq / 8));
+        const file = FILES[sq % 8];
+        const rank = 8 - Math.floor(sq / 8);
+        return file + rank;
       }
 
       findKing(color) {
@@ -1734,8 +1781,12 @@
         // 1. Pawns
         const pawnRow = byColor === 'w' ? r + 1 : r - 1;
         if (pawnRow >= 0 && pawnRow < 8) {
-          if (c - 1 >= 0 && this.board[pawnRow * 8 + (c - 1)] === byColor + 'P') return true;
-          if (c + 1 < 8 && this.board[pawnRow * 8 + (c + 1)] === byColor + 'P') return true;
+          for (const dc of [-1, 1]) {
+            const pc = c + dc;
+            if (pc >= 0 && pc < 8 && this.board[pawnRow * 8 + pc] === byColor + 'P') {
+              return true;
+            }
+          }
         }
 
         // 2. Knights
@@ -2680,13 +2731,13 @@
       state.customPlayer = val;
       const presetElo = CUSTOM_PLAYER_ELOS[val] || 1500;
       state.customElo = presetElo;
-      const sliderVal = Math.min(2900, Math.max(300, Math.round(presetElo / 100) * 100));
+      const sliderVal = Math.min(3000, Math.max(100, Math.round(presetElo / 100) * 100));
       $('custom-elo-slider').value = sliderVal;
       $('custom-elo-display').textContent = `${presetElo} ELO`;
     });
 
     function setManualCustomElo(newElo) {
-      const clamped = Math.min(2900, Math.max(300, Math.round(newElo / 100) * 100));
+      const clamped = Math.min(3000, Math.max(100, Math.round(newElo / 100) * 100));
       state.customElo = clamped;
       state.customPlayer = null;
       $('custom-elo-slider').value = clamped;
