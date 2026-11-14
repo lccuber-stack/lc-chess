@@ -353,6 +353,27 @@
       animation: pulseClock 1s infinite alternate;
     }
 
+    .top-resign-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 30px;
+      padding: 0 9px;
+      border-radius: var(--radius-sm);
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .top-resign-btn:hover:not(:disabled) { background: rgba(239, 68, 68, 0.26); }
+    .top-resign-btn:active:not(:disabled) { transform: scale(0.95); }
+    .top-resign-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
     @keyframes pulseClock {
       from { opacity: 1; }
       to { opacity: 0.65; }
@@ -1410,7 +1431,10 @@
               </div>
             </div>
           </div>
-          <div id="top-clock" class="clock-box">10:00</div>
+          <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+            <button id="btn-resign-black-top" class="top-resign-btn" title="Black Resigns">🏳 Resign</button>
+            <div id="top-clock" class="clock-box">10:00</div>
+          </div>
         </div>
 
         <!-- Evaluation Bar + 8x8 Chessboard -->
@@ -1490,10 +1514,7 @@
             <button id="btn-hint-desktop" class="action-btn hint-style">💡 Hint</button>
             <button id="btn-undo-desktop" class="action-btn" disabled>↩ Undo Move</button>
           </div>
-          <div id="desktop-resign-container" style="display: flex; gap: 8px; width: 100%;">
-            <button id="btn-resign-desktop" class="resign-btn-lg" style="flex: 1;">🏳 Resign</button>
-            <button id="btn-resign-black-desktop" class="resign-btn-lg" style="flex: 1; display: none;">🏳 Resign (Black)</button>
-          </div>
+          <button id="btn-resign-desktop" class="resign-btn-lg">🏳 Resign</button>
           <button id="btn-new-desktop" class="btn-full-primary">New Game &amp; Settings</button>
         </div>
       </aside>
@@ -1508,7 +1529,6 @@
         <button id="btn-hint-mobile" class="action-btn hint-style">💡 Hint</button>
         <button id="btn-undo-mobile" class="action-btn" disabled>↩ Undo</button>
         <button id="btn-resign-mobile" class="action-btn" style="background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">🏳 Resign</button>
-        <button id="btn-resign-black-mobile" class="action-btn" style="display: none; background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">🏳 Resign (B)</button>
       </div>
     </div>
   </div>
@@ -3577,9 +3597,8 @@
       $('btn-hint-desktop').disabled = !canHintNow;
 
       $('btn-resign-mobile').disabled = state.gameOver;
-      $('btn-resign-black-mobile').disabled = state.gameOver;
+      $('btn-resign-black-top').disabled = state.gameOver;
       $('btn-resign-desktop').disabled = state.gameOver;
-      $('btn-resign-black-desktop').disabled = state.gameOver;
 
       updateClocksUI();
     }
@@ -3657,8 +3676,8 @@
       $('btn-hint-mobile').style.display = showHint ? 'flex' : 'none';
       $('btn-undo-mobile').style.display = showUndo ? 'flex' : 'none';
       $('btn-resign-mobile').style.display = 'flex';
-      $('btn-resign-mobile').textContent = isFriend ? '🏳 Resign (W)' : '🏳 Resign';
-      $('btn-resign-black-mobile').style.display = isFriend ? 'flex' : 'none';
+      $('btn-resign-mobile').textContent = '🏳 Resign';
+      $('btn-resign-black-top').style.display = isFriend ? 'inline-flex' : 'none';
       $('mobile-action-row').style.display = 'flex';
       $('mobile-bottom-strip').classList.remove('no-actions');
 
@@ -3668,7 +3687,6 @@
       $('desktop-assist-grid').style.gridTemplateColumns = (showHint && showUndo) ? '1fr 1fr' : '1fr';
 
       $('btn-resign-desktop').textContent = isFriend ? '🏳 Resign (White)' : '🏳 Resign';
-      $('btn-resign-black-desktop').style.display = isFriend ? 'flex' : 'none';
 
       resizeBoard(true);
     }
@@ -3850,9 +3868,8 @@
     }
 
     $('btn-resign-desktop').addEventListener('click', () => handleResign(state.mode === 'friend' ? 'w' : null));
-    $('btn-resign-black-desktop').addEventListener('click', () => handleResign('b'));
+    $('btn-resign-black-top').addEventListener('click', () => handleResign('b'));
     $('btn-resign-mobile').addEventListener('click', () => handleResign(state.mode === 'friend' ? 'w' : null));
-    $('btn-resign-black-mobile').addEventListener('click', () => handleResign('b'));
 
     $('btn-go-rematch').addEventListener('click', startNewMatch);
     $('btn-go-settings').addEventListener('click', () => {
