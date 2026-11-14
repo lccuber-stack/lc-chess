@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>LC Chess — Tactical Board &amp; Adaptive Engine</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="LC Chess" />
   <meta name="theme-color" content="#090d16" />
   <!-- Crisp Staunton Knight App Icon (SVG Favicon + Dynamic High-Res Apple Touch Icon) -->
@@ -103,15 +103,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 48px;
-      min-height: 48px;
-      padding: 0 12px;
-      background: rgba(17, 24, 39, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      width: 100%;
+      height: 50px;
+      min-height: 50px;
+      padding: 0 14px;
+      background: #111827;
       border-bottom: 1px solid var(--border-subtle);
       gap: 8px;
       z-index: 20;
+      flex-shrink: 0;
     }
 
     .brand {
@@ -180,8 +180,8 @@
       width: 100%;
       max-width: 1280px;
       margin: 0 auto;
-      padding: 6px 10px;
-      gap: 6px;
+      padding: 8px 10px;
+      gap: 8px;
       overflow: hidden;
       min-height: 0;
     }
@@ -193,9 +193,9 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      flex: 1;
+      flex: 0 1 auto;
       min-height: 0;
-      gap: 6px;
+      gap: 8px;
     }
 
     /* Mobile Status Strip */
@@ -357,22 +357,36 @@
       display: none;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      height: 30px;
-      padding: 0 9px;
-      border-radius: var(--radius-sm);
+      gap: 6px;
+      width: 100%;
+      height: 40px;
+      padding: 0 12px;
+      border-radius: var(--radius-md);
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.45);
       color: #fca5a5;
-      font-size: 11px;
+      font-size: 13.5px;
       font-weight: 700;
       white-space: nowrap;
       flex-shrink: 0;
-      transition: background 0.15s ease, transform 0.1s ease;
+      transition: background 0.15s ease, transform 0.2s ease;
+    }
+    .top-resign-btn.rotated-180 {
+      transform: rotate(180deg);
     }
     .top-resign-btn:hover:not(:disabled) { background: rgba(239, 68, 68, 0.26); }
-    .top-resign-btn:active:not(:disabled) { transform: scale(0.95); }
+    .top-resign-btn:active:not(:disabled) { transform: scale(0.97); }
+    .top-resign-btn.rotated-180:active:not(:disabled) { transform: rotate(180deg) scale(0.97); }
     .top-resign-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+    /* Symmetrical Bottom Resign Row beneath Board (iPad/Desktop & Mobile) */
+    #board-bottom-resign-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      flex-shrink: 0;
+    }
 
     @keyframes pulseClock {
       from { opacity: 1; }
@@ -672,8 +686,10 @@
     #mobile-bottom-strip {
       display: flex;
       flex-direction: column;
+      align-items: stretch;
       width: 100%;
-      gap: 6px;
+      margin: 0 auto;
+      gap: 8px;
       flex-shrink: 0;
     }
 
@@ -681,7 +697,8 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      height: 30px;
+      width: 100%;
+      height: 32px;
       padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
@@ -689,7 +706,7 @@
       overflow-x: auto;
       white-space: nowrap;
       font-family: "SF Mono", Menlo, monospace;
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--text-secondary);
       scrollbar-width: none;
       touch-action: pan-x;
@@ -699,8 +716,10 @@
     .mobile-action-row {
       display: flex;
       align-items: center;
-      gap: 6px;
-      height: 36px;
+      justify-content: center;
+      width: 100%;
+      gap: 8px;
+      height: 44px;
     }
 
     .action-btn {
@@ -710,11 +729,11 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-md);
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13.5px;
+      font-weight: 700;
       color: var(--text-primary);
       transition: all 0.15s ease;
     }
@@ -1416,6 +1435,9 @@
           <span id="mobile-move-count" style="color: var(--text-secondary); font-size: 11px;">Move 1</span>
         </div>
 
+        <!-- Symmetrical Top Resign Row (Black / Opponent in vs Friend, sits directly above top player bar) -->
+        <button id="btn-resign-black-top" class="top-resign-btn" title="Black Resigns">🏳 Resign</button>
+
         <!-- Top Player Bar (Opponent / Black) -->
         <div id="top-player-bar" class="player-bar">
           <div class="player-meta">
@@ -1431,10 +1453,7 @@
               </div>
             </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-            <button id="btn-resign-black-top" class="top-resign-btn" title="Black Resigns">🏳 Resign</button>
-            <div id="top-clock" class="clock-box">10:00</div>
-          </div>
+          <div id="top-clock" class="clock-box">10:00</div>
         </div>
 
         <!-- Evaluation Bar + 8x8 Chessboard -->
@@ -1465,6 +1484,22 @@
             </div>
           </div>
           <div id="bottom-clock" class="clock-box">10:00</div>
+        </div>
+
+        <!-- Symmetrical Bottom Resign Row (Directly opposite Top Resign Row on iPad/Desktop & Mobile) -->
+        <div id="board-bottom-resign-wrap">
+          <button id="btn-resign-board-bottom" class="resign-btn-lg">🏳 Resign</button>
+        </div>
+
+        <!-- Mobile Bottom Move History + Assist Strip -->
+        <div id="mobile-bottom-strip">
+          <div id="mobile-move-ticker" class="mobile-ticker">
+            <span style="color: var(--text-muted); font-family: inherit;">Tap a piece to start playing...</span>
+          </div>
+          <div id="mobile-action-row" class="mobile-action-row">
+            <button id="btn-hint-mobile" class="action-btn hint-style">💡 Hint</button>
+            <button id="btn-undo-mobile" class="action-btn" disabled>↩ Undo</button>
+          </div>
         </div>
       </section>
 
@@ -1514,23 +1549,10 @@
             <button id="btn-hint-desktop" class="action-btn hint-style">💡 Hint</button>
             <button id="btn-undo-desktop" class="action-btn" disabled>↩ Undo Move</button>
           </div>
-          <button id="btn-resign-desktop" class="resign-btn-lg">🏳 Resign</button>
           <button id="btn-new-desktop" class="btn-full-primary">New Game &amp; Settings</button>
         </div>
       </aside>
     </main>
-
-    <!-- Mobile Bottom Move History + Action Strip -->
-    <div id="mobile-bottom-strip">
-      <div id="mobile-move-ticker" class="mobile-ticker">
-        <span style="color: var(--text-muted); font-family: inherit;">Tap a piece to start playing...</span>
-      </div>
-      <div id="mobile-action-row" class="mobile-action-row">
-        <button id="btn-hint-mobile" class="action-btn hint-style">💡 Hint</button>
-        <button id="btn-undo-mobile" class="action-btn" disabled>↩ Undo</button>
-        <button id="btn-resign-mobile" class="action-btn" style="background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">🏳 Resign</button>
-      </div>
-    </div>
   </div>
 
   <!-- Floating Drag Piece Ghost -->
@@ -2865,14 +2887,18 @@
 
       let boardSize;
       if (isDesktop) {
+        const isFriend = state.mode === 'friend';
+        const extraTopResign = isFriend ? 50 : 0;
         const availW = vw - 340 - 26 - 72;
-        const availH = vh - 116 - 36;
+        const availH = vh - 116 - 52 - extraTopResign - 36;
         boardSize = Math.floor(Math.min(availW, availH, 680));
       } else {
+        const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
-        const chromeH = 48 + 32 + 44 + 44 + 30 + (hasActions ? 36 : 0) + 46;
+        const extraTopResign = isFriend ? 48 : 0;
+        const chromeH = 50 + 32 + extraTopResign + 44 + 44 + 44 + 32 + (hasActions ? 44 : 0) + 56;
         const availH = vh - chromeH;
-        const availW = vw - 18 - 8 - 20;
+        const availW = vw - 16 - 8 - 18;
         boardSize = Math.floor(Math.min(availW, availH));
       }
 
@@ -2886,6 +2912,8 @@
       const barWidth = (boardSize + 8 + 18) + 'px';
       els.topBar.style.width = barWidth;
       els.bottomBar.style.width = barWidth;
+      $('btn-resign-black-top').style.width = barWidth;
+      $('board-bottom-resign-wrap').style.width = barWidth;
 
       if (!isDesktop) {
         $('mobile-status-strip').style.width = barWidth;
@@ -3596,9 +3624,8 @@
       $('btn-hint-mobile').disabled = !canHintNow;
       $('btn-hint-desktop').disabled = !canHintNow;
 
-      $('btn-resign-mobile').disabled = state.gameOver;
+      $('btn-resign-board-bottom').disabled = state.gameOver;
       $('btn-resign-black-top').disabled = state.gameOver;
-      $('btn-resign-desktop').disabled = state.gameOver;
 
       updateClocksUI();
     }
@@ -3670,23 +3697,25 @@
     function updateAssistControlsVisibility() {
       const showHint = state.allowHints;
       const showUndo = state.allowUndo;
+      const anyMobileAssist = showHint || showUndo;
       const anyDesktopAssist = showHint || showUndo;
       const isFriend = state.mode === 'friend';
 
       $('btn-hint-mobile').style.display = showHint ? 'flex' : 'none';
       $('btn-undo-mobile').style.display = showUndo ? 'flex' : 'none';
-      $('btn-resign-mobile').style.display = 'flex';
-      $('btn-resign-mobile').textContent = '🏳 Resign';
-      $('btn-resign-black-top').style.display = isFriend ? 'inline-flex' : 'none';
-      $('mobile-action-row').style.display = 'flex';
-      $('mobile-bottom-strip').classList.remove('no-actions');
+      $('mobile-action-row').style.display = anyMobileAssist ? 'flex' : 'none';
+      $('mobile-bottom-strip').classList.toggle('no-actions', !anyMobileAssist);
+
+      const topResignBtn = $('btn-resign-black-top');
+      topResignBtn.style.display = isFriend ? 'flex' : 'none';
+      topResignBtn.classList.toggle('rotated-180', isFriend && state.tabletopMode);
+
+      $('btn-resign-board-bottom').textContent = '🏳 Resign';
 
       $('btn-hint-desktop').style.display = showHint ? 'flex' : 'none';
       $('btn-undo-desktop').style.display = showUndo ? 'flex' : 'none';
       $('desktop-assist-grid').style.display = anyDesktopAssist ? 'grid' : 'none';
       $('desktop-assist-grid').style.gridTemplateColumns = (showHint && showUndo) ? '1fr 1fr' : '1fr';
-
-      $('btn-resign-desktop').textContent = isFriend ? '🏳 Resign (White)' : '🏳 Resign';
 
       resizeBoard(true);
     }
@@ -3867,9 +3896,8 @@
       });
     }
 
-    $('btn-resign-desktop').addEventListener('click', () => handleResign(state.mode === 'friend' ? 'w' : null));
     $('btn-resign-black-top').addEventListener('click', () => handleResign('b'));
-    $('btn-resign-mobile').addEventListener('click', () => handleResign(state.mode === 'friend' ? 'w' : null));
+    $('btn-resign-board-bottom').addEventListener('click', () => handleResign(state.mode === 'friend' ? 'w' : null));
 
     $('btn-go-rematch').addEventListener('click', startNewMatch);
     $('btn-go-settings').addEventListener('click', () => {
