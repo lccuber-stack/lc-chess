@@ -862,37 +862,6 @@
       display: block;
     }
 
-    /* Mobile Bottom Move Ticker + Optional Undo */
-    #mobile-bottom-strip {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-      flex-shrink: 0;
-    }
-
-    @media (min-width: 1024px) {
-      #mobile-bottom-strip {
-        display: none;
-      }
-    }
-
-    #mobile-move-ticker {
-      flex: 1;
-      height: 36px;
-      padding: 0 10px;
-      border-radius: var(--radius-sm);
-      background-color: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      overflow-x: auto;
-      white-space: nowrap;
-      font-size: 12px;
-    }
-
     /* Custom Scrollbars */
     .scroll-thin::-webkit-scrollbar {
       width: 5px;
@@ -1287,6 +1256,8 @@
           </div>
         </div>
         <div id="bottom-clock" class="clock-box mono active">10:00</div>
+      </div>
+
       <!-- Mobile Expanded Move History & Hint / Undo Bar -->
       <div id="mobile-bottom-strip">
         <div id="mobile-move-ticker" class="mono scroll-thin">
@@ -1401,7 +1372,7 @@
         <!-- Computer Difficulty -->
         <div id="ai-difficulty-section">
           <span class="field-label">Computer Strength</span>
-          <div class="grid-3" id="difficulty-selector">
+          <div class="grid-4" id="difficulty-selector">
             <button type="button" data-diff="easy" class="option-btn">
               <span>Easy</span>
               <span class="option-sub mono">300 ELO</span>
@@ -1409,6 +1380,10 @@
             <button type="button" data-diff="intermediate" class="option-btn selected">
               <span>Intermediate</span>
               <span class="option-sub mono">1200 ELO</span>
+            </button>
+            <button type="button" data-diff="hard" class="option-btn">
+              <span>Hard</span>
+              <span class="option-sub mono" style="color: #60a5fa;">1800 ELO</span>
             </button>
             <button type="button" data-diff="magnus" class="option-btn">
               <span>Magnus</span>
@@ -1478,22 +1453,22 @@
 
         <!-- Allow Undo & Hints Settings -->
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div id="toggle-undo" class="toggle-row" role="switch" aria-checked="true" tabindex="0">
+          <div id="toggle-undo" class="toggle-row" role="switch" aria-checked="false" tabindex="0">
             <div>
               <div class="toggle-text-title">Allow Undo Move</div>
               <div class="toggle-text-sub">Enable takebacks during the match</div>
             </div>
-            <div id="switch-undo" class="switch-pill on">
+            <div id="switch-undo" class="switch-pill">
               <div class="switch-knob"></div>
             </div>
           </div>
 
-          <div id="toggle-hints" class="toggle-row" role="switch" aria-checked="true" tabindex="0">
+          <div id="toggle-hints" class="toggle-row" role="switch" aria-checked="false" tabindex="0">
             <div>
               <div class="toggle-text-title">Allow Hints</div>
               <div class="toggle-text-sub">Highlight best move suggestions on demand</div>
             </div>
-            <div id="switch-hints" class="switch-pill on">
+            <div id="switch-hints" class="switch-pill">
               <div class="switch-knob"></div>
             </div>
           </div>
@@ -2354,6 +2329,27 @@
           return scored[0].move;
         }
 
+        // HARD (1800 ELO)
+        if (difficulty === 'hard') {
+          this.nodes = 0;
+          this.startTime = performance.now();
+          this.timeBudget = 480;
+          this.aborted = false;
+
+          this.orderMoves(engine, legal);
+          const scored = [];
+          for (const m of legal) {
+            const snap = engine.cloneState();
+            engine.applyMoveRaw(m);
+            let sc = this.minimax(engine, 2, -Infinity, Infinity, !maximizing);
+            engine.restoreState(snap);
+            sc += (Math.random() - 0.5) * 28;
+            scored.push({ move: m, score: sc });
+          }
+          scored.sort((a, b) => maximizing ? (b.score - a.score) : (a.score - b.score));
+          return scored[0].move;
+        }
+
         // MAGNUS (2500 ELO)
         this.nodes = 0;
         this.startTime = performance.now();
@@ -2431,14 +2427,14 @@
 
     const state = {
       mode: 'ai',                 // 'ai' | 'friend'
-      difficulty: 'intermediate', // 'easy' | 'intermediate' | 'magnus'
+      difficulty: 'intermediate', // 'easy' | 'intermediate' | 'hard' | 'magnus'
       timeControl: 600,           // 0 | 300 | 600 | 900 | 1800
       colorPref: 'w',             // 'w' | 'b' | 'random'
       playerColor: 'w',           // human side in AI mode
       boardOrientationBlack: false, // true only when human plays Black vs AI
       tabletopMode: true,         // rotates Black pieces 180° in vs Friend mode
-      allowUndo: true,            // configured in pre-game settings
-      allowHints: true,           // configured in pre-game settings
+      allowUndo: false,           // off by default in pre-game settings
+      allowHints: false,          // off by default in pre-game settings
       hintMove: null,             // { from, to } highlighted when Hint is clicked
       selectedSq: null,
       legalMovesForSelected: [],
@@ -2527,8 +2523,8 @@
       const bottomBarH = 48;
       const mobileStatusH = isMobileOrTablet ? 40 : 0; // 36px + 4px gap
       const barsMargins = 8; // 4px + 4px
-      const mobileStripH = isMobileOrTablet ? 88 : 0; // expanded 2-row move log + full-width action buttons
-      const verticalPadding = isMobileOrTablet ? 14 : 32;
+      const mobileStripH = isMobileOrTablet ? 94 : 0; // move ticker + action buttons + gap
+      const verticalPadding = isMobileOrTablet ? 16 : 32;
       const horizontalPadding = isMobileOrTablet ? 8 : 48;
 
       const availHeight = Math.max(220, stageH - topBarH - bottomBarH - mobileStatusH - barsMargins - mobileStripH - verticalPadding);
@@ -3058,6 +3054,7 @@
     function getDiffLabel() {
       if (state.difficulty === 'easy') return 'Easy (300)';
       if (state.difficulty === 'intermediate') return 'Intermediate (1200)';
+      if (state.difficulty === 'hard') return 'Hard (1800)';
       return 'Magnus (2500)';
     }
 
