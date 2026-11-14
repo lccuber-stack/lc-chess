@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LC Chess vs AI</title>
+    <!-- Chess.js for rules -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <style>
+        * { box-sizing: border-box; user-select: none; }
+        body { background-color: #060913; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-height: 100dvh; padding: 12px; }
+        .panel { background: rgba(13, 19, 34, 0.9); border: 1px solid rgba(30, 41, 59, 0.9); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); width: 100%; max-width: 520px; }
+        header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; }
+        h1 { font-size: 16px; font-weight: 800; margin: 0; color: #ffffff; }
+        #status { font-size: 12px; color: #fbbf24; font-weight: 600; margin-top: 2px; }
+        .btn { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 12px; cursor: pointer; }
+        .btn:hover { background: #334155; }
+        .main-content { padding: 12px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+        @media (min-width: 520px) {
+            .main-content { flex-direction: row; align-items: flex-start; justify-content: center; }
+        }
+        #board { width: 100%; max-width: 360px; aspect-ratio: 1; display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); border: 3px solid #334155; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+        .square { display: flex; align-items: center; justify-content: center; font-size: 36px; cursor: pointer; }
+        .light { background-color: #cbd5e1; }
+        .dark-sq { background-color: #475569; }
+        .selected { background-color: #38bdf8 !important; }
+        .highlight { background-color: #facc15 !important; }
+        .history-box { width: 100%; max-width: 360px; height: 180px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px; overflow-y: auto; font-family: monospace; font-size: 12px; color: #cbd5e1; }
+        @media (min-width: 520px) {
+            .history-box { max-width: 140px; height: 360px; }
+        }
+        .history-row { display: flex; justify-content: space-between; padding: 2px 4px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        footer { padding: 8px; text-align: center; font-size: 11px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <header class="panel">
+        <div>
+            <h1>LC Chess vs AI</h1>
+            <div id="status">White to move</div>
+        </div>
+        <button class="btn" id="resetBtn">New Game</button>
+    </header>
+
+    <div class="panel main-content">
+        <div id="board"></div>
+        <div class="history-box" id="historyLog">
+            <div style="color: #64748b; text-align: center; margin-top: 10px;">Move history...</div>
+        </div>
+    </div>
+
+    <footer class="panel">
+        Click your piece (White) to move. The computer responds automatically.
+    </footer>
+
+    <script>
+        const game = new Chess();
+        const boardEl = document.getElementById('board');
+        const statusEl = document.getElementById('status');
+        const historyLog = document.getElementById('historyLog');
+        let selectedSquare = null;
+        let possibleMoves = [];
+
+        const pieces = {
+            'wK': '♔', 'wQ': '♕', 'wR': '♖', 'wB': '♗', 'wN': '♘', 'wP': '♙',
+            'bK': '♚', 'bQ': '♛', 'bR': '♜', 'bB': '♝', 'bN': '♞', 'bP': '♟'
+        };
+
+        const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+        function renderBoard() {
+            boardEl.innerHTML = '';
+            const boardState = game.board();
+
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const sqName = files[c] + (8 - r);
+                    const sqDiv = document.createElement('div');
+                    
+                    const isLight = (r + c) % 2 === 0;
+                    sqDiv.className = `square ${isLight ? 'light' : 'dark-sq'}`;
+
+                    if (selectedSquare === sqName) {
+                        sqDiv.classList.add('selected');
+                    } else if (possibleMoves.includes(sqName)) {
+                        sqDiv.classList.add('highlight');
+                    }
+
+                    const piece = boardState[r][c];
+                    if (piece) {
+                        const key = piece.color + piece.type.toUpperCase();
+                        sqDiv.textContent = pieces[key];
+                        if (piece.color === 'w') {
+                            sqDiv.style.color = '#ffffff';
+                            sqDiv.style.textShadow = '0 2px 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.8)';
+                        } else {
+                            sqDiv.style.color = '#0f172a';
+                            sqDiv.style.textShadow = '0 1px 3px rgba(255,255,255,0.5), 0 0 2px rgba(255,255,255,0.4)';
+                        }
+                    }
+
+                    sqDiv.addEventListener('click', () => onSquareClick(sqName));
+                    boardEl.appendChild(sqDiv);
+                }
+            }
+            updateStatus();
+            updateHistoryLog();
+        }
+
+        function onSquareClick(sq) {
+            if (game.turn() === 'b' || game.game_over()) return;
+
+            if (selectedSquare === null) {
+                const piece = game.get(sq);
+                if (piece && piece.color === 'w') {
+                    selectedSquare = sq;
+                    possibleMoves = game.moves({ square: sq, verbose: true }).map(m => m.to);
+                    renderBoard();
+                }
+            } else {
+                const move = game.move({
+                    from: selectedSquare,
+                    to: sq,
+                    promotion: 'q'
+                });
+
+                selectedSquare = null;
+                possibleMoves = [];
+
+                if (!move) {
+                    const piece = game.get(sq);
+                    if (piece && piece.color === 'w') {
+                        selectedSquare = sq;
+                        possibleMoves = game.moves({ square: sq, verbose: true }).map(m => m.to);
+                    }
+                } else {
+                    renderBoard();
+                    if (!game.game_over()) {
+                        setTimeout(makeAiMove, 350);
+                    }
+                }
+                renderBoard();
+            }
+        }
+
+        function makeAiMove() {
+            const moves = game.moves({ verbose: true });
+            if (moves.length === 0) return;
+
+            let bestMove = null;
+            let bestValue = -99999;
+
+            for (let i = 0; i < moves.length; i++) {
+                const m = moves[i];
+                game.move(m);
+                let boardVal = evaluateBoard(game.board());
+                game.undo();
+
+                if (boardVal > bestValue) {
+                    bestValue = boardVal;
+                    bestMove = m;
+                }
+            }
+
+            if (!bestMove) {
+                bestMove = moves[Math.floor(Math.random() * moves.length)];
+            }
+
+            game.move(bestMove);
+            renderBoard();
+        }
+
+        function evaluateBoard(board) {
+            let totalEvaluation = 0;
+            const values = { p: 10, n: 30, b: 30, r: 50, q: 90, k: 900 };
+
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const piece = board[r][c];
+                    if (piece) {
+                        const val = values[piece.type];
+                        if (piece.color === 'b') {
+                            totalEvaluation += val;
+                        } else {
+                            totalEvaluation -= val;
+                        }
+                    }
+                }
+            }
+            return totalEvaluation;
+        }
+
+        function updateHistoryLog() {
+            const history = game.history({ verbose: true });
+            let html = '';
+            for (let i = 0; i < history.length; i += 2) {
+                const moveNum = Math.floor(i / 2) + 1;
+                const whiteMove = history[i] ? history[i].san : '';
+                const blackMove = history[i+1] ? history[i+1].san : '';
+                html += `<div class="history-row"><span>${moveNum}. ${whiteMove}</span><span>${blackMove}</span></div>`;
+            }
+            historyLog.innerHTML = html || '<div style="color: #64748b; text-align: center; margin-top: 10px;">No moves yet...</div>';
+            historyLog.scrollTop = historyLog.scrollHeight;
+        }
+
+        function updateStatus() {
+            if (game.in_checkmate()) {
+                statusEl.textContent = game.turn() === 'w' ? 'Checkmate! Black wins!' : 'Checkmate! White wins!';
+            } else if (game.in_draw()) {
+                statusEl.textContent = 'Draw!';
+            } else {
+                let txt = game.turn() === 'w' ? 'White to move (Your turn)' : 'Black to move (AI thinking...)';
+                if (game.in_check()) txt += ' (check!)';
+                statusEl.textContent = txt;
+            }
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            game.reset();
+            selectedSquare = null;
+            possibleMoves = [];
+            renderBoard();
+        });
+
+        renderBoard();
+    </script>
+</body>
+</html>
