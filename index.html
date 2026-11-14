@@ -2454,35 +2454,40 @@
 
         // CUSTOM FAMOUS PLAYERS OR MANUAL 100-STEP ELO (300 – 2900 ELO)
         const playerProfiles = {
-          botez:    { maxDepth: 2, budget: 400, jitter: 22 }, // Andrea Botez (1800 ELO)
-          cramling: { maxDepth: 3, budget: 550, jitter: 12 }, // Anna Cramling (2100 ELO)
-          gotham:   { maxDepth: 3, budget: 700, jitter: 6  }, // GothamChess (2350 ELO)
-          hikaru:   { maxDepth: 4, budget: 900, jitter: 2  }, // Hikaru (2800 ELO)
-          magnus:   { maxDepth: 4, budget: 1050, jitter: 0 }  // Magnus (2850 ELO)
+          botez:    { maxDepth: 2, budget: 450, jitter: 18, topPool: 1 }, // Andrea Botez (1800 ELO)
+          cramling: { maxDepth: 3, budget: 600, jitter: 10, topPool: 1 }, // Anna Cramling (2100 ELO)
+          gotham:   { maxDepth: 3, budget: 750, jitter: 5,  topPool: 1 }, // GothamChess (2350 ELO)
+          hikaru:   { maxDepth: 4, budget: 950, jitter: 2,  topPool: 1 }, // Hikaru (2800 ELO)
+          magnus:   { maxDepth: 4, budget: 1100, jitter: 0, topPool: 1 }  // Magnus (2850 ELO)
         };
 
         let profile;
         if (state.customPlayer && playerProfiles[state.customPlayer]) {
           profile = playerProfiles[state.customPlayer];
         } else {
-          const elo = state.customElo || 1500;
-          if (elo <= 500) {
-            if (Math.random() < 0.65) return legal[Math.floor(Math.random() * legal.length)];
-            profile = { maxDepth: 1, budget: 180, jitter: 140 };
+          const elo = state.customElo || 1200;
+          if (elo <= 400) {
+            if (Math.random() < 0.70) return legal[Math.floor(Math.random() * legal.length)];
+            profile = { maxDepth: 1, budget: 200, jitter: 120, topPool: 4 };
+          } else if (elo <= 600) {
+            if (Math.random() < 0.35) return legal[Math.floor(Math.random() * legal.length)];
+            profile = { maxDepth: 1, budget: 250, jitter: 90, topPool: 3 };
           } else if (elo <= 900) {
-            profile = { maxDepth: 1, budget: 220, jitter: 85 };
+            // Guaranteed 2-ply tactical vision with human inaccuracies
+            profile = { maxDepth: 2, budget: 320, jitter: 65, topPool: 3 };
           } else if (elo <= 1300) {
-            profile = { maxDepth: 2, budget: 280, jitter: 42 };
+            // Matches Intermediate (1200 ELO) tactical strength
+            profile = { maxDepth: 2, budget: 380, jitter: 35, topPool: 2 };
           } else if (elo <= 1700) {
-            profile = { maxDepth: 2, budget: 360, jitter: 25 };
+            profile = { maxDepth: 2, budget: 450, jitter: 20, topPool: 1 };
           } else if (elo <= 2000) {
-            profile = { maxDepth: 2, budget: 450, jitter: 16 };
+            profile = { maxDepth: 2, budget: 520, jitter: 12, topPool: 1 };
           } else if (elo <= 2400) {
-            profile = { maxDepth: 3, budget: 680, jitter: 7 };
+            profile = { maxDepth: 3, budget: 750, jitter: 5, topPool: 1 };
           } else if (elo <= 2700) {
-            profile = { maxDepth: 3, budget: 850, jitter: 3 };
+            profile = { maxDepth: 3, budget: 900, jitter: 2, topPool: 1 };
           } else {
-            profile = { maxDepth: 4, budget: 1050, jitter: 0 };
+            profile = { maxDepth: 4, budget: 1100, jitter: 0, topPool: 1 };
           }
         }
 
@@ -2491,16 +2496,20 @@
         this.timeBudget = profile.budget;
         this.aborted = false;
 
-        let bestMove = legal[0];
         this.orderMoves(engine, legal);
+        let bestScoredList = null;
 
-        for (let depth = 1; depth <= profile.maxDepth; depth++) {
-          let currentBest = null;
-          let bestVal = maximizing ? -Infinity : Infinity;
+        // Always guarantee at least depth 2 for ELO >= 700 so it never hangs pieces blindly
+        const minGuaranteedDepth = Math.min(2, profile.maxDepth);
+
+        for (let depth = minGuaranteedDepth; depth <= profile.maxDepth; depth++) {
+          const scored = [];
           let alpha = -Infinity;
           let beta = Infinity;
 
-          this.orderMoves(engine, legal, bestMove);
+          if (bestScoredList && bestScoredList.length > 0) {
+            this.orderMoves(engine, legal, bestScoredList[0].m);
+          }
 
           for (const m of legal) {
             engine.applyMoveRaw(m);
@@ -2508,31 +2517,32 @@
             const val = rawVal + (profile.jitter > 0 ? (Math.random() * profile.jitter * 2 - profile.jitter) : 0);
             engine.restoreState(snap);
 
-            if (this.aborted) break;
+            if (depth > minGuaranteedDepth && this.aborted) break;
+
+            scored.push({ m, s: val });
 
             if (maximizing) {
-              if (val > bestVal) {
-                bestVal = val;
-                currentBest = m;
-              }
-              if (val > alpha) alpha = val;
+              if (rawVal > alpha) alpha = rawVal;
             } else {
-              if (val < bestVal) {
-                bestVal = val;
-                currentBest = m;
-              }
-              if (val < beta) beta = val;
+              if (rawVal < beta) beta = rawVal;
             }
           }
 
-          if (!this.aborted && currentBest) {
-            bestMove = currentBest;
+          if (depth === minGuaranteedDepth || !this.aborted) {
+            scored.sort((a, b) => maximizing ? b.s - a.s : a.s - b.s);
+            bestScoredList = scored;
           } else {
             break;
           }
         }
 
-        return bestMove;
+        if (!bestScoredList || bestScoredList.length === 0) return legal[0];
+        if (profile.topPool > 1 && bestScoredList.length > 1) {
+          const pool = Math.min(profile.topPool, bestScoredList.length);
+          const idx = Math.random() < 0.78 ? 0 : Math.floor(Math.random() * pool);
+          return bestScoredList[idx].m;
+        }
+        return bestScoredList[0].m;
       }
     }
 
