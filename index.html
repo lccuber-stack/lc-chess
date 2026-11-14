@@ -196,7 +196,8 @@
 
     /* Center Stage (Board + Player Bars) */
     #board-stage {
-      flex: 1;
+      flex: 1 1 0;
+      min-width: 0;
       width: 100%;
       height: 100%;
       display: flex;
@@ -214,18 +215,22 @@
       }
     }
 
-    /* Player Bars */
+    /* Fixed-height Player Bars to prevent zero-pixel vertical shift */
     .player-bar {
       width: 100%;
+      height: 46px;
+      min-height: 46px;
+      max-height: 46px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 10px;
+      padding: 0 10px;
       border-radius: var(--radius-md);
       background-color: var(--bg-panel);
       border: 1px solid var(--border-subtle);
       flex-shrink: 0;
       gap: 8px;
+      overflow: hidden;
     }
 
     #top-player-bar {
@@ -246,11 +251,12 @@
       gap: 10px;
       min-width: 0;
       flex: 1;
+      height: 100%;
     }
 
     .player-avatar {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: var(--radius-sm);
       background-color: var(--bg-card);
       border: 1px solid var(--border-strong);
@@ -261,19 +267,25 @@
     }
 
     .player-avatar svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
     }
 
     .player-meta {
       min-width: 0;
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 36px;
     }
 
     .player-name-row {
       display: flex;
       align-items: center;
       gap: 6px;
+      height: 18px;
+      line-height: 18px;
     }
 
     .player-name {
@@ -288,13 +300,14 @@
     .thinking-pill {
       font-size: 10px;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 1px 7px;
       border-radius: 999px;
       background: rgba(245, 158, 11, 0.2);
       color: #fbbf24;
       border: 1px solid rgba(245, 158, 11, 0.4);
       animation: pulse 1.1s infinite ease-in-out;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .turn-dot {
@@ -310,19 +323,23 @@
       display: flex;
       align-items: center;
       height: 16px;
-      margin-top: 2px;
+      min-height: 16px;
+      max-height: 16px;
+      margin-top: 1px;
       overflow: hidden;
     }
 
     .captured-icons {
       display: flex;
       align-items: center;
+      height: 16px;
     }
 
     .captured-icons svg {
       width: 14px;
       height: 14px;
       margin-right: -3px;
+      flex-shrink: 0;
     }
 
     .material-badge {
@@ -330,20 +347,23 @@
       font-weight: 700;
       color: #34d399;
       margin-left: 6px;
+      line-height: 16px;
     }
 
     .clock-box {
       font-size: 15px;
       font-weight: 700;
-      padding: 5px 10px;
+      height: 32px;
+      line-height: 30px;
+      padding: 0 10px;
       border-radius: var(--radius-sm);
       background-color: var(--bg-app);
       color: var(--text-secondary);
       border: 1px solid var(--border-subtle);
       flex-shrink: 0;
-      min-width: 64px;
+      width: 68px;
       text-align: center;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
 
     .clock-box.active {
@@ -364,6 +384,99 @@
       50% { opacity: 0.55; }
     }
 
+    /* Board & Vertical Evaluation Bar Assembly */
+    #board-assembly {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 8px;
+      flex-shrink: 0;
+      overflow: hidden;
+      contain: layout size;
+    }
+
+    #eval-bar-wrap {
+      width: 22px;
+      min-width: 22px;
+      max-width: 22px;
+      height: 100%;
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+      background-color: #18181b;
+      border: 1px solid var(--border-strong);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      contain: strict;
+    }
+
+    #eval-bar-wrap {
+      width: 22px;
+      min-width: 22px;
+      max-width: 22px;
+      height: 100%;
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+      background-color: #18181b;
+      border: 1px solid var(--border-strong);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #eval-fill-top {
+      width: 100%;
+      height: 50%;
+      background-color: #18181b;
+      transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease;
+    }
+
+    #eval-fill-bottom {
+      width: 100%;
+      flex: 1;
+      background-color: #f8fafc;
+      transition: background-color 0.2s ease;
+    }
+
+    #eval-midline {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      margin-top: -1px;
+      background-color: rgba(16, 185, 129, 0.85);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .eval-score-label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 800;
+      line-height: 1;
+      z-index: 4;
+      pointer-events: none;
+      letter-spacing: -0.04em;
+    }
+
+    #eval-label-top {
+      top: 4px;
+      color: #f8fafc;
+    }
+
+    #eval-label-bottom {
+      bottom: 4px;
+      color: #0f172a;
+    }
+
     /* Chessboard Wrapper & Grid */
     #board-container {
       position: relative;
@@ -371,25 +484,31 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      overflow: hidden;
+      contain: strict;
     }
 
     #chessboard {
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(8, 1fr);
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      grid-template-rows: repeat(8, minmax(0, 1fr));
       border-radius: var(--radius-md);
       overflow: hidden;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.14);
       background-color: var(--bg-card);
       touch-action: none;
+      contain: strict;
     }
 
     .square {
       position: relative;
       width: 100%;
       height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -424,20 +543,78 @@
       z-index: 1;
     }
 
+    .sq-hint-from::after,
+    .sq-hint-to::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 2;
+      animation: hintPulse 1.3s infinite ease-in-out;
+    }
+
+    .sq-hint-from::after {
+      border: 3px solid #38bdf8;
+      background-color: rgba(56, 189, 248, 0.25);
+    }
+
+    .sq-hint-to::after {
+      border: 3px solid #f59e0b;
+      background-color: rgba(245, 158, 11, 0.32);
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(0.96); }
+    }
+
     .sq-check {
       background: radial-gradient(circle at center, #ef4444 0%, #dc2626 52%, rgba(220, 38, 38, 0.3) 80%, transparent 100%) !important;
     }
+    /* Mobile Bottom Move Ticker + Optional Undo & Hint */
+    #mobile-bottom-strip {
+      width: 100%;
+      height: 36px;
+      min-height: 36px;
+      max-height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
 
-    .coord-rank {
-      position: absolute;
-      top: 2px;
-      left: 3px;
-      font-size: 10px;
-      font-weight: 800;
-      line-height: 1;
-      opacity: 0.85;
-      pointer-events: none;
-      z-index: 2;
+    @media (min-width: 1024px) {
+      #mobile-bottom-strip {
+        display: none;
+      }
+    }
+
+    #mobile-move-ticker {
+      flex: 1;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+
+    .btn-hint {
+      border-color: rgba(56, 189, 248, 0.38);
+      color: #7dd3fc;
+      background-color: rgba(14, 165, 233, 0.12);
+    }
+
+    .btn-hint:hover:not(:disabled) {
+      background-color: rgba(14, 165, 233, 0.22);
+      border-color: rgba(56, 189, 248, 0.65);
     }
 
     .coord-file {
@@ -504,11 +681,14 @@
     /* Floating Drag Ghost */
     #drag-ghost {
       position: fixed;
+      left: -9999px;
+      top: -9999px;
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -55%) scale(1.15);
       filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.55));
       display: none;
+      will-change: left, top;
     }
 
     #drag-ghost svg {
@@ -572,11 +752,14 @@
         flex-direction: column;
         justify-content: space-between;
         width: 370px;
+        min-width: 370px;
+        max-width: 370px;
         height: 100%;
         background-color: var(--bg-panel);
         border-left: 1px solid var(--border-subtle);
         padding: 20px;
         flex-shrink: 0;
+        overflow: hidden;
       }
     }
 
@@ -888,8 +1071,8 @@
           <div class="player-meta">
             <div class="player-name-row">
               <span id="top-name" class="player-name">Intermediate (1200)</span>
-              <span id="top-thinking" class="thinking-pill hidden">Thinking...</span>
               <span id="top-turn-dot" class="turn-dot hidden"></span>
+              <span id="top-thinking" class="thinking-pill hidden">Thinking...</span>
             </div>
             <div class="captured-row">
               <div id="top-captured" class="captured-icons"></div>
@@ -900,9 +1083,18 @@
         <div id="top-clock" class="clock-box mono">10:00</div>
       </div>
 
-      <!-- Dynamic Maximum-Scale Chessboard -->
-      <div id="board-container">
-        <div id="chessboard"></div>
+      <!-- Dynamic Maximum-Scale Chessboard + Vertical Black/White Position Bar -->
+      <div id="board-assembly">
+        <div id="eval-bar-wrap" title="Real-time Position Evaluation (White vs Black)">
+          <div id="eval-fill-top"></div>
+          <div id="eval-fill-bottom"></div>
+          <div id="eval-midline"></div>
+          <span id="eval-label-top" class="eval-score-label mono"></span>
+          <span id="eval-label-bottom" class="eval-score-label mono">0.0</span>
+        </div>
+        <div id="board-container">
+          <div id="chessboard"></div>
+        </div>
       </div>
 
       <!-- Bottom Player Bar -->
@@ -923,12 +1115,16 @@
         <div id="bottom-clock" class="clock-box mono active">10:00</div>
       </div>
 
-      <!-- Mobile Compact Move Ticker & Conditional Undo -->
+      <!-- Mobile Compact Move Ticker & Conditional Hint / Undo -->
       <div id="mobile-bottom-strip">
         <div id="mobile-move-ticker" class="mono scroll-thin">
           <span style="color: var(--text-muted); font-family: inherit;">White to move</span>
         </div>
-        <button id="btn-undo-mobile" class="btn" style="height: 36px; padding: 0 12px; font-size: 12px; flex-shrink: 0;">
+        <button id="btn-hint-mobile" class="btn btn-hint" style="height: 36px; padding: 0 10px; font-size: 12px; flex-shrink: 0;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          Hint
+        </button>
+        <button id="btn-undo-mobile" class="btn" style="height: 36px; padding: 0 10px; font-size: 12px; flex-shrink: 0;">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14L4 9l5-5"/><path stroke-linecap="round" stroke-linejoin="round" d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
           Undo
         </button>
@@ -977,10 +1173,16 @@
 
       <!-- Sidebar Controls (No Flip Board Button) -->
       <div class="sidebar-controls">
-        <button id="btn-undo-desktop" class="btn" style="width: 100%; padding: 11px 14px;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14L4 9l5-5"/><path stroke-linecap="round" stroke-linejoin="round" d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
-          Undo Last Move
-        </button>
+        <div id="sidebar-assist-row" class="grid-2">
+          <button id="btn-hint-desktop" class="btn btn-hint" style="width: 100%; padding: 11px 12px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Hint
+          </button>
+          <button id="btn-undo-desktop" class="btn" style="width: 100%; padding: 11px 12px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14L4 9l5-5"/><path stroke-linecap="round" stroke-linejoin="round" d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+            Undo Move
+          </button>
+        </div>
         <button id="btn-new-desktop" class="btn btn-primary" style="width: 100%; padding: 12px 16px; font-size: 14px; font-weight: 700;">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           New Game Setup
@@ -1100,14 +1302,24 @@
           </div>
         </div>
 
-        <!-- Allow Undo Setting -->
-        <div>
+        <!-- Allow Undo & Hints Settings -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
           <div id="toggle-undo" class="toggle-row" role="switch" aria-checked="true" tabindex="0">
             <div>
               <div class="toggle-text-title">Allow Undo Move</div>
               <div class="toggle-text-sub">Enable takebacks during the match</div>
             </div>
             <div id="switch-undo" class="switch-pill on">
+              <div class="switch-knob"></div>
+            </div>
+          </div>
+
+          <div id="toggle-hints" class="toggle-row" role="switch" aria-checked="true" tabindex="0">
+            <div>
+              <div class="toggle-text-title">Allow Hints</div>
+              <div class="toggle-text-sub">Highlight best move suggestions on demand</div>
+            </div>
+            <div id="switch-hints" class="switch-pill on">
               <div class="switch-knob"></div>
             </div>
           </div>
@@ -2052,6 +2264,8 @@
       boardOrientationBlack: false, // true only when human plays Black vs AI
       tabletopMode: true,         // rotates Black pieces 180° in vs Friend mode
       allowUndo: true,            // configured in pre-game settings
+      allowHints: true,           // configured in pre-game settings
+      hintMove: null,             // { from, to } highlighted when Hint is clicked
       selectedSq: null,
       legalMovesForSelected: [],
       pendingPromotion: null,
@@ -2064,8 +2278,14 @@
 
     const dom = {
       boardStage: document.getElementById('board-stage'),
+      boardAssembly: document.getElementById('board-assembly'),
       boardContainer: document.getElementById('board-container'),
       chessboard: document.getElementById('chessboard'),
+      evalBarWrap: document.getElementById('eval-bar-wrap'),
+      evalFillTop: document.getElementById('eval-fill-top'),
+      evalFillBottom: document.getElementById('eval-fill-bottom'),
+      evalLabelTop: document.getElementById('eval-label-top'),
+      evalLabelBottom: document.getElementById('eval-label-bottom'),
       topBar: document.getElementById('top-player-bar'),
       bottomBar: document.getElementById('bottom-player-bar'),
       topName: document.getElementById('top-name'),
@@ -2097,45 +2317,73 @@
       gameoverIcon: document.getElementById('gameover-icon'),
       dragGhost: document.getElementById('drag-ghost'),
       btnUndoMobile: document.getElementById('btn-undo-mobile'),
-      btnUndoDesktop: document.getElementById('btn-undo-desktop')
+      btnUndoDesktop: document.getElementById('btn-undo-desktop'),
+      btnHintMobile: document.getElementById('btn-hint-mobile'),
+      btnHintDesktop: document.getElementById('btn-hint-desktop'),
+      sidebarAssistRow: document.getElementById('sidebar-assist-row')
     };
 
     // =========================================================================
-    // 6. DYNAMIC FULL-SCREEN BOARD SCALER (Mac, iPad, iPhone)
+    // 6. DYNAMIC FULL-SCREEN BOARD SCALER (FIXED ZERO-JITTER DIMENSIONS)
     // =========================================================================
-    function resizeBoard() {
-      const stageRect = dom.boardStage.getBoundingClientRect();
-      const isMobileOrTablet = window.innerWidth < 1024;
+    let lastStageW = 0;
+    let lastStageH = 0;
 
-      const topBarH = dom.topBar.offsetHeight || 46;
-      const bottomBarH = dom.bottomBar.offsetHeight || 46;
-      const mobileStripH = isMobileOrTablet ? (document.getElementById('mobile-bottom-strip').offsetHeight + 8) : 0;
-      const verticalPadding = isMobileOrTablet ? 18 : 36;
+    function resizeBoard(force = false) {
+      const rect = dom.boardStage.getBoundingClientRect();
+      const stageW = Math.round(rect.width);
+      const stageH = Math.round(rect.height);
+
+      if (!force && stageW === lastStageW && stageH === lastStageH) {
+        return;
+      }
+      lastStageW = stageW;
+      lastStageH = stageH;
+
+      const isMobileOrTablet = window.innerWidth < 1024;
+      const evalBarFullWidth = 30; // 22px bar + 8px gap
+
+      // Fixed bar heights so board calculation never changes when pieces/badges update
+      const topBarH = 46;
+      const bottomBarH = 46;
+      const barsMargins = 12; // 6px + 6px
+      const mobileStripH = isMobileOrTablet ? 42 : 0; // 36px + 6px margin
+      const verticalPadding = isMobileOrTablet ? 14 : 32;
       const horizontalPadding = isMobileOrTablet ? 16 : 48;
 
-      const availHeight = Math.max(220, stageRect.height - topBarH - bottomBarH - mobileStripH - verticalPadding);
-      const availWidth = Math.max(220, stageRect.width - horizontalPadding);
+      const availHeight = Math.max(220, stageH - topBarH - bottomBarH - barsMargins - mobileStripH - verticalPadding);
+      const availWidth = Math.max(220, stageW - horizontalPadding - evalBarFullWidth);
 
       let boardSize = Math.floor(Math.min(availWidth, availHeight));
       boardSize = boardSize - (boardSize % 8);
+      if (boardSize % 2 !== 0) boardSize -= 1;
+      const totalWidth = boardSize + evalBarFullWidth;
 
+      dom.boardAssembly.style.width = `${totalWidth}px`;
+      dom.boardAssembly.style.minWidth = `${totalWidth}px`;
+      dom.boardAssembly.style.maxWidth = `${totalWidth}px`;
+      dom.boardAssembly.style.height = `${boardSize}px`;
+      dom.evalBarWrap.style.width = '22px';
+      dom.evalBarWrap.style.height = `${boardSize}px`;
       dom.boardContainer.style.width = `${boardSize}px`;
       dom.boardContainer.style.height = `${boardSize}px`;
-      dom.topBar.style.width = `${boardSize}px`;
-      dom.bottomBar.style.width = `${boardSize}px`;
+      dom.chessboard.style.width = `${boardSize}px`;
+      dom.chessboard.style.height = `${boardSize}px`;
+      dom.topBar.style.width = `${totalWidth}px`;
+      dom.bottomBar.style.width = `${totalWidth}px`;
       if (isMobileOrTablet) {
-        document.getElementById('mobile-bottom-strip').style.width = `${boardSize}px`;
+        document.getElementById('mobile-bottom-strip').style.width = `${totalWidth}px`;
       }
     }
 
-    window.addEventListener('resize', resizeBoard);
-    window.addEventListener('orientationchange', () => setTimeout(resizeBoard, 100));
+    window.addEventListener('resize', () => resizeBoard(true));
+    window.addEventListener('orientationchange', () => setTimeout(() => resizeBoard(true), 120));
     if (window.ResizeObserver) {
-      new ResizeObserver(resizeBoard).observe(dom.boardStage);
+      new ResizeObserver(() => resizeBoard(false)).observe(dom.boardStage);
     }
 
     // =========================================================================
-    // 7. BOARD RENDERING & POINTER/TOUCH INTERACTION
+    // 7. BOARD RENDERING & POINTER/TOUCH INTERACTION (WITH ROOK-CLICK CASTLING)
     // =========================================================================
     let dragState = {
       active: false,
@@ -2147,6 +2395,25 @@
 
     function shouldRotatePiece180(piece) {
       return state.mode === 'friend' && state.tabletopMode && piece && piece[0] === 'b';
+    }
+
+    // Maps a destination square (including clicking friendly rook on h1/a1/h8/a8) to legal move(s)
+    function resolveLegalMovesToTarget(fromSq, targetSq) {
+      let matches = state.legalMovesForSelected.filter(m => m.from === fromSq && m.to === targetSq);
+      if (matches.length > 0) return matches;
+
+      // Support castling by clicking/dropping directly onto the friendly Rook square
+      const kingPiece = engine.board[fromSq];
+      if (kingPiece && kingPiece[1] === 'K') {
+        if (kingPiece === 'wK' && fromSq === 60) {
+          if (targetSq === 63) matches = state.legalMovesForSelected.filter(m => m.from === 60 && m.to === 62 && m.castle === 'K');
+          else if (targetSq === 56) matches = state.legalMovesForSelected.filter(m => m.from === 60 && m.to === 58 && m.castle === 'Q');
+        } else if (kingPiece === 'bK' && fromSq === 4) {
+          if (targetSq === 7) matches = state.legalMovesForSelected.filter(m => m.from === 4 && m.to === 6 && m.castle === 'K');
+          else if (targetSq === 0) matches = state.legalMovesForSelected.filter(m => m.from === 4 && m.to === 2 && m.castle === 'Q');
+        }
+      }
+      return matches;
     }
 
     function renderBoard() {
@@ -2175,6 +2442,12 @@
         }
         if (state.selectedSq === sq) {
           sqEl.classList.add('sq-selected');
+        }
+        if (state.hintMove && state.hintMove.from === sq) {
+          sqEl.classList.add('sq-hint-from');
+        }
+        if (state.hintMove && state.hintMove.to === sq) {
+          sqEl.classList.add('sq-hint-to');
         }
         if (sq === kingInCheckSq) {
           sqEl.classList.add('sq-check');
@@ -2253,7 +2526,7 @@
     }
 
     function tryExecuteHumanMove(fromSq, toSq) {
-      const matchingMoves = state.legalMovesForSelected.filter(m => m.from === fromSq && m.to === toSq);
+      const matchingMoves = resolveLegalMovesToTarget(fromSq, toSq);
       if (matchingMoves.length === 0) return false;
 
       if (matchingMoves.length > 1 && matchingMoves[0].promo) {
@@ -2266,9 +2539,12 @@
       return true;
     }
 
+    dom.chessboard.addEventListener('dragstart', (e) => e.preventDefault());
+
     dom.chessboard.addEventListener('pointerdown', (e) => {
       if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
       if (!canHumanInteract()) return;
+      e.preventDefault();
 
       const sq = getSquareFromPoint(e.clientX, e.clientY);
       if (sq === null) return;
@@ -2308,7 +2584,7 @@
     window.addEventListener('pointermove', (e) => {
       if (!dragState.active) return;
       const dist = Math.hypot(e.clientX - dragState.startX, e.clientY - dragState.startY);
-      if (dist > 6 && !dragState.moved) {
+      if (dist > 10 && !dragState.moved) {
         dragState.moved = true;
         dom.dragGhost.style.display = 'block';
         renderBoard();
@@ -2321,50 +2597,33 @@
 
     window.addEventListener('pointerup', (e) => {
       if (!dragState.active) return;
-      dom.dragGhost.style.display = 'none';
-
-      if (dragState.moved) {
-        const dropSq = getSquareFromPoint(e.clientX, e.clientY);
-        if (dropSq !== null && dropSq !== dragState.fromSq) {
-          tryExecuteHumanMove(dragState.fromSq, dropSq);
-        }
-      }
+      const wasMoved = dragState.moved;
+      const originSq = dragState.fromSq;
       dragState.active = false;
       dragState.moved = false;
-      renderBoard();
+      dom.dragGhost.style.display = 'none';
+      dom.dragGhost.style.left = '-9999px';
+      dom.dragGhost.style.top = '-9999px';
+
+      if (wasMoved) {
+        const dropSq = getSquareFromPoint(e.clientX, e.clientY);
+        if (dropSq !== null && dropSq !== originSq) {
+          const executed = tryExecuteHumanMove(originSq, dropSq);
+          if (!executed) renderBoard();
+        } else {
+          renderBoard();
+        }
+      }
     });
 
     // =========================================================================
-    // 8. PROMOTION MODAL
-    // =========================================================================
-    function showPromotionModal(color) {
-      dom.promoChoices.innerHTML = '';
-      ['Q', 'R', 'B', 'N'].forEach(type => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'promo-btn';
-        btn.innerHTML = PIECE_SVGS[color + type];
-        if (state.mode === 'friend' && state.tabletopMode && color === 'b') {
-          btn.style.transform = 'rotate(180deg)';
-        }
-        btn.onclick = () => {
-          const chosen = state.pendingPromotion.find(m => m.promo === type);
-          state.pendingPromotion = null;
-          dom.promoModal.classList.add('hidden');
-          if (chosen) commitMove(chosen);
-        };
-        dom.promoChoices.appendChild(btn);
-      });
-      dom.promoModal.classList.remove('hidden');
-    }
-
-    // =========================================================================
-    // 9. MOVE COMMITMENT, AI TURN & UI UPDATES
+    // 9. MOVE COMMITMENT, EVALUATION BAR, HINTS & AI TURN
     // =========================================================================
     function commitMove(move) {
       const record = engine.makeMove(move);
       state.selectedSq = null;
       state.legalMovesForSelected = [];
+      state.hintMove = null;
 
       if (record.isCheckmate || record.isStalemate) sfx.play('gameover');
       else if (record.inCheck) sfx.play('check');
@@ -2385,18 +2644,36 @@
       }
     }
 
-    function triggerAITurn() {
-      state.aiThinking = true;
-      updatePlayerBars();
-      updateStatusBanner();
+    function showPromotionModal(color) {
+      dom.promoChoices.innerHTML = '';
+      ['Q', 'R', 'B', 'N'].forEach(pieceType => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'promo-btn';
+        btn.innerHTML = PIECE_SVGS[color + pieceType];
+        btn.addEventListener('click', () => {
+          dom.promoModal.classList.add('hidden');
+          const chosenMove = state.pendingPromotion
+            ? state.pendingPromotion.find(m => m.promo === pieceType)
+            : null;
+          state.pendingPromotion = null;
+          if (chosenMove) {
+            commitMove(chosenMove);
+          }
+        });
+        dom.promoChoices.appendChild(btn);
+      });
+      dom.promoModal.classList.remove('hidden');
+    }
 
-      const delay = state.difficulty === 'easy' ? 240 : (state.difficulty === 'intermediate' ? 300 : 120);
+    function triggerAITurn() {
+      if (state.gameOver || state.mode !== 'ai' || engine.turn === state.playerColor) return;
+      state.aiThinking = true;
+      updateAllUI();
+
+      const delay = state.difficulty === 'magnus' ? 220 : 160;
       setTimeout(() => {
-        if (state.gameOver || engine.turn === state.playerColor) {
-          state.aiThinking = false;
-          updatePlayerBars();
-          return;
-        }
+        if (state.gameOver || !state.aiThinking) return;
         const aiMove = ai.chooseMove(engine, state.difficulty);
         state.aiThinking = false;
         if (aiMove) {
@@ -2405,6 +2682,111 @@
           updateAllUI();
         }
       }, delay);
+    }
+
+    function handleHint() {
+      if (!state.allowHints || !canHumanInteract()) return;
+      const suggested = ai.chooseMove(engine, 'magnus');
+      if (suggested) {
+        state.hintMove = { from: suggested.from, to: suggested.to };
+        state.selectedSq = suggested.from;
+        state.legalMovesForSelected = engine.generateLegalMoves(engine.turn).filter(m => m.from === suggested.from);
+        sfx.play('move');
+        renderBoard();
+      }
+    }
+
+    function updateEvaluationBar() {
+      const legal = engine.generateLegalMoves(engine.turn);
+      const inCheck = engine.isInCheck(engine.turn);
+
+      let whitePercent = 50;
+      let scoreText = '0.0';
+      let whiteAhead = true;
+
+      if (legal.length === 0 && inCheck) {
+        // Checkmate
+        whiteAhead = engine.turn === 'b';
+        whitePercent = whiteAhead ? 100 : 0;
+        scoreText = 'M0';
+      } else if (legal.length === 0) {
+        whitePercent = 50;
+        scoreText = '0.0';
+      } else {
+        const cp = ai.evaluateBoard(engine); // positive = White advantage
+        whiteAhead = cp >= 0;
+        // Smooth sigmoid conversion from centipawns to win percentage
+        const winProb = 1 / (1 + Math.exp(-0.0038 * cp));
+        whitePercent = Math.max(4, Math.min(96, Math.round(winProb * 100)));
+        const pawns = Math.abs(cp / 100);
+        scoreText = pawns >= 9.95 ? `${Math.round(pawns)}` : pawns.toFixed(1);
+      }
+
+      // If board is oriented with White at bottom, top is Black and bottom is White.
+      // If board is oriented with Black at bottom (playing Black vs AI), top is White and bottom is Black.
+      if (!state.boardOrientationBlack) {
+        const blackPercent = 100 - whitePercent;
+        dom.evalFillTop.style.backgroundColor = '#18181b';
+        dom.evalFillBottom.style.backgroundColor = '#f8fafc';
+        dom.evalFillTop.style.height = `${blackPercent}%`;
+
+        if (whiteAhead) {
+          dom.evalLabelTop.textContent = '';
+          dom.evalLabelBottom.textContent = scoreText;
+          dom.evalLabelBottom.style.color = '#0f172a';
+        } else {
+          dom.evalLabelBottom.textContent = '';
+          dom.evalLabelTop.textContent = scoreText;
+          dom.evalLabelTop.style.color = '#f8fafc';
+        }
+      } else {
+        dom.evalFillTop.style.backgroundColor = '#f8fafc';
+        dom.evalFillBottom.style.backgroundColor = '#18181b';
+        dom.evalFillTop.style.height = `${whitePercent}%`;
+
+        if (whiteAhead) {
+          dom.evalLabelBottom.textContent = '';
+          dom.evalLabelTop.textContent = scoreText;
+          dom.evalLabelTop.style.color = '#0f172a';
+        } else {
+          dom.evalLabelTop.textContent = '';
+          dom.evalLabelBottom.textContent = scoreText;
+          dom.evalLabelBottom.style.color = '#f8fafc';
+        }
+      }
+    }
+    function updateAssistControlsVisibility() {
+      const showUndo = state.allowUndo;
+      const showHints = state.allowHints;
+
+      dom.btnUndoMobile.classList.toggle('hidden', !showUndo);
+      dom.btnUndoDesktop.classList.toggle('hidden', !showUndo);
+      dom.btnHintMobile.classList.toggle('hidden', !showHints);
+      dom.btnHintDesktop.classList.toggle('hidden', !showHints);
+
+      // Adjust desktop sidebar assist row grid columns cleanly
+      if (!showUndo && !showHints) {
+        dom.sidebarAssistRow.classList.add('hidden');
+      } else {
+        dom.sidebarAssistRow.classList.remove('hidden');
+        dom.sidebarAssistRow.style.gridTemplateColumns = (showUndo && showHints) ? 'repeat(2, 1fr)' : '1fr';
+      }
+
+      const canInteractNow = canHumanInteract();
+      dom.btnUndoMobile.disabled = !(showUndo && !state.aiThinking && engine.history.length > 0);
+      dom.btnUndoDesktop.disabled = !(showUndo && !state.aiThinking && engine.history.length > 0);
+      dom.btnHintMobile.disabled = !(showHints && canInteractNow);
+      dom.btnHintDesktop.disabled = !(showHints && canInteractNow);
+    }
+
+    function updateAllUI() {
+      renderBoard();
+      updateEvaluationBar();
+      updateMoveLog();
+      updateCapturedAndMaterial();
+      updatePlayerBars();
+      updateStatusBanner();
+      updateAssistControlsVisibility();
     }
 
     function updateMoveLog() {
@@ -2572,25 +2954,6 @@
       }
     }
 
-    function updateUndoVisibility() {
-      const show = state.allowUndo;
-      dom.btnUndoMobile.classList.toggle('hidden', !show);
-      dom.btnUndoDesktop.classList.toggle('hidden', !show);
-
-      const canUndoNow = show && !state.aiThinking && engine.history.length > 0;
-      dom.btnUndoMobile.disabled = !canUndoNow;
-      dom.btnUndoDesktop.disabled = !canUndoNow;
-    }
-
-    function updateAllUI() {
-      renderBoard();
-      updateMoveLog();
-      updateCapturedAndMaterial();
-      updatePlayerBars();
-      updateStatusBanner();
-      updateUndoVisibility();
-    }
-
     // =========================================================================
     // 10. CLOCK TIMER
     // =========================================================================
@@ -2643,6 +3006,7 @@
       engine.reset();
       state.selectedSq = null;
       state.legalMovesForSelected = [];
+      state.hintMove = null;
       state.pendingPromotion = null;
       state.aiThinking = false;
       state.gameOver = false;
@@ -2673,7 +3037,7 @@
       dom.gameoverModal.classList.add('hidden');
 
       updateAllUI();
-      resizeBoard();
+      resizeBoard(true);
       startClockTimer();
 
       if (state.mode === 'ai' && state.playerColor === 'b') {
@@ -2722,11 +3086,12 @@
 
       state.selectedSq = null;
       state.legalMovesForSelected = [];
+      state.hintMove = null;
       updateAllUI();
     }
 
     // =========================================================================
-    // 12. PRE-GAME SETUP BINDINGS & SELF-VERIFICATION
+    // 12. PRE-GAME SETUP BINDINGS & COMPREHENSIVE RULE SELF-VERIFICATION
     // =========================================================================
     function bindSetupSelectors() {
       // Opponent Mode
@@ -2789,6 +3154,15 @@
         switchUndo.classList.toggle('on', state.allowUndo);
         toggleUndo.setAttribute('aria-checked', String(state.allowUndo));
       });
+
+      // Allow Hints Toggle
+      const toggleHints = document.getElementById('toggle-hints');
+      const switchHints = document.getElementById('switch-hints');
+      toggleHints.addEventListener('click', () => {
+        state.allowHints = !state.allowHints;
+        switchHints.classList.toggle('on', state.allowHints);
+        toggleHints.setAttribute('aria-checked', String(state.allowHints));
+      });
     }
 
     function toggleSound() {
@@ -2816,6 +3190,10 @@
       document.getElementById(id).addEventListener('click', handleUndo);
     });
 
+    ['btn-hint-mobile', 'btn-hint-desktop'].forEach(id => {
+      document.getElementById(id).addEventListener('click', handleHint);
+    });
+
     ['btn-sound-mobile', 'btn-sound-desktop'].forEach(id => {
       document.getElementById(id).addEventListener('click', toggleSound);
     });
@@ -2826,13 +3204,59 @@
       dom.setupModal.classList.remove('hidden');
     });
 
+    function runRulesSelfTest() {
+      const testEng = new ChessEngine();
+
+      // 1. Verify White & Black Kingside and Queenside Castling
+      testEng.board.fill(null);
+      testEng.board[60] = 'wK'; testEng.board[63] = 'wR'; testEng.board[56] = 'wR';
+      testEng.board[4] = 'bK'; testEng.board[7] = 'bR'; testEng.board[0] = 'bR';
+      testEng.castling = { wK: true, wQ: true, bK: true, bQ: true };
+      testEng.turn = 'w';
+      const wMoves = testEng.generateLegalMoves('w');
+      const wOO = wMoves.find(m => m.from === 60 && m.to === 62 && m.castle === 'K');
+      const wOOO = wMoves.find(m => m.from === 60 && m.to === 58 && m.castle === 'Q');
+      if (!wOO || !wOOO) console.error('Self-Test Failed: White castling missing');
+
+      testEng.makeMove(wOO);
+      if (testEng.board[62] !== 'wK' || testEng.board[61] !== 'wR') {
+        console.error('Self-Test Failed: White O-O execution');
+      }
+
+      const bMoves = testEng.generateLegalMoves('b');
+      const bOOO = bMoves.find(m => m.from === 4 && m.to === 2 && m.castle === 'Q');
+      if (!bOOO) console.error('Self-Test Failed: Black queenside castling missing');
+      testEng.makeMove(bOOO);
+      if (testEng.board[2] !== 'bK' || testEng.board[3] !== 'bR') {
+        console.error('Self-Test Failed: Black O-O-O execution');
+      }
+
+      // 2. Verify En Passant
+      testEng.reset();
+      testEng.makeMove({ from: 52, to: 36, doublePawn: true }); // e4
+      testEng.makeMove({ from: 8, to: 16 }); // a6
+      testEng.makeMove({ from: 36, to: 28 }); // e5
+      testEng.makeMove({ from: 11, to: 27, doublePawn: true }); // d5
+      const epMoves = testEng.generateLegalMoves('w').filter(m => m.isEnPassant);
+      if (epMoves.length !== 1 || epMoves[0].to !== 19) {
+        console.error('Self-Test Failed: En passant detection');
+      }
+
+      // 3. Verify Pawn Promotion (4 piece options)
+      testEng.board.fill(null);
+      testEng.board[60] = 'wK'; testEng.board[4] = 'bK'; testEng.board[8] = 'wP';
+      testEng.turn = 'w';
+      const promos = testEng.generateLegalMoves('w').filter(m => m.from === 8 && m.to === 0);
+      if (promos.length !== 4) console.error('Self-Test Failed: Pawn promotion options');
+    }
+
     // Startup Initialization & Self-Verification
     window.addEventListener('DOMContentLoaded', () => {
       bindSetupSelectors();
+      runRulesSelfTest();
       updateAllUI();
-      resizeBoard();
+      resizeBoard(true);
 
-      // Self-verification: confirm all 32 starting pieces rendered as visible SVGs
       const renderedSvgs = dom.chessboard.querySelectorAll('.piece-wrap svg');
       if (renderedSvgs.length !== 32) {
         console.error('LC Chess Verification Failed: Expected 32 piece SVGs, found', renderedSvgs.length);
