@@ -129,22 +129,6 @@
       white-space: nowrap;
     }
 
-    .pill-badge {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      padding: 4px 9px;
-      border-radius: 999px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-width: 0;
-      flex: 1 1 auto;
-      text-align: center;
-    }
-
     .header-actions {
       display: flex;
       align-items: center;
@@ -1176,8 +1160,6 @@
         </div>
         <span class="brand-title">LC Chess</span>
       </div>
-
-      <span id="mobile-mode-pill" class="pill-badge">Intermediate (1200)</span>
 
       <div class="header-actions">
         <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
@@ -3438,12 +3420,10 @@
         const humanLabel = `You (${state.humanColor === 'w' ? 'White' : 'Black'})`;
         $('top-name').textContent = topColor === state.humanColor ? humanLabel : aiName;
         $('bottom-name').textContent = bottomColor === state.humanColor ? humanLabel : aiName;
-        $('mobile-mode-pill').textContent = aiName;
         $('desktop-mode-sub').textContent = `vs Computer · ${aiName}`;
       } else {
         $('top-name').textContent = 'Black Player';
         $('bottom-name').textContent = 'White Player';
-        $('mobile-mode-pill').textContent = 'vs Friend';
         $('desktop-mode-sub').textContent = 'vs Friend · Pass & Play';
       }
 
