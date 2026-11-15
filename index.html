@@ -190,12 +190,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       width: 100%;
       max-width: 520px;
       margin: 0 auto;
-      padding: 6px 0 2px;
-      gap: 5px;
+      padding: 6px 0 4px;
+      gap: 6px;
       overflow: hidden;
       min-height: 0;
     }
@@ -204,12 +204,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       width: 100%;
-      height: 100%;
-      flex: 1 1 auto;
+      flex: 0 1 auto;
       min-height: 0;
-      gap: 5px;
+      gap: 6px;
     }
 
     #mobile-status-strip {
@@ -391,23 +390,24 @@
       flex-shrink: 0;
       transition: background 0.15s ease, transform 0.2s ease;
     }
-    .top-resign-btn.rotated-180 { transform: rotate(180deg); }
-
-    /* Bot & Celebrity Personality Commentary Bar */
+    /* Bot & Celebrity Personality Commentary Bar — fixed height prevents board vertical shift */
     .celeb-comment-bar {
       display: none;
       align-items: center;
       gap: 7px;
       width: 100%;
-      min-height: 32px;
-      padding: 5px 10px;
+      height: 40px;
+      min-height: 40px;
+      max-height: 40px;
+      padding: 4px 10px;
       border-radius: var(--radius-sm);
       background: rgba(16, 185, 129, 0.09);
       border: 1px solid rgba(16, 185, 129, 0.28);
       font-size: 11.5px;
-      line-height: 1.3;
+      line-height: 1.28;
       color: #e2e8f0;
       flex-shrink: 0;
+      overflow: hidden;
     }
     .celeb-comment-bar.visible {
       display: flex;
@@ -446,8 +446,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      flex: 1 1 auto;
-      min-height: 0;
+      flex: 0 0 auto;
       width: 100%;
     }
 
@@ -2167,7 +2166,7 @@
       if (dragState && dragState.active && !force) return;
       const isDesktop = window.innerWidth >= 900;
       const vw = document.documentElement.clientWidth || window.innerWidth;
-      const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const vh = Math.max(window.innerHeight, window.visualViewport ? window.visualViewport.height : 0);
       const celebEl = $('celeb-comment-bar');
       const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
 
@@ -2175,12 +2174,12 @@
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
         const extraTopResign = isFriend ? 46 : 0;
-        const celebExtraH = hasCelebComment ? 42 : 0;
+        const celebExtraH = hasCelebComment ? 46 : 0;
         const availW = vw - 340 - 26 - 72;
         const availH = vh - 132 - extraTopResign - celebExtraH - 44;
         boardSize = Math.floor(Math.min(availW, availH, 640));
       } else {
-        // Measure actual surrounding mobile chrome height so the board maximizes available screen real estate
+        // Measure actual surrounding mobile chrome height so the board maximizes available screen real estate in both Safari and Standalone PWA mode
         const appStyle = getComputedStyle($('app'));
         const padTop = parseFloat(appStyle.paddingTop) || 12;
         const padBot = parseFloat(appStyle.paddingBottom) || 6;
@@ -2189,18 +2188,19 @@
 
         const topHeaderH = $('top-bar').offsetHeight || 46;
         const statusH = $('mobile-status-strip').offsetHeight || 28;
-        const topResignH = ($('btn-resign-black-top').style.display !== 'none') ? (($('btn-resign-black-top').offsetHeight || 36) + 5) : 0;
+        const isFriend = state.mode === 'friend';
+        const topResignH = isFriend ? (($('btn-resign-black-top').offsetHeight || 36) + 6) : 0;
         const topPlayerH = els.topBar.offsetHeight || 40;
-        const commentH = hasCelebComment ? ((celebEl.offsetHeight || 34) + 5) : 0;
+        const commentH = hasCelebComment ? (40 + 6) : 0;
         const botPlayerH = els.bottomBar.offsetHeight || 40;
         const botResignH = $('board-bottom-resign-wrap').offsetHeight || 38;
-        const botStripH = $('mobile-bottom-strip').offsetHeight || 32;
+        const botStripH = $('mobile-bottom-strip').offsetHeight || 28;
 
-        // Total fixed vertical chrome + gaps between stacked elements
-        const usedVertical = padTop + padBot + topHeaderH + 6 + statusH + topResignH + topPlayerH + commentH + botPlayerH + botResignH + botStripH + 26;
+        const numGaps = 5;
+        const usedVertical = padTop + padBot + topHeaderH + 10 + statusH + topResignH + topPlayerH + commentH + botPlayerH + botResignH + botStripH + (numGaps * 6);
         const availH = vh - usedVertical;
         const containerW = Math.min(vw - padLeft - padRight, 520);
-        const availW = containerW - 18 - 8; // subtract eval bar (18px) and gap (8px)
+        const availW = containerW - 18 - 8;
 
         boardSize = Math.floor(Math.min(availW, availH));
       }
@@ -2214,7 +2214,7 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const celebExtraH = hasCelebComment ? 42 : 0;
+        const celebExtraH = hasCelebComment ? 46 : 0;
         const totalColumnHeight = boardSize + 44 + 44 + 42 + (isFriend ? 46 : 0) + celebExtraH + (isFriend ? 32 : 24);
         $('desktop-sidebar').style.height = Math.min(totalColumnHeight, vh - 32) + 'px';
         $('desktop-sidebar').style.maxHeight = (vh - 32) + 'px';
