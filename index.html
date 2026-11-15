@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LC Chess" />
   <meta name="theme-color" content="#090d16" />
-  <!-- Full-bleed Checkered Black Staunton Rook App Icon (no outer frame) -->
-  <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23739552'/%3E%3Cg fill='%23ebecd0'%3E%3Crect x='0' y='0' width='128' height='128'/%3E%3Crect x='256' y='0' width='128' height='128'/%3E%3Crect x='128' y='128' width='128' height='128'/%3E%3Crect x='384' y='128' width='128' height='128'/%3E%3Crect x='0' y='256' width='128' height='256'/%3E%3Crect x='256' y='256' width='128' height='256'/%3E%3Crect x='128' y='384' width='128' height='384'/%3E%3Crect x='384' y='384' width='128' height='384'/%3E%3C/g%3E%3Cg transform='translate(52, 46) scale(9.05)' fill='%2318181b' stroke='%23090d16' stroke-width='1.55' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z'/%3E%3Cpath d='M 12.5,32 L 14,29.5 L 31,29.5 L 32.5,32 L 12.5,32 z'/%3E%3Cpath d='M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z'/%3E%3Cpath d='M 14,29.5 L 14,16.5 L 31,16.5 L 31,29.5 L 14,29.5 z'/%3E%3Cpath d='M 14,16.5 L 11,14 L 34,14 L 31,16.5 L 14,16.5 z'/%3E%3Cpath d='M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14 L 11,14 z'/%3E%3Cpath d='M 12,35.5 L 33,35.5 M 13,31.5 L 32,31.5 M 14,29.5 L 31,29.5 M 14,16.5 L 31,16.5 M 11,14 L 34,14' fill='none' stroke='%23cbd5e1' stroke-width='1.05' stroke-linejoin='miter'/%3E%3C/g%3E%3C/svg%3E" />
+  <!-- Crisp Staunton Knight App Icon on Full-Bleed Emerald Gradient -->
+  <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23065f46'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' fill='url(%23bg)'/%3E%3Cg transform='translate(52, 44) scale(9.05)'%3E%3Cpath d='M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18' fill='%23ffffff' stroke='%23090d16' stroke-width='2.0' stroke-linejoin='round'/%3E%3Cpath d='M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10' fill='%23ffffff' stroke='%23090d16' stroke-width='2.0' stroke-linejoin='round'/%3E%3Ccircle cx='14.5' cy='15.5' r='1.3' fill='%23090d16'/%3E%3Cpath d='M 12.5,39 L 38.5,39 L 38.5,42.5 L 12.5,42.5 Z' fill='%23a7f3d0' stroke='%23090d16' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E" />
   <link id="apple-touch-icon" rel="apple-touch-icon" sizes="512x512" href="" />
   <style>
     /* =========================================================================
@@ -139,16 +139,16 @@
       width: 30px;
       height: 30px;
       border-radius: 9px;
-      background: #739552;
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: linear-gradient(135deg, #10b981 0%, #065f46 100%);
+      border: 1px solid rgba(52, 211, 153, 0.35);
       display: grid;
       place-items: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 2px 10px var(--accent-emerald-glow);
       flex-shrink: 0;
       overflow: hidden;
     }
 
-    .brand-icon svg { width: 100%; height: 100%; display: block; }
+    .brand-icon svg { width: 22px; height: 22px; display: block; }
 
     .top-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
@@ -1116,23 +1116,11 @@
         <header id="top-bar">
           <div class="brand">
             <div class="brand-icon" aria-hidden="true">
-              <svg viewBox="0 0 512 512">
-                <rect width="512" height="512" fill="#739552"/>
-                <g fill="#ebecd0">
-                  <rect x="0" y="0" width="128" height="128"/><rect x="256" y="0" width="128" height="128"/>
-                  <rect x="128" y="128" width="128" height="128"/><rect x="384" y="128" width="128" height="128"/>
-                  <rect x="0" y="256" width="128" height="128"/><rect x="256" y="256" width="128" height="128"/>
-                  <rect x="128" y="384" width="128" height="128"/><rect x="384" y="384" width="128" height="128"/>
-                </g>
-                <g transform="translate(52, 46) scale(9.05)" fill="#18181b" stroke="#090d16" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/>
-                  <path d="M 12.5,32 L 14,29.5 L 31,29.5 L 32.5,32 L 12.5,32 z"/>
-                  <path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/>
-                  <path d="M 14,29.5 L 14,16.5 L 31,16.5 L 31,29.5 L 14,29.5 z"/>
-                  <path d="M 14,16.5 L 11,14 L 34,14 L 31,16.5 L 14,16.5 z"/>
-                  <path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14 L 11,14 z"/>
-                  <path d="M 12,35.5 L 33,35.5 M 13,31.5 L 32,31.5 M 14,29.5 L 31,29.5 M 14,16.5 L 31,16.5 M 11,14 L 34,14" fill="none" stroke="#cbd5e1" stroke-width="1.05" stroke-linejoin="miter"/>
-                </g>
+              <svg viewBox="0 0 45 45">
+                <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
+                <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
               </svg>
             </div>
             <span>LC Chess</span>
@@ -1225,23 +1213,11 @@
           <div class="sidebar-title-row">
             <div class="brand">
               <div class="brand-icon" aria-hidden="true">
-                <svg viewBox="0 0 512 512">
-                  <rect width="512" height="512" fill="#739552"/>
-                  <g fill="#ebecd0">
-                    <rect x="0" y="0" width="128" height="128"/><rect x="256" y="0" width="128" height="128"/>
-                    <rect x="128" y="128" width="128" height="128"/><rect x="384" y="128" width="128" height="128"/>
-                    <rect x="0" y="256" width="128" height="128"/><rect x="256" y="256" width="128" height="128"/>
-                    <rect x="128" y="384" width="128" height="128"/><rect x="384" y="384" width="128" height="128"/>
-                  </g>
-                  <g transform="translate(52, 46) scale(9.05)" fill="#18181b" stroke="#090d16" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/>
-                    <path d="M 12.5,32 L 14,29.5 L 31,29.5 L 32.5,32 L 12.5,32 z"/>
-                    <path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/>
-                    <path d="M 14,29.5 L 14,16.5 L 31,16.5 L 31,29.5 L 14,29.5 z"/>
-                    <path d="M 14,16.5 L 11,14 L 34,14 L 31,16.5 L 14,16.5 z"/>
-                    <path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14 L 11,14 z"/>
-                    <path d="M 12,35.5 L 33,35.5 M 13,31.5 L 32,31.5 M 14,29.5 L 31,29.5 M 14,16.5 L 31,16.5 M 11,14 L 34,14" fill="none" stroke="#cbd5e1" stroke-width="1.05" stroke-linejoin="miter"/>
-                  </g>
+                <svg viewBox="0 0 45 45">
+                  <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+                  <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
+                  <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
                 </svg>
               </div>
               <div>
@@ -1292,23 +1268,11 @@
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div class="brand-icon" style="width: 36px; height: 36px; border-radius: 10px;">
-            <svg viewBox="0 0 512 512">
-              <rect width="512" height="512" fill="#739552"/>
-              <g fill="#ebecd0">
-                <rect x="0" y="0" width="128" height="128"/><rect x="256" y="0" width="128" height="128"/>
-                <rect x="128" y="128" width="128" height="128"/><rect x="384" y="128" width="128" height="128"/>
-                <rect x="0" y="256" width="128" height="128"/><rect x="256" y="256" width="128" height="128"/>
-                <rect x="128" y="384" width="128" height="128"/><rect x="384" y="384" width="128" height="128"/>
-              </g>
-              <g transform="translate(52, 46) scale(9.05)" fill="#18181b" stroke="#090d16" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/>
-                <path d="M 12.5,32 L 14,29.5 L 31,29.5 L 32.5,32 L 12.5,32 z"/>
-                <path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/>
-                <path d="M 14,29.5 L 14,16.5 L 31,16.5 L 31,29.5 L 14,29.5 z"/>
-                <path d="M 14,16.5 L 11,14 L 34,14 L 31,16.5 L 14,16.5 z"/>
-                <path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14 L 11,14 z"/>
-                <path d="M 12,35.5 L 33,35.5 M 13,31.5 L 32,31.5 M 14,29.5 L 31,29.5 M 14,16.5 L 31,16.5 M 11,14 L 34,14" fill="none" stroke="#cbd5e1" stroke-width="1.05" stroke-linejoin="miter"/>
-              </g>
+            <svg viewBox="0 0 45 45" style="width: 26px; height: 26px;">
+              <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+              <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
+              <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
             </svg>
           </div>
           <div>
@@ -2175,37 +2139,29 @@
         const c = document.createElement('canvas');
         c.width = 512; c.height = 512;
         const ctx = c.getContext('2d');
-        if (!ctx) return;
+        const svgEl = document.querySelector('#top-bar .brand-icon svg');
+        if (!ctx || !svgEl) return;
 
-        // Full-bleed 4x4 checkered board background so iOS applies its native squircle mask with zero black border
-        const cell = 128;
-        for (let r = 0; r < 4; r++) {
-          for (let col = 0; col < 4; col++) {
-            ctx.fillStyle = (r + col) % 2 === 0 ? '#ebecd0' : '#739552';
-            ctx.fillRect(col * cell, r * cell, cell, cell);
-          }
-        }
-
-        // Subtle inner vignette for depth
-        const vignette = ctx.createRadialGradient(256, 256, 90, 256, 256, 360);
-        vignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        vignette.addColorStop(1, 'rgba(9, 13, 22, 0.22)');
-        ctx.fillStyle = vignette;
+        // Full-bleed emerald gradient background (no dark outer border so iOS squircle mask is clean)
+        const grad = ctx.createLinearGradient(0, 0, 512, 512);
+        grad.addColorStop(0, '#10b981');
+        grad.addColorStop(1, '#065f46');
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 512, 512);
 
-        const rookSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><g fill="#18181b" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12.5,32 L 14,29.5 L 31,29.5 L 32.5,32 L 12.5,32 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 14,29.5 L 14,16.5 L 31,16.5 L 31,29.5 L 14,29.5 z"/><path d="M 14,16.5 L 11,14 L 34,14 L 31,16.5 L 14,16.5 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14 L 11,14 z"/><path d="M 12,35.5 L 33,35.5 M 13,31.5 L 32,31.5 M 14,29.5 L 31,29.5 M 14,16.5 L 31,16.5 M 11,14 L 34,14" fill="none" stroke="#cbd5e1" stroke-width="1.05" stroke-linejoin="miter"/></g></svg>`;
+        const svgData = new XMLSerializer().serializeToString(svgEl);
         const img = new Image();
         img.onload = () => {
           ctx.save();
-          ctx.shadowColor = 'rgba(9, 13, 22, 0.45)';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
           ctx.shadowBlur = 18;
           ctx.shadowOffsetY = 8;
-          ctx.drawImage(img, 54, 48, 404, 404);
+          ctx.drawImage(img, 66, 56, 380, 380);
           ctx.restore();
           const touchLink = $('apple-touch-icon');
           if (touchLink) touchLink.href = c.toDataURL('image/png');
         };
-        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(rookSvg);
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
       } catch (_) {}
     })();
 
