@@ -421,6 +421,11 @@
       color: #fca5a5 !important;
       animation: pulseClock 1s infinite alternate;
     }
+    .clock-box.unlimited-time {
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
 
     .top-resign-btn {
       display: none;
@@ -951,10 +956,10 @@
       filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
     #color-selector .seg-btn {
-      padding: 10px 8px;
+      padding: 10px 13px 10px 7px;
     }
     #color-selector .seg-btn[data-color="random"] {
-      padding: 10px 7px 10px 9px;
+      padding: 10px 12px 10px 8px;
     }
 
     .config-section { display: flex; flex-direction: column; gap: 8px; }
@@ -1063,24 +1068,33 @@
     .elo-slider-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .elo-badge-live { font-family: "SF Mono", Menlo, monospace; font-size: 13px; font-weight: 800; color: #6ee7b7; background: rgba(16, 185, 129, 0.16); border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 9px; border-radius: 8px; }
 
-    .elo-stepper-controls { display: flex; align-items: center; gap: 8px; }
+    .elo-stepper-controls { display: flex; align-items: center; gap: 10px; }
     .elo-step-btn {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      min-height: 34px;
+      flex: 0 0 34px;
+      aspect-ratio: 1 / 1;
       border-radius: 8px;
       background: #0b1120;
       border: 1px solid var(--border-strong);
       color: var(--text-primary);
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 700;
-      display: grid;
-      place-items: center;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
     }
     .elo-step-btn:hover { background: var(--bg-hover); }
 
     .elo-range-input {
       -webkit-appearance: none;
       appearance: none;
+      flex: 1;
+      min-width: 0;
       width: 100%;
       height: 36px;
       padding: 15px 0;
@@ -2680,12 +2694,15 @@
 
     function updateClocksUI() {
       const flipped = isBoardFlipped();
+      const isUnlimited = state.timeControl === 0;
       const topSec = flipped ? state.whiteTime : state.blackTime;
       const botSec = flipped ? state.blackTime : state.whiteTime;
       els.topClock.textContent = formatTime(topSec);
       els.bottomClock.textContent = formatTime(botSec);
-      els.topClock.classList.toggle('low-time', state.timeControl > 0 && topSec <= 30 && topSec > 0);
-      els.bottomClock.classList.toggle('low-time', state.timeControl > 0 && botSec <= 30 && botSec > 0);
+      els.topClock.classList.toggle('unlimited-time', isUnlimited);
+      els.bottomClock.classList.toggle('unlimited-time', isUnlimited);
+      els.topClock.classList.toggle('low-time', !isUnlimited && topSec <= 30 && topSec > 0);
+      els.bottomClock.classList.toggle('low-time', !isUnlimited && botSec <= 30 && botSec > 0);
       els.topBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'w' : 'b'));
       els.bottomBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'b' : 'w'));
     }
