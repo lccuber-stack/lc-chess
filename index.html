@@ -95,13 +95,13 @@
     #app {
       display: flex;
       flex-direction: column;
+      align-items: center;
       width: 100%;
       height: 100dvh;
-      /* Safe area padding with 20px offset for iPhone standalone / PWA mode */
-      padding-top: max(22px, env(safe-area-inset-top, 0px));
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      padding-left: env(safe-area-inset-left, 0px);
-      padding-right: env(safe-area-inset-right, 0px);
+      padding-top: max(12px, env(safe-area-inset-top, 0px));
+      padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
+      padding-left: max(12px, env(safe-area-inset-left, 0px));
+      padding-right: max(12px, env(safe-area-inset-right, 0px));
       overflow: hidden;
       overscroll-behavior: none;
       touch-action: none;
@@ -112,11 +112,14 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      height: 50px;
-      min-height: 50px;
-      padding: 0 14px;
-      background: #111827;
-      border-bottom: 1px solid var(--border-subtle);
+      max-width: 520px;
+      height: 46px;
+      min-height: 46px;
+      margin: 0 auto;
+      padding: 0 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
       gap: 8px;
       z-index: 20;
       flex-shrink: 0;
@@ -147,7 +150,7 @@
 
     .brand-icon svg { width: 22px; height: 22px; }
 
-    .top-actions { display: flex; align-items: center; gap: 6px; }
+    .top-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
     .icon-btn {
       display: inline-flex;
@@ -167,6 +170,13 @@
     .icon-btn:hover { background: var(--bg-hover); }
     .icon-btn:active { transform: scale(0.96); }
 
+    .sound-toggle-btn {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
     .icon-btn.primary {
       background: var(--accent-emerald);
       color: #042f2e;
@@ -180,12 +190,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       width: 100%;
-      max-width: 1280px;
+      max-width: 520px;
       margin: 0 auto;
-      padding: 6px 10px;
-      gap: 6px;
+      padding: 6px 0 2px;
+      gap: 5px;
       overflow: hidden;
       min-height: 0;
     }
@@ -194,11 +204,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       width: 100%;
-      flex: 0 1 auto;
+      height: 100%;
+      flex: 1 1 auto;
       min-height: 0;
-      gap: 6px;
+      gap: 5px;
     }
 
     #mobile-status-strip {
@@ -206,14 +217,15 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      height: 30px;
-      min-height: 30px;
+      height: 28px;
+      min-height: 28px;
       padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       font-size: 12px;
       font-weight: 600;
+      flex-shrink: 0;
     }
 
     .player-bar {
@@ -228,6 +240,7 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       gap: 8px;
+      flex-shrink: 0;
       transition: transform 0.25s ease;
     }
 
@@ -258,14 +271,20 @@
       filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
 
-    .player-details { display: flex; flex-direction: column; min-width: 0; }
+    .player-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
 
     .player-name-row {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
+      line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -288,9 +307,13 @@
       align-items: center;
       gap: 4px;
       height: 14px;
+      margin-top: 1px;
       font-size: 11px;
       color: var(--text-secondary);
       overflow: hidden;
+    }
+    .captured-row.is-empty {
+      display: none;
     }
 
     .captured-icons {
@@ -332,6 +355,11 @@
       letter-spacing: 0.03em;
       flex-shrink: 0;
     }
+    .clock-box.unlimited-time {
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
     .player-bar.active-turn .clock-box {
       background: rgba(16, 185, 129, 0.14);
       border-color: rgba(16, 185, 129, 0.45);
@@ -350,7 +378,8 @@
       justify-content: center;
       gap: 6px;
       width: 100%;
-      height: 38px;
+      height: 36px;
+      min-height: 36px;
       padding: 0 12px;
       border-radius: var(--radius-md);
       background: rgba(239, 68, 68, 0.15);
@@ -370,7 +399,7 @@
       align-items: center;
       gap: 7px;
       width: 100%;
-      min-height: 30px;
+      min-height: 32px;
       padding: 5px 10px;
       border-radius: var(--radius-sm);
       background: rgba(16, 185, 129, 0.09);
@@ -392,11 +421,11 @@
     .celeb-comment-text {
       color: #f1f5f9;
       font-style: italic;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      overflow-wrap: break-word;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     #board-bottom-resign-wrap {
@@ -417,7 +446,9 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      flex-shrink: 0;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
     }
 
     /* Live Evaluation Bar */
@@ -631,7 +662,7 @@
       align-items: stretch;
       width: 100%;
       margin: 0 auto;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
@@ -640,7 +671,7 @@
       align-items: center;
       gap: 6px;
       width: 100%;
-      height: 30px;
+      height: 28px;
       padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
@@ -659,7 +690,7 @@
       justify-content: center;
       width: 100%;
       gap: 8px;
-      height: 40px;
+      height: 38px;
     }
 
     .action-btn {
@@ -686,8 +717,8 @@
 
     .resign-btn-lg {
       width: 100%;
-      height: 40px;
-      min-height: 40px;
+      height: 38px;
+      min-height: 38px;
       flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
@@ -793,7 +824,7 @@
       background: rgba(9, 13, 22, 0.45);
     }
     .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .footer-grid .action-btn { height: 38px; }
+    .footer-grid .action-btn { height: 42px; min-height: 42px; }
 
     .btn-full-primary {
       width: 100%;
@@ -824,6 +855,7 @@
       #main-workspace {
         flex: 0 1 auto;
         height: 100%;
+        max-width: 1280px;
         max-height: 100%;
         flex-direction: row;
         align-items: center;
@@ -831,9 +863,11 @@
         padding: 12px 24px;
         gap: 24px;
       }
-      #board-column { width: auto; flex: 0 1 auto; gap: 8px; }
+      #board-column { width: auto; height: auto; flex: 0 1 auto; justify-content: center; gap: 8px; }
+      #board-and-eval { flex: 0 0 auto; width: auto; }
       #desktop-sidebar { display: flex; }
       .player-bar { height: 44px; min-height: 44px; padding: 0 14px; }
+      .resign-btn-lg { height: 42px; min-height: 42px; }
     }
 
     .modal-backdrop {
@@ -908,6 +942,11 @@
     .seg-btn-main { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 700; }
     .seg-btn-sub { font-size: 10px; color: var(--text-secondary); }
     .seg-btn.active .seg-btn-sub { color: #6ee7b7; }
+    .seg-btn[data-time="0"] .seg-btn-sub {
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 700;
+    }
 
     .persona-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .persona-btn {
@@ -941,16 +980,19 @@
 
     .elo-stepper-controls { display: flex; align-items: center; gap: 8px; }
     .elo-step-btn {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      min-height: 34px;
       border-radius: 8px;
       background: #0b1120;
       border: 1px solid var(--border-strong);
       color: var(--text-primary);
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 700;
       display: grid;
       place-items: center;
+      flex-shrink: 0;
     }
     .elo-step-btn:hover { background: var(--bg-hover); }
 
@@ -1070,7 +1112,9 @@
         <span>LC Chess</span>
       </div>
       <div class="top-actions">
-        <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound">🔊</button>
+        <button id="btn-sound-mobile" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        </button>
         <button id="btn-new-mobile" class="icon-btn primary">New Game</button>
       </div>
     </header>
@@ -1095,7 +1139,7 @@
                 <span id="top-player-name">Intermediate (1200)</span>
                 <span class="turn-dot"></span>
               </div>
-              <div class="captured-row">
+              <div id="top-captured-row" class="captured-row is-empty">
                 <span id="top-captured" class="captured-icons"></span>
                 <span id="top-mat-diff" class="material-diff"></span>
               </div>
@@ -1128,7 +1172,7 @@
                 <span id="bottom-player-name">You (White)</span>
                 <span class="turn-dot"></span>
               </div>
-              <div class="captured-row">
+              <div id="bottom-captured-row" class="captured-row is-empty">
                 <span id="bottom-captured" class="captured-icons"></span>
                 <span id="bottom-mat-diff" class="material-diff"></span>
               </div>
@@ -1169,7 +1213,9 @@
                 <div id="desktop-mode-sub" style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">vs Computer • Intermediate (1200)</div>
               </div>
             </div>
-            <button id="btn-sound-desktop" class="icon-btn" title="Toggle Sound">🔊</button>
+            <button id="btn-sound-desktop" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </button>
           </div>
 
           <div class="status-banner">
@@ -1437,6 +1483,9 @@
       bQ: `<svg viewBox="0 0 45 45"><g fill="#18181b" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g stroke="none"><circle cx="6" cy="12" r="2.75"/><circle cx="14" cy="9" r="2.75"/><circle cx="22.5" cy="8" r="2.75"/><circle cx="31" cy="9" r="2.75"/><circle cx="39" cy="12" r="2.75"/></g><path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38.5,13.5 L 31,25 L 30.7,10.9 L 25.5,24.5 L 22.5,10 L 19.5,24.5 L 14.3,10.9 L 14,25 L 6.5,13.5 L 9,26 z" stroke-linecap="butt"/><path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z" stroke-linecap="butt"/><path d="M 11,38.5 A 35,35 1 0 0 34,38.5" fill="none" stroke-linecap="butt"/><path d="M 11,29 A 35,35 1 0 1 34,29 M 12.5,31.5 L 32.5,31.5 M 11.5,34.5 A 35,35 1 0 0 33.5,34.5 M 10.5,37.5 A 35,35 1 0 0 34.5,37.5" fill="none" stroke="#cbd5e1" stroke-width="1"/></g></svg>`,
       bK: `<svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#18181b" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#18181b"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85" stroke="#cbd5e1" stroke-width="1"/><path d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37" stroke="#cbd5e1" stroke-width="1"/></g></svg>`
     };
+
+    const SOUND_ICON_ON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+    const SOUND_ICON_OFF = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
 
     class SoundFX {
       constructor() { this.enabled = true; this.ctx = null; }
@@ -2086,6 +2135,8 @@
       bottomAvatar: $('bottom-avatar'),
       topClock: $('top-clock'),
       bottomClock: $('bottom-clock'),
+      topCapturedRow: $('top-captured-row'),
+      bottomCapturedRow: $('bottom-captured-row'),
       topCaptured: $('top-captured'),
       bottomCaptured: $('bottom-captured'),
       topMatDiff: $('top-mat-diff'),
@@ -2119,23 +2170,38 @@
       const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
       const celebEl = $('celeb-comment-bar');
       const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
-      const celebExtraH = hasCelebComment ? 38 : 0;
 
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const extraTopResign = isFriend ? 52 : 0;
+        const extraTopResign = isFriend ? 46 : 0;
+        const celebExtraH = hasCelebComment ? 42 : 0;
         const availW = vw - 340 - 26 - 72;
         const availH = vh - 132 - extraTopResign - celebExtraH - 44;
         boardSize = Math.floor(Math.min(availW, availH, 640));
       } else {
-        const isFriend = state.mode === 'friend';
-        const hasActions = $('mobile-action-row').style.display !== 'none';
-        const extraTopResign = isFriend ? 52 : 0;
-        const safeTopOffset = 28;
-        const chromeH = safeTopOffset + 50 + 32 + extraTopResign + celebExtraH + 44 + 44 + 44 + 32 + (hasActions ? 44 : 0) + 56;
-        const availH = vh - chromeH;
-        const availW = vw - 16 - 8 - 18;
+        // Measure actual surrounding mobile chrome height so the board maximizes available screen real estate
+        const appStyle = getComputedStyle($('app'));
+        const padTop = parseFloat(appStyle.paddingTop) || 12;
+        const padBot = parseFloat(appStyle.paddingBottom) || 6;
+        const padLeft = parseFloat(appStyle.paddingLeft) || 12;
+        const padRight = parseFloat(appStyle.paddingRight) || 12;
+
+        const topHeaderH = $('top-bar').offsetHeight || 46;
+        const statusH = $('mobile-status-strip').offsetHeight || 28;
+        const topResignH = ($('btn-resign-black-top').style.display !== 'none') ? (($('btn-resign-black-top').offsetHeight || 36) + 5) : 0;
+        const topPlayerH = els.topBar.offsetHeight || 40;
+        const commentH = hasCelebComment ? ((celebEl.offsetHeight || 34) + 5) : 0;
+        const botPlayerH = els.bottomBar.offsetHeight || 40;
+        const botResignH = $('board-bottom-resign-wrap').offsetHeight || 38;
+        const botStripH = $('mobile-bottom-strip').offsetHeight || 32;
+
+        // Total fixed vertical chrome + gaps between stacked elements
+        const usedVertical = padTop + padBot + topHeaderH + 6 + statusH + topResignH + topPlayerH + commentH + botPlayerH + botResignH + botStripH + 26;
+        const availH = vh - usedVertical;
+        const containerW = Math.min(vw - padLeft - padRight, 520);
+        const availW = containerW - 18 - 8; // subtract eval bar (18px) and gap (8px)
+
         boardSize = Math.floor(Math.min(availW, availH));
       }
 
@@ -2148,22 +2214,29 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const totalColumnHeight = boardSize + 44 + 44 + 44 + (isFriend ? 52 : 0) + celebExtraH + (isFriend ? 32 : 24);
+        const celebExtraH = hasCelebComment ? 42 : 0;
+        const totalColumnHeight = boardSize + 44 + 44 + 42 + (isFriend ? 46 : 0) + celebExtraH + (isFriend ? 32 : 24);
         $('desktop-sidebar').style.height = Math.min(totalColumnHeight, vh - 32) + 'px';
         $('desktop-sidebar').style.maxHeight = (vh - 32) + 'px';
+
+        const barWidth = (boardSize + 8 + 18) + 'px';
+        els.topBar.style.width = barWidth;
+        els.bottomBar.style.width = barWidth;
+        if (celebEl) celebEl.style.width = barWidth;
+        $('btn-resign-black-top').style.width = barWidth;
+        $('board-bottom-resign-wrap').style.width = barWidth;
+      } else {
+        // On mobile, let UI bars span full container width (100% up to 520px) for clean edge-to-edge alignment
+        $('top-bar').style.width = '100%';
+        $('mobile-status-strip').style.width = '100%';
+        els.topBar.style.width = '100%';
+        els.bottomBar.style.width = '100%';
+        if (celebEl) celebEl.style.width = '100%';
+        $('btn-resign-black-top').style.width = '100%';
+        $('board-bottom-resign-wrap').style.width = '100%';
+        $('mobile-bottom-strip').style.width = '100%';
       }
 
-      const barWidth = (boardSize + 8 + 18) + 'px';
-      els.topBar.style.width = barWidth;
-      els.bottomBar.style.width = barWidth;
-      if (celebEl) celebEl.style.width = barWidth;
-      $('btn-resign-black-top').style.width = barWidth;
-      $('board-bottom-resign-wrap').style.width = barWidth;
-      if (!isDesktop) {
-        $('top-bar').style.width = barWidth;
-        $('mobile-status-strip').style.width = barWidth;
-        $('mobile-bottom-strip').style.width = barWidth;
-      }
       els.dragGhost.style.width = Math.round(boardSize / 8 * 1.15) + 'px';
       els.dragGhost.style.height = Math.round(boardSize / 8 * 1.15) + 'px';
     }
@@ -2214,7 +2287,8 @@
         sqEl.dataset.sq = sq;
         sqEl.innerHTML = '';
 
-        if (f === 0) {
+        // Always render rank numbers (1-8) on the left-most column of the displayed board
+        if (i % 8 === 0) {
           const rankLbl = document.createElement('span');
           rankLbl.className = 'coord-rank';
           rankLbl.textContent = 8 - r;
@@ -2283,7 +2357,6 @@
       const legal = engine.generateLegalMoves(moverColor);
       if (legal.length === 0) return { bestMove: null, bestScore: 0, secondBestScore: 0, scoredMoves: [] };
 
-      // Deterministic 3-ply evaluation with generous budget so every root move is evaluated identically
       ai.nodes = 0; ai.startTime = performance.now(); ai.timeBudget = 4000; ai.aborted = false;
       ai.orderMoves(engine, legal);
 
@@ -2324,7 +2397,6 @@
       );
       let playedScore = matched ? matched.score : bestScore;
 
-      // Guarantee that playing the exact suggested Hint move always matches its top rating
       if (state.hintMove && state.hintMove.from === move.from && state.hintMove.to === move.to && (state.hintMove.promo || null) === (move.promo || null)) {
         playedScore = bestScore;
       }
@@ -2351,7 +2423,6 @@
       const pawns = cp / 100, clamped = Math.max(-10, Math.min(10, pawns));
       let whitePct = engine.history.length === 0 ? 50 : (50 + 50 * (2 / (1 + Math.exp(-0.42 * clamped)) - 1));
 
-      // Dynamic orientation: when board is flipped (playing as Black), evaluation bar fills relative to Black's perspective from bottom up
       if (isBoardFlipped()) {
         whitePct = 100 - whitePct;
       }
@@ -2405,7 +2476,6 @@
       updateCapturedUI();
       updateStatusUI();
 
-      // Trigger ELO-matched or celebrity personality commentary on every single move
       if (state.mode === 'ai') {
         if (outcome.over) {
           if (outcome.winner === 'Draw') updateBotComment('draw');
@@ -2545,12 +2615,15 @@
 
     function updateClocksUI() {
       const flipped = isBoardFlipped();
+      const isUnlimited = state.timeControl === 0;
       const topSec = flipped ? state.whiteTime : state.blackTime;
       const botSec = flipped ? state.blackTime : state.whiteTime;
       els.topClock.textContent = formatTime(topSec);
       els.bottomClock.textContent = formatTime(botSec);
-      els.topClock.classList.toggle('low-time', state.timeControl > 0 && topSec <= 30 && topSec > 0);
-      els.bottomClock.classList.toggle('low-time', state.timeControl > 0 && botSec <= 30 && botSec > 0);
+      els.topClock.classList.toggle('unlimited-time', isUnlimited);
+      els.bottomClock.classList.toggle('unlimited-time', isUnlimited);
+      els.topClock.classList.toggle('low-time', !isUnlimited && topSec <= 30 && topSec > 0);
+      els.bottomClock.classList.toggle('low-time', !isUnlimited && botSec <= 30 && botSec > 0);
       els.topBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'w' : 'b'));
       els.bottomBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'b' : 'w'));
     }
@@ -2587,11 +2660,18 @@
         for (let k = 0; k < Math.max(0, startCounts[t] - currW[t]); k++) bCap += PIECE_SVGS['w' + t];
       }
       const flipped = isBoardFlipped();
-      els.bottomCaptured.innerHTML = flipped ? bCap : wCap;
-      els.topCaptured.innerHTML = flipped ? wCap : bCap;
+      const botIcons = flipped ? bCap : wCap;
+      const topIcons = flipped ? wCap : bCap;
+      els.bottomCaptured.innerHTML = botIcons;
+      els.topCaptured.innerHTML = topIcons;
       const diff = wMat - bMat, botDiff = flipped ? -diff : diff, topDiff = -botDiff;
-      els.bottomMatDiff.textContent = botDiff > 0 ? `+${Math.round(botDiff / 100)}` : '';
-      els.topMatDiff.textContent = topDiff > 0 ? `+${Math.round(topDiff / 100)}` : '';
+      const botDiffStr = botDiff > 0 ? `+${Math.round(botDiff / 100)}` : '';
+      const topDiffStr = topDiff > 0 ? `+${Math.round(topDiff / 100)}` : '';
+      els.bottomMatDiff.textContent = botDiffStr;
+      els.topMatDiff.textContent = topDiffStr;
+
+      els.bottomCapturedRow.classList.toggle('is-empty', !botIcons && !botDiffStr);
+      els.topCapturedRow.classList.toggle('is-empty', !topIcons && !topDiffStr);
     }
 
     function updateMoveHistoryUI() {
@@ -3485,8 +3565,8 @@
 
     function toggleSound() {
       sfx.enabled = !sfx.enabled;
-      const icon = sfx.enabled ? '🔊' : '🔇';
-      $('btn-sound-mobile').textContent = $('btn-sound-desktop').textContent = icon;
+      const iconHTML = sfx.enabled ? SOUND_ICON_ON : SOUND_ICON_OFF;
+      $('btn-sound-mobile').innerHTML = $('btn-sound-desktop').innerHTML = iconHTML;
       showToast(sfx.enabled ? 'Sound enabled' : 'Sound muted');
     }
 
