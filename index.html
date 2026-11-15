@@ -194,7 +194,7 @@
       width: 100%;
       max-width: 520px;
       margin: 0 auto;
-      padding: 6px 0 4px;
+      padding: 4px 0;
       gap: 6px;
       overflow: hidden;
       min-height: 0;
@@ -1098,28 +1098,28 @@
 </head>
 <body>
   <div id="app">
-    <header id="top-bar">
-      <div class="brand">
-        <div class="brand-icon" aria-hidden="true">
-          <svg viewBox="0 0 45 45">
-            <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
-            <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
-            <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
-            <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
-          </svg>
-        </div>
-        <span>LC Chess</span>
-      </div>
-      <div class="top-actions">
-        <button id="btn-sound-mobile" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-        </button>
-        <button id="btn-new-mobile" class="icon-btn primary">New Game</button>
-      </div>
-    </header>
-
     <main id="main-workspace">
       <section id="board-column">
+        <header id="top-bar">
+          <div class="brand">
+            <div class="brand-icon" aria-hidden="true">
+              <svg viewBox="0 0 45 45">
+                <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
+                <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
+              </svg>
+            </div>
+            <span>LC Chess</span>
+          </div>
+          <div class="top-actions">
+            <button id="btn-sound-mobile" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </button>
+            <button id="btn-new-mobile" class="icon-btn primary">New Game</button>
+          </div>
+        </header>
+
         <div id="mobile-status-strip">
           <div class="status-indicator">
             <span id="mobile-status-dot" class="status-pulse"></span>
@@ -2196,8 +2196,8 @@
         const botResignH = $('board-bottom-resign-wrap').offsetHeight || 38;
         const botStripH = $('mobile-bottom-strip').offsetHeight || 28;
 
-        const numGaps = 5;
-        const usedVertical = padTop + padBot + topHeaderH + 10 + statusH + topResignH + topPlayerH + commentH + botPlayerH + botResignH + botStripH + (numGaps * 6);
+        const numGaps = 6;
+        const usedVertical = padTop + padBot + 8 + topHeaderH + statusH + topResignH + topPlayerH + commentH + botPlayerH + botResignH + botStripH + (numGaps * 6);
         const availH = vh - usedVertical;
         const containerW = Math.min(vw - padLeft - padRight, 520);
         const availW = containerW - 18 - 8;
