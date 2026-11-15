@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="LC Chess" />
   <meta name="theme-color" content="#090d16" />
-  <!-- Crisp Staunton Knight App Icon (SVG Favicon + Dynamic High-Res Apple Touch Icon) -->
+  <!-- Crisp Staunton Knight App Icon -->
   <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23064e3b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='%230b1120'/%3E%3Crect x='24' y='24' width='464' height='464' rx='94' fill='url(%23bg)' opacity='0.22' stroke='%2334d399' stroke-width='10'/%3E%3Cg transform='translate(66, 56) scale(8.4)'%3E%3Cpath d='M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18' fill='%23ffffff' stroke='%23090d16' stroke-width='2.1' stroke-linejoin='round'/%3E%3Cpath d='M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10' fill='%23ffffff' stroke='%23090d16' stroke-width='2.1' stroke-linejoin='round'/%3E%3Ccircle cx='14.5' cy='15.5' r='1.35' fill='%23090d16'/%3E%3Cpath d='M 12.5,39 L 38.5,39 L 38.5,42.5 L 12.5,42.5 Z' fill='%2334d399' stroke='%23090d16' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E" />
   <link id="apple-touch-icon" rel="apple-touch-icon" sizes="512x512" href="" />
   <style>
@@ -89,13 +89,20 @@
       flex-direction: column;
       width: 100%;
       height: 100dvh;
-      padding-top: env(safe-area-inset-top, 0px);
+      padding-top: max(26px, env(safe-area-inset-top, 0px));
       padding-bottom: env(safe-area-inset-bottom, 0px);
       padding-left: env(safe-area-inset-left, 0px);
       padding-right: env(safe-area-inset-right, 0px);
+      background-color: var(--bg-canvas);
       overflow: hidden;
       overscroll-behavior: none;
       touch-action: none;
+    }
+
+    @media all and (display-mode: standalone) {
+      #app {
+        padding-top: calc(env(safe-area-inset-top, 20px) + 12px);
+      }
     }
 
     /* Top Header Bar (visible on mobile/tablet, compact on desktop) */
@@ -108,6 +115,7 @@
       min-height: 50px;
       padding: 0 14px;
       background: #111827;
+      border-top: 1px solid var(--border-subtle);
       border-bottom: 1px solid var(--border-subtle);
       gap: 8px;
       z-index: 20;
@@ -124,6 +132,77 @@
       white-space: nowrap;
     }
 
+    /* Live Evaluation Bar */
+    #eval-bar-wrap {
+      position: relative;
+      width: 18px;
+      height: 320px;
+      border-radius: 6px;
+      background: #181c24;
+      border: 1px solid var(--border-strong);
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+    }
+
+    #eval-bar-wrap.flipped-eval {
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+    }
+
+    #eval-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+      transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #eval-bar-wrap.flipped-eval #eval-fill {
+      background: linear-gradient(180deg, #1e2430 0%, #111622 100%);
+    }
+
+    #eval-midline {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      background: rgba(16, 185, 129, 0.7);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #eval-score-label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 3px;
+      text-align: center;
+      font-size: 8.5px;
+      font-weight: 800;
+      font-family: "SF Mono", Menlo, monospace;
+      color: #0f172a;
+      z-index: 3;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    #eval-score-label.top-advantage {
+      bottom: auto;
+      top: 4px;
+      color: #f8fafc;
+    }
+
+    #eval-bar-wrap.flipped-eval #eval-score-label {
+      color: #f8fafc;
+    }
+
+    #eval-bar-wrap.flipped-eval #eval-score-label.top-advantage {
+      color: #0f172a;
+    }
+
     .brand-icon {
       width: 30px;
       height: 30px;
@@ -132,16 +211,14 @@
       border: 1px solid rgba(52, 211, 153, 0.35);
       display: grid;
       place-items: center;
-      font-size: 16px;
       box-shadow: 0 2px 10px var(--accent-emerald-glow);
       flex-shrink: 0;
+      overflow: hidden;
     }
 
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .brand-icon svg { width: 22px; height: 22px; }
+
+    .top-actions { display: flex; align-items: center; gap: 6px; }
 
     .icon-btn {
       display: inline-flex;
@@ -158,7 +235,6 @@
       font-weight: 600;
       transition: background 0.15s ease, transform 0.1s ease;
     }
-
     .icon-btn:hover { background: var(--bg-hover); }
     .icon-btn:active { transform: scale(0.96); }
 
@@ -170,7 +246,6 @@
     }
     .icon-btn.primary:hover { background: #34d399; }
 
-    /* Main Arena Container */
     #main-workspace {
       flex: 1;
       display: flex;
@@ -186,7 +261,6 @@
       min-height: 0;
     }
 
-    /* Board Stage (holds top player strip, eval bar + board, bottom player strip) */
     #board-column {
       display: flex;
       flex-direction: column;
@@ -198,7 +272,6 @@
       gap: 8px;
     }
 
-    /* Mobile Status Strip */
     #mobile-status-strip {
       display: flex;
       align-items: center;
@@ -214,7 +287,6 @@
       font-weight: 600;
     }
 
-    /* Player Info Bars (Top & Bottom of Board) */
     .player-bar {
       display: flex;
       align-items: center;
@@ -230,9 +302,7 @@
       transition: transform 0.25s ease;
     }
 
-    .player-bar.rotated-180 {
-      transform: rotate(180deg);
-    }
+    .player-bar.rotated-180 { transform: rotate(180deg); }
 
     .player-meta {
       display: flex;
@@ -253,16 +323,13 @@
       font-size: 14px;
       flex-shrink: 0;
     }
-
     .player-avatar svg {
+      width: 20px;
+      height: 20px;
       filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
 
-    .player-details {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
+    .player-details { display: flex; flex-direction: column; min-width: 0; }
 
     .player-name-row {
       display: flex;
@@ -304,13 +371,12 @@
       font-size: 12px;
       line-height: 1;
     }
-
     .captured-icons svg {
       width: 16px;
       height: 16px;
       margin-right: -3px;
       vertical-align: middle;
-      filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+      filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
 
     .material-diff {
@@ -320,7 +386,6 @@
       margin-left: 2px;
     }
 
-    /* Digital Chess Clock */
     .clock-box {
       display: flex;
       align-items: center;
@@ -337,15 +402,12 @@
       color: var(--text-secondary);
       letter-spacing: 0.03em;
       flex-shrink: 0;
-      transition: all 0.2s ease;
     }
-
     .player-bar.active-turn .clock-box {
       background: rgba(16, 185, 129, 0.14);
       border-color: rgba(16, 185, 129, 0.45);
       color: #6ee7b7;
     }
-
     .clock-box.low-time {
       background: rgba(239, 68, 68, 0.18) !important;
       border-color: rgba(239, 68, 68, 0.6) !important;
@@ -371,15 +433,8 @@
       flex-shrink: 0;
       transition: background 0.15s ease, transform 0.2s ease;
     }
-    .top-resign-btn.rotated-180 {
-      transform: rotate(180deg);
-    }
-    .top-resign-btn:hover:not(:disabled) { background: rgba(239, 68, 68, 0.26); }
-    .top-resign-btn:active:not(:disabled) { transform: scale(0.97); }
-    .top-resign-btn.rotated-180:active:not(:disabled) { transform: rotate(180deg) scale(0.97); }
-    .top-resign-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+    .top-resign-btn.rotated-180 { transform: rotate(180deg); }
 
-    /* Symmetrical Bottom Resign Row beneath Board (iPad/Desktop & Mobile) */
     #board-bottom-resign-wrap {
       display: flex;
       align-items: center;
@@ -393,9 +448,6 @@
       to { opacity: 0.65; }
     }
 
-    /* =========================================================================
-       3. BOARD + EVALUATION BAR WRAPPER
-       ========================================================================= */
     #board-and-eval {
       display: flex;
       align-items: center;
@@ -404,7 +456,6 @@
       flex-shrink: 0;
     }
 
-    /* Live Evaluation Bar */
     #eval-bar-wrap {
       position: relative;
       width: 18px;
@@ -452,14 +503,8 @@
       pointer-events: none;
       line-height: 1;
     }
+    #eval-score-label.black-advantage { bottom: auto; top: 4px; color: #f8fafc; }
 
-    #eval-score-label.black-advantage {
-      bottom: auto;
-      top: 4px;
-      color: #f8fafc;
-    }
-
-    /* 8x8 Chessboard Container */
     #board-frame {
       position: relative;
       width: 320px;
@@ -488,46 +533,15 @@
       height: 100%;
       cursor: pointer;
     }
-
     .square.light { background-color: var(--sq-light); }
     .square.dark  { background-color: var(--sq-dark); }
-
     .square.last-move.light { background-color: var(--sq-last-light); }
     .square.last-move.dark  { background-color: var(--sq-last-dark); }
+    .square.selected::before { content: ""; position: absolute; inset: 0; background: var(--sq-selected); pointer-events: none; }
+    .square.hint-from::before { content: ""; position: absolute; inset: 0; background: var(--sq-hint-from); pointer-events: none; }
+    .square.hint-to::before { content: ""; position: absolute; inset: 0; background: var(--sq-hint-to); pointer-events: none; }
+    .square.in-check::after { content: ""; position: absolute; inset: 0; background: var(--sq-check); pointer-events: none; }
 
-    .square.selected::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--sq-selected);
-      pointer-events: none;
-    }
-
-    .square.hint-from::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--sq-hint-from);
-      pointer-events: none;
-    }
-
-    .square.hint-to::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--sq-hint-to);
-      pointer-events: none;
-    }
-
-    .square.in-check::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--sq-check);
-      pointer-events: none;
-    }
-
-    /* Move Quality Classification Badge on Destination Square */
     .move-badge {
       position: absolute;
       top: 2px;
@@ -539,7 +553,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 900;
       letter-spacing: -0.04em;
       line-height: 1;
@@ -548,17 +562,8 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
       z-index: 6;
       pointer-events: none;
-      animation: badgePop 0.24s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-
-    .move-badge.rotated-180 {
-      transform: rotate(180deg);
-    }
-
-    @keyframes badgePop {
-      0% { transform: scale(0.35); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+    .move-badge.rotated-180 { transform: rotate(180deg); }
 
     .badge-book { background: #a88865; }
     .badge-brilliant { background: #1baca6; }
@@ -569,7 +574,6 @@
     .badge-mistake { background: #e6912c; }
     .badge-blunder { background: #ca3431; }
 
-    /* Move Quality Pill in Move History */
     .hist-badge {
       display: inline-flex;
       align-items: center;
@@ -582,7 +586,6 @@
       vertical-align: middle;
     }
 
-    /* Coordinate Labels inside edge squares */
     .coord-rank {
       position: absolute;
       top: 2px;
@@ -593,7 +596,6 @@
       pointer-events: none;
       opacity: 0.85;
     }
-
     .coord-file {
       position: absolute;
       bottom: 2px;
@@ -604,14 +606,9 @@
       pointer-events: none;
       opacity: 0.85;
     }
+    .square.light .coord-rank, .square.light .coord-file { color: var(--sq-dark); }
+    .square.dark .coord-rank, .square.dark .coord-file { color: var(--sq-light); }
 
-    .square.light .coord-rank,
-    .square.light .coord-file { color: var(--sq-dark); }
-
-    .square.dark .coord-rank,
-    .square.dark .coord-file { color: var(--sq-light); }
-
-    /* Legal Move Indicators */
     .move-dot {
       position: relative;
       z-index: 3;
@@ -621,7 +618,6 @@
       background: rgba(15, 23, 42, 0.28);
       pointer-events: none;
     }
-
     .capture-ring {
       position: absolute;
       inset: 6%;
@@ -631,7 +627,6 @@
       pointer-events: none;
     }
 
-    /* Chess Piece Styling */
     .piece-wrap {
       position: relative;
       z-index: 4;
@@ -643,24 +638,15 @@
       transition: transform 0.14s cubic-bezier(0.2, 0.9, 0.3, 1);
       pointer-events: none;
     }
-
     .piece-wrap svg {
       width: 100%;
       height: 100%;
       overflow: visible;
       filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.42));
     }
+    .piece-wrap.rotated-180 { transform: rotate(180deg); }
+    .piece-wrap.dragging-source { opacity: 0.25; }
 
-    /* Tabletop / Pass-and-Play 180-degree rotation for Black pieces */
-    .piece-wrap.rotated-180 {
-      transform: rotate(180deg);
-    }
-
-    .piece-wrap.dragging-source {
-      opacity: 0.25;
-    }
-
-    /* Floating Drag Ghost */
     #drag-ghost {
       position: fixed;
       top: 0;
@@ -671,18 +657,9 @@
       z-index: 9999;
       transform: translate(-50%, -50%) scale(1.18);
       display: none;
-      will-change: left, top;
     }
+    #drag-ghost svg { width: 100%; height: 100%; filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.55)); }
 
-    #drag-ghost svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.55));
-    }
-
-    /* =========================================================================
-       4. MOBILE BOTTOM STRIP & DESKTOP/IPAD SIDEBAR
-       ========================================================================= */
     #mobile-bottom-strip {
       display: flex;
       flex-direction: column;
@@ -709,9 +686,7 @@
       font-size: 11.5px;
       color: var(--text-secondary);
       scrollbar-width: none;
-      touch-action: pan-x;
     }
-    .mobile-ticker::-webkit-scrollbar { display: none; }
 
     .mobile-action-row {
       display: flex;
@@ -737,21 +712,13 @@
       color: var(--text-primary);
       transition: all 0.15s ease;
     }
-
     .action-btn:hover:not(:disabled) { background: var(--bg-hover); }
-    .action-btn:active:not(:disabled) { transform: scale(0.97); }
-    .action-btn:disabled {
-      opacity: 0.38;
-      cursor: not-allowed;
-    }
-
     .action-btn.hint-style {
       background: rgba(56, 189, 248, 0.14);
       border-color: rgba(56, 189, 248, 0.35);
       color: #7dd3fc;
     }
 
-    /* Prominent Resign Button (Desktop / iPad & Mobile) */
     .resign-btn-lg {
       width: 100%;
       height: 44px;
@@ -774,10 +741,7 @@
       border-color: rgba(239, 68, 68, 0.65);
       color: #fecaca;
     }
-    .resign-btn-lg:active:not(:disabled) { transform: scale(0.98); }
-    .resign-btn-lg:disabled { opacity: 0.38; cursor: not-allowed; }
 
-    /* Desktop / iPad Landscape Right Sidebar */
     #desktop-sidebar {
       display: none;
       flex-direction: column;
@@ -798,12 +762,7 @@
       flex-direction: column;
       gap: 10px;
     }
-
-    .sidebar-title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .sidebar-title-row { display: flex; align-items: center; justify-content: space-between; }
 
     .status-banner {
       display: flex;
@@ -816,19 +775,8 @@
       font-size: 13px;
       font-weight: 600;
     }
-
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .status-pulse {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent-emerald);
-    }
+    .status-indicator { display: flex; align-items: center; gap: 8px; }
+    .status-pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-emerald); }
 
     .sidebar-moves-header {
       display: flex;
@@ -851,7 +799,6 @@
       gap: 2px;
       font-family: "SF Mono", Menlo, monospace;
       font-size: 12.5px;
-      touch-action: pan-y;
     }
 
     .move-row {
@@ -861,11 +808,7 @@
       padding: 5px 8px;
       border-radius: 6px;
     }
-
-    .move-row:nth-child(odd) {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
+    .move-row:nth-child(odd) { background: rgba(255, 255, 255, 0.02); }
     .move-num { color: var(--text-muted); font-size: 11px; }
     .move-cell { color: var(--text-primary); font-weight: 600; }
     .move-cell.latest {
@@ -884,16 +827,8 @@
       gap: 8px;
       background: rgba(9, 13, 22, 0.45);
     }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .footer-grid .action-btn {
-      height: 38px;
-    }
+    .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .footer-grid .action-btn { height: 38px; }
 
     .btn-full-primary {
       width: 100%;
@@ -910,44 +845,17 @@
       justify-content: center;
       gap: 8px;
       box-shadow: 0 4px 14px var(--accent-emerald-glow);
-      transition: background 0.15s ease, transform 0.1s ease;
     }
     .btn-full-primary:hover { background: #34d399; }
-    .btn-full-primary:active { transform: scale(0.98); }
 
-    /* Desktop / Wide Tablet Breakpoint */
     @media (min-width: 900px) {
-      #top-bar,
-      #mobile-status-strip,
-      #mobile-bottom-strip {
-        display: none !important;
-      }
-
-      #main-workspace {
-        flex-direction: row;
-        padding: 18px 24px;
-        gap: 24px;
-      }
-
-      #board-column {
-        width: auto;
-        flex: 0 1 auto;
-        gap: 10px;
-      }
-
-      #desktop-sidebar {
-        display: flex;
-      }
-
-      .player-bar {
-        height: 48px;
-        padding: 0 14px;
-      }
+      #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
+      #main-workspace { flex-direction: row; padding: 18px 24px; gap: 24px; }
+      #board-column { width: auto; flex: 0 1 auto; gap: 10px; }
+      #desktop-sidebar { display: flex; }
+      .player-bar { height: 48px; padding: 0 14px; }
     }
 
-    /* =========================================================================
-       5. MODALS (NEW GAME CONFIG, PROMOTION PICKER, GAME OVER)
-       ========================================================================= */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -959,17 +867,8 @@
       justify-content: center;
       padding: 16px;
       z-index: 1000;
-      animation: fadeIn 0.18s ease;
     }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    .modal-backdrop.open { display: flex; }
 
     .modal-card {
       width: 100%;
@@ -984,45 +883,30 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      touch-action: pan-y;
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
-
     .modal-card::-webkit-scrollbar,
-    #desktop-move-list::-webkit-scrollbar {
+    #desktop-move-list::-webkit-scrollbar,
+    .mobile-ticker::-webkit-scrollbar {
       display: none;
       width: 0;
       height: 0;
     }
-
-    #desktop-move-list {
+    #desktop-move-list,
+    .mobile-ticker {
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
 
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .modal-subtitle {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-size: 18px; font-weight: 800; }
+    .modal-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
     .close-modal-btn {
       width: 38px;
       height: 38px;
-      border-radius: 10px;
+      border-radius: 50%;
       background: var(--bg-elevated);
       border: 1px solid var(--border-strong);
       color: var(--text-primary);
@@ -1030,49 +914,16 @@
       place-items: center;
       font-size: 20px;
       font-weight: 700;
-      line-height: 1;
-      transition: background 0.15s ease, transform 0.1s ease;
     }
     .close-modal-btn:hover { background: var(--bg-hover); }
-    .close-modal-btn:active { transform: scale(0.95); }
 
-    .config-section {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .config-section { display: flex; flex-direction: column; gap: 8px; }
+    .config-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); }
 
-    .config-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-secondary);
-    }
-
-    .seg-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .seg-grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .seg-grid-4 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .seg-grid-5 {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-    }
+    .seg-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .seg-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .seg-grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .seg-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 
     .seg-btn {
       display: flex;
@@ -1085,42 +936,15 @@
       border: 1.5px solid transparent;
       text-align: center;
       gap: 2px;
-      transition: all 0.15s ease;
     }
-
     .seg-btn:hover { background: var(--bg-hover); }
+    .seg-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--accent-emerald); color: #ffffff; }
 
-    .seg-btn.active {
-      background: rgba(16, 185, 129, 0.14);
-      border-color: var(--accent-emerald);
-      color: #ffffff;
-    }
+    .seg-btn-main { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 700; }
+    .seg-btn-sub { font-size: 10px; color: var(--text-secondary); }
+    .seg-btn.active .seg-btn-sub { color: #6ee7b7; }
 
-    .seg-btn-main {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .seg-btn-sub {
-      font-size: 10px;
-      color: var(--text-secondary);
-    }
-
-    .seg-btn.active .seg-btn-sub {
-      color: #6ee7b7;
-    }
-
-    /* Custom Grandmaster / Streamer Persona Cards */
-    .persona-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
+    .persona-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .persona-btn {
       display: flex;
       align-items: center;
@@ -1131,39 +955,13 @@
       border: 1.5px solid transparent;
       text-align: left;
       gap: 8px;
-      transition: all 0.15s ease;
     }
-
     .persona-btn:hover { background: var(--bg-hover); }
+    .persona-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--accent-emerald); }
+    .persona-name { font-size: 12.5px; font-weight: 700; color: var(--text-primary); }
+    .persona-elo { font-size: 11px; font-weight: 700; font-family: "SF Mono", Menlo, monospace; color: var(--text-secondary); background: rgba(9, 13, 22, 0.55); padding: 2px 6px; border-radius: 6px; }
+    .persona-btn.active .persona-elo { color: #6ee7b7; background: rgba(16, 185, 129, 0.2); }
 
-    .persona-btn.active {
-      background: rgba(16, 185, 129, 0.14);
-      border-color: var(--accent-emerald);
-    }
-
-    .persona-name {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .persona-elo {
-      font-size: 11px;
-      font-weight: 700;
-      font-family: "SF Mono", Menlo, monospace;
-      color: var(--text-secondary);
-      background: rgba(9, 13, 22, 0.55);
-      padding: 2px 6px;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-
-    .persona-btn.active .persona-elo {
-      color: #6ee7b7;
-      background: rgba(16, 185, 129, 0.2);
-    }
-
-    /* Custom ELO Stepper & Slider (100 - 3000 in steps of 100) */
     .elo-slider-card {
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
@@ -1173,31 +971,10 @@
       flex-direction: column;
       gap: 8px;
     }
+    .elo-slider-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .elo-badge-live { font-family: "SF Mono", Menlo, monospace; font-size: 13px; font-weight: 800; color: #6ee7b7; background: rgba(16, 185, 129, 0.16); border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 9px; border-radius: 8px; }
 
-    .elo-slider-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .elo-badge-live {
-      font-family: "SF Mono", Menlo, monospace;
-      font-size: 13px;
-      font-weight: 800;
-      color: #6ee7b7;
-      background: rgba(16, 185, 129, 0.16);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      padding: 3px 9px;
-      border-radius: 8px;
-    }
-
-    .elo-stepper-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .elo-stepper-controls { display: flex; align-items: center; gap: 8px; }
     .elo-step-btn {
       width: 32px;
       height: 32px;
@@ -1209,11 +986,8 @@
       font-weight: 700;
       display: grid;
       place-items: center;
-      flex-shrink: 0;
-      transition: background 0.15s ease, transform 0.1s ease;
     }
     .elo-step-btn:hover { background: var(--bg-hover); }
-    .elo-step-btn:active { transform: scale(0.94); }
 
     .elo-range-input {
       -webkit-appearance: none;
@@ -1225,7 +999,6 @@
       outline: none;
       cursor: pointer;
     }
-
     .elo-range-input::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -1235,45 +1008,12 @@
       background: var(--accent-emerald);
       border: 2px solid #ffffff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      cursor: pointer;
     }
 
-    .elo-range-input::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--accent-emerald);
-      border: 2px solid #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-    }
-
-    /* Toggle Switch Rows */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
-      background: var(--bg-elevated);
-      gap: 12px;
-    }
-
-    .toggle-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .toggle-title {
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .toggle-desc {
-      font-size: 11px;
-      color: var(--text-secondary);
-    }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: var(--radius-md); background: var(--bg-elevated); gap: 12px; }
+    .toggle-info { display: flex; flex-direction: column; gap: 2px; }
+    .toggle-title { font-size: 13px; font-weight: 600; }
+    .toggle-desc { font-size: 11px; color: var(--text-secondary); }
 
     .switch {
       position: relative;
@@ -1284,11 +1024,7 @@
       transition: background 0.2s ease;
       flex-shrink: 0;
     }
-
-    .switch.on {
-      background: var(--accent-emerald);
-    }
-
+    .switch.on { background: var(--accent-emerald); }
     .switch-knob {
       position: absolute;
       top: 2px;
@@ -1300,18 +1036,9 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .switch.on .switch-knob { transform: translateX(20px); }
 
-    .switch.on .switch-knob {
-      transform: translateX(20px);
-    }
-
-    /* Pawn Promotion Picker */
-    .promo-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
+    .promo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
     .promo-choice {
       aspect-ratio: 1;
       border-radius: var(--radius-md);
@@ -1323,36 +1050,12 @@
       justify-content: center;
       padding: 8px;
       gap: 4px;
-      transition: all 0.15s ease;
     }
+    .promo-choice:hover { background: rgba(16, 185, 129, 0.16); border-color: var(--accent-emerald); }
+    .promo-choice svg { width: 46px; height: 46px; }
+    .promo-choice span { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
 
-    .promo-choice:hover {
-      background: rgba(16, 185, 129, 0.16);
-      border-color: var(--accent-emerald);
-      transform: translateY(-2px);
-    }
-
-    .promo-choice svg {
-      width: 46px;
-      height: 46px;
-    }
-
-    .promo-choice span {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-secondary);
-    }
-
-    /* Game Over Summary Banner */
-    .gameover-hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 10px 0 4px;
-      gap: 8px;
-    }
-
+    .gameover-hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 0 4px; gap: 8px; }
     .gameover-trophy {
       width: 56px;
       height: 56px;
@@ -1363,19 +1066,9 @@
       place-items: center;
       font-size: 28px;
     }
+    .gameover-title { font-size: 22px; font-weight: 800; }
+    .gameover-reason { font-size: 13px; color: var(--text-secondary); }
 
-    .gameover-title {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .gameover-reason {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-
-    /* Toast Notification */
     #toast {
       position: fixed;
       bottom: 72px;
@@ -1394,20 +1087,15 @@
       transition: all 0.22s ease;
       z-index: 2000;
     }
-
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
   <div id="app">
-    <!-- Mobile & Tablet Top Bar -->
     <header id="top-bar">
       <div class="brand">
         <div class="brand-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 45 45">
+          <svg viewBox="0 0 45 45">
             <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
             <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
             <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
@@ -1417,16 +1105,13 @@
         <span>LC Chess</span>
       </div>
       <div class="top-actions">
-        <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
+        <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound">🔊</button>
         <button id="btn-new-mobile" class="icon-btn primary">New Game</button>
       </div>
     </header>
 
-    <!-- Main Workspace -->
     <main id="main-workspace">
-      <!-- Board + Players Column -->
       <section id="board-column">
-        <!-- Mobile Status Strip -->
         <div id="mobile-status-strip">
           <div class="status-indicator">
             <span id="mobile-status-dot" class="status-pulse"></span>
@@ -1435,10 +1120,8 @@
           <span id="mobile-move-count" style="color: var(--text-secondary); font-size: 11px;">Move 1</span>
         </div>
 
-        <!-- Symmetrical Top Resign Row (Black / Opponent in vs Friend, sits directly above top player bar) -->
         <button id="btn-resign-black-top" class="top-resign-btn" title="Black Resigns">🏳 Resign</button>
 
-        <!-- Top Player Bar (Opponent / Black) -->
         <div id="top-player-bar" class="player-bar">
           <div class="player-meta">
             <div id="top-avatar" class="player-avatar">♚</div>
@@ -1456,7 +1139,6 @@
           <div id="top-clock" class="clock-box">10:00</div>
         </div>
 
-        <!-- Evaluation Bar + 8x8 Chessboard -->
         <div id="board-and-eval">
           <div id="eval-bar-wrap" title="Live Engine Evaluation">
             <div id="eval-fill"></div>
@@ -1468,7 +1150,6 @@
           </div>
         </div>
 
-        <!-- Bottom Player Bar (Human / White) -->
         <div id="bottom-player-bar" class="player-bar active-turn">
           <div class="player-meta">
             <div id="bottom-avatar" class="player-avatar">♔</div>
@@ -1486,12 +1167,10 @@
           <div id="bottom-clock" class="clock-box">10:00</div>
         </div>
 
-        <!-- Symmetrical Bottom Resign Row (Directly opposite Top Resign Row on iPad/Desktop & Mobile) -->
         <div id="board-bottom-resign-wrap">
           <button id="btn-resign-board-bottom" class="resign-btn-lg">🏳 Resign</button>
         </div>
 
-        <!-- Mobile Bottom Move History + Assist Strip -->
         <div id="mobile-bottom-strip">
           <div id="mobile-move-ticker" class="mobile-ticker">
             <span style="color: var(--text-muted); font-family: inherit;">Tap a piece to start playing...</span>
@@ -1503,13 +1182,12 @@
         </div>
       </section>
 
-      <!-- Desktop & Wide Tablet Sidebar -->
       <aside id="desktop-sidebar">
         <div class="sidebar-header">
           <div class="sidebar-title-row">
             <div class="brand">
               <div class="brand-icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 45 45">
+                <svg viewBox="0 0 45 45">
                   <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
                   <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
                   <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
@@ -1555,18 +1233,14 @@
     </main>
   </div>
 
-  <!-- Floating Drag Piece Ghost -->
   <div id="drag-ghost"></div>
 
-  <!-- =========================================================================
-       MODAL 1: NEW GAME CONFIGURATION
-       ========================================================================= -->
   <div id="modal-config" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="cfg-title">
     <div class="modal-card">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div class="brand-icon" style="width: 36px; height: 36px; border-radius: 10px;">
-            <svg width="24" height="24" viewBox="0 0 45 45">
+            <svg viewBox="0 0 45 45">
               <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
               <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linejoin="round"/>
               <circle cx="14.5" cy="15.5" r="1.2" fill="#090d16"/>
@@ -1581,7 +1255,6 @@
         <button id="btn-close-config" class="close-modal-btn" aria-label="Close">✕</button>
       </div>
 
-      <!-- Opponent Mode -->
       <div class="config-section">
         <span class="config-label">Opponent</span>
         <div id="mode-selector" class="seg-grid-2">
@@ -1602,7 +1275,6 @@
         </div>
       </div>
 
-      <!-- AI Difficulty Section -->
       <div id="ai-difficulty-section" class="config-section">
         <span class="config-label">Computer Strength</span>
         <div id="difficulty-selector" class="seg-grid-4">
@@ -1637,7 +1309,6 @@
         </div>
       </div>
 
-      <!-- Custom ELO Slider (100 - 3000) & Famous Chess Personalities -->
       <div id="custom-persona-section" class="config-section" style="display: none;">
         <span class="config-label">Custom Rating (100 – 3000 ELO)</span>
         <div class="elo-slider-card">
@@ -1646,9 +1317,9 @@
             <span id="custom-elo-badge" class="elo-badge-live">1500 ELO</span>
           </div>
           <div class="elo-stepper-controls">
-            <button type="button" id="btn-elo-minus" class="elo-step-btn" aria-label="Decrease ELO by 100">−</button>
+            <button type="button" id="btn-elo-minus" class="elo-step-btn" aria-label="Decrease ELO">−</button>
             <input type="range" id="custom-elo-slider" class="elo-range-input" min="100" max="3000" step="100" value="1500" aria-label="Custom ELO Rating" />
-            <button type="button" id="btn-elo-plus" class="elo-step-btn" aria-label="Increase ELO by 100">+</button>
+            <button type="button" id="btn-elo-plus" class="elo-step-btn" aria-label="Increase ELO">+</button>
           </div>
         </div>
 
@@ -1681,34 +1352,17 @@
         </div>
       </div>
 
-      <!-- Time Control Section -->
       <div class="config-section">
         <span class="config-label">Time Control</span>
         <div id="time-selector" class="seg-grid-5">
-          <button class="seg-btn" data-time="0">
-            <span class="seg-btn-main">None</span>
-            <span class="seg-btn-sub">∞</span>
-          </button>
-          <button class="seg-btn" data-time="300">
-            <span class="seg-btn-main">5m</span>
-            <span class="seg-btn-sub">Blitz</span>
-          </button>
-          <button class="seg-btn active" data-time="600">
-            <span class="seg-btn-main">10m</span>
-            <span class="seg-btn-sub">Rapid</span>
-          </button>
-          <button class="seg-btn" data-time="900">
-            <span class="seg-btn-main">15m</span>
-            <span class="seg-btn-sub">Rapid</span>
-          </button>
-          <button class="seg-btn" data-time="1800">
-            <span class="seg-btn-main">30m</span>
-            <span class="seg-btn-sub">Classic</span>
-          </button>
+          <button class="seg-btn" data-time="0"><span class="seg-btn-main">None</span><span class="seg-btn-sub">∞</span></button>
+          <button class="seg-btn" data-time="300"><span class="seg-btn-main">5m</span><span class="seg-btn-sub">Blitz</span></button>
+          <button class="seg-btn active" data-time="600"><span class="seg-btn-main">10m</span><span class="seg-btn-sub">Rapid</span></button>
+          <button class="seg-btn" data-time="900"><span class="seg-btn-main">15m</span><span class="seg-btn-sub">Rapid</span></button>
+          <button class="seg-btn" data-time="1800"><span class="seg-btn-main">30m</span><span class="seg-btn-sub">Classic</span></button>
         </div>
       </div>
 
-      <!-- Play As Section (Human Color for AI Mode) -->
       <div id="color-section" class="config-section">
         <span class="config-label">Play As</span>
         <div id="color-selector" class="seg-grid-3">
@@ -1733,7 +1387,6 @@
         </div>
       </div>
 
-      <!-- Tabletop Orientation (Only visible in Pass & Play mode) -->
       <div id="tabletop-section" class="config-section" style="display: none;">
         <span class="config-label">Pass &amp; Play Orientation</span>
         <div class="toggle-row">
@@ -1741,44 +1394,26 @@
             <span class="toggle-title">Face-to-Face Tabletop Mode</span>
             <span class="toggle-desc">Rotate Black pieces 180° for players sitting opposite</span>
           </div>
-          <button id="toggle-tabletop" class="switch on" role="switch" aria-checked="true">
-            <span class="switch-knob"></span>
-          </button>
+          <button id="toggle-tabletop" class="switch on" role="switch" aria-checked="true"><span class="switch-knob"></span></button>
         </div>
       </div>
 
-      <!-- Optional Match Assistance (Off by Default for Competitive Play) -->
       <div class="config-section">
         <span class="config-label">Match Assistance</span>
         <div class="toggle-row">
-          <div class="toggle-info">
-            <span class="toggle-title">Allow Undo Move</span>
-            <span class="toggle-desc">Enable takebacks during the match</span>
-          </div>
-          <button id="toggle-undo" class="switch" role="switch" aria-checked="false">
-            <span class="switch-knob"></span>
-          </button>
+          <div class="toggle-info"><span class="toggle-title">Allow Undo Move</span><span class="toggle-desc">Enable takebacks during the match</span></div>
+          <button id="toggle-undo" class="switch" role="switch" aria-checked="false"><span class="switch-knob"></span></button>
         </div>
         <div class="toggle-row">
-          <div class="toggle-info">
-            <span class="toggle-title">Allow Hints</span>
-            <span class="toggle-desc">Highlight best suggested move on demand</span>
-          </div>
-          <button id="toggle-hints" class="switch" role="switch" aria-checked="false">
-            <span class="switch-knob"></span>
-          </button>
+          <div class="toggle-info"><span class="toggle-title">Allow Hints</span><span class="toggle-desc">Highlight best suggested move on demand</span></div>
+          <button id="toggle-hints" class="switch" role="switch" aria-checked="false"><span class="switch-knob"></span></button>
         </div>
       </div>
 
-      <button id="btn-start-match" class="btn-full-primary" style="margin-top: 4px;">
-        Start Match
-      </button>
+      <button id="btn-start-match" class="btn-full-primary" style="margin-top: 4px;">Start Match</button>
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL 2: PAWN PROMOTION PICKER
-       ========================================================================= -->
   <div id="modal-promo" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Choose Promotion Piece">
     <div class="modal-card" style="max-width: 340px;">
       <div class="modal-header">
@@ -1791,9 +1426,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL 3: GAME OVER / MATCH SUMMARY
-       ========================================================================= -->
   <div id="modal-gameover" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="go-title">
     <div class="modal-card" style="max-width: 380px;">
       <div class="gameover-hero">
@@ -1809,19 +1441,14 @@
     </div>
   </div>
 
-  <!-- Toast Banner -->
   <div id="toast"></div>
 
   <script>
     /**
      * =========================================================================
-     * LC CHESS — SELF-CONTAINED CHESS ENGINE, AI & RESPONSIVE CONTROLLER
+     * LC CHESS — COMPLETE STAUNTON PIECES, EVAL BAR ON LEFT & AI ENGINE
      * =========================================================================
      */
-
-    // =========================================================================
-    // 1. PIECE DEFINITIONS, MATERIAL VALUES & VECTOR SVGs
-    // =========================================================================
     const PIECE_VALUES = { P: 100, N: 320, B: 330, R: 500, Q: 900, K: 20000 };
     const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -1840,22 +1467,14 @@
       bK: `<svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#18181b" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#18181b"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85" stroke="#cbd5e1" stroke-width="1"/><path d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37" stroke="#cbd5e1" stroke-width="1"/></g></svg>`
     };
 
-    // =========================================================================
-    // 2. WEB AUDIO SYNTHESIZER (TACTILE PIECE & CHECK SOUNDS)
-    // =========================================================================
     class SoundFX {
-      constructor() {
-        this.enabled = true;
-        this.ctx = null;
-      }
+      constructor() { this.enabled = true; this.ctx = null; }
       init() {
         if (!this.ctx) {
-          const AudioCtx = window.AudioContext || window.webkitAudioContext;
-          if (AudioCtx) this.ctx = new AudioCtx();
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) this.ctx = new AC();
         }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume().catch(() => {});
-        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
       }
       play(type) {
         if (!this.enabled) return;
@@ -1866,39 +1485,34 @@
         const gain = this.ctx.createGain();
         osc.connect(gain);
         gain.connect(this.ctx.destination);
-
         if (type === 'move') {
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(175, now);
           osc.frequency.exponentialRampToValueAtTime(75, now + 0.065);
           gain.gain.setValueAtTime(0.22, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-          osc.start(now);
-          osc.stop(now + 0.075);
+          osc.start(now); osc.stop(now + 0.075);
         } else if (type === 'capture') {
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(240, now);
           osc.frequency.exponentialRampToValueAtTime(55, now + 0.11);
           gain.gain.setValueAtTime(0.28, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-          osc.start(now);
-          osc.stop(now + 0.125);
+          osc.start(now); osc.stop(now + 0.125);
         } else if (type === 'check') {
           osc.type = 'sine';
           osc.frequency.setValueAtTime(587.33, now);
           osc.frequency.setValueAtTime(880, now + 0.08);
           gain.gain.setValueAtTime(0.24, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
-          osc.start(now);
-          osc.stop(now + 0.25);
+          osc.start(now); osc.stop(now + 0.25);
         } else if (type === 'castle') {
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(160, now);
           osc.frequency.setValueAtTime(210, now + 0.07);
           gain.gain.setValueAtTime(0.2, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-          osc.start(now);
-          osc.stop(now + 0.16);
+          osc.start(now); osc.stop(now + 0.16);
         } else if (type === 'gameover') {
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(440, now);
@@ -1906,21 +1520,14 @@
           osc.frequency.setValueAtTime(659.25, now + 0.24);
           gain.gain.setValueAtTime(0.24, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-          osc.start(now);
-          osc.stop(now + 0.56);
+          osc.start(now); osc.stop(now + 0.56);
         }
       }
     }
     const sfx = new SoundFX();
 
-    // =========================================================================
-    // 3. COMPLETE CHESS RULES ENGINE (FIDE COMPLIANT)
-    // =========================================================================
     class ChessEngine {
-      constructor() {
-        this.reset();
-      }
-
+      constructor() { this.reset(); }
       reset() {
         this.board = new Array(64).fill(null);
         const backRank = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'];
@@ -1939,7 +1546,6 @@
         this.positionCounts = new Map();
         this.recordPositionKey();
       }
-
       cloneState() {
         return {
           board: this.board.slice(),
@@ -1950,7 +1556,6 @@
           fullMoveNumber: this.fullMoveNumber
         };
       }
-
       restoreState(snap) {
         this.board = snap.board.slice();
         this.turn = snap.turn;
@@ -1959,65 +1564,41 @@
         this.halfMoveClock = snap.halfMoveClock;
         this.fullMoveNumber = snap.fullMoveNumber;
       }
-
       getPositionKey() {
         const c = (this.castling.wK ? 'K' : '') + (this.castling.wQ ? 'Q' : '') +
                   (this.castling.bK ? 'k' : '') + (this.castling.bQ ? 'q' : '');
         return `${this.turn}|${c}|${this.enPassant}|${this.board.map(p => p || '.').join('')}`;
       }
-
       recordPositionKey() {
         const key = this.getPositionKey();
         this.positionCounts.set(key, (this.positionCounts.get(key) || 0) + 1);
       }
-
-      sqToAlgebraic(sq) {
-        const f = sq % 8;
-        const r = 8 - Math.floor(sq / 8);
-        return FILES[f] + r;
-      }
-
+      sqToAlgebraic(sq) { return FILES[sq % 8] + (8 - Math.floor(sq / 8)); }
       findKing(color) {
         const target = color + 'K';
-        for (let i = 0; i < 64; i++) {
-          if (this.board[i] === target) return i;
-        }
+        for (let i = 0; i < 64; i++) if (this.board[i] === target) return i;
         return -1;
       }
-
       isSquareAttacked(sq, byColor) {
-        const r = Math.floor(sq / 8);
-        const f = sq % 8;
-
-        // Pawn attacks
+        const r = Math.floor(sq / 8), f = sq % 8;
         const pawnDir = byColor === 'w' ? 1 : -1;
         const pr = r + pawnDir;
         if (pr >= 0 && pr < 8) {
           if (f > 0 && this.board[pr * 8 + (f - 1)] === byColor + 'P') return true;
           if (f < 7 && this.board[pr * 8 + (f + 1)] === byColor + 'P') return true;
         }
-
-        // Knight attacks
         const knightDeltas = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
         for (const [dr, df] of knightDeltas) {
           const nr = r + dr, nf = f + df;
-          if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
-            if (this.board[nr * 8 + nf] === byColor + 'N') return true;
-          }
+          if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8 && this.board[nr * 8 + nf] === byColor + 'N') return true;
         }
-
-        // King attacks
         for (let dr = -1; dr <= 1; dr++) {
           for (let df = -1; df <= 1; df++) {
             if (dr === 0 && df === 0) continue;
             const nr = r + dr, nf = f + df;
-            if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
-              if (this.board[nr * 8 + nf] === byColor + 'K') return true;
-            }
+            if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8 && this.board[nr * 8 + nf] === byColor + 'K') return true;
           }
         }
-
-        // Orthogonal rays (Rook / Queen)
         const orthoDirs = [[-1,0],[1,0],[0,-1],[0,1]];
         for (const [dr, df] of orthoDirs) {
           let nr = r + dr, nf = f + df;
@@ -2027,12 +1608,9 @@
               if (p[0] === byColor && (p[1] === 'R' || p[1] === 'Q')) return true;
               break;
             }
-            nr += dr;
-            nf += df;
+            nr += dr; nf += df;
           }
         }
-
-        // Diagonal rays (Bishop / Queen)
         const diagDirs = [[-1,-1],[-1,1],[1,-1],[1,1]];
         for (const [dr, df] of diagDirs) {
           let nr = r + dr, nf = f + df;
@@ -2042,69 +1620,43 @@
               if (p[0] === byColor && (p[1] === 'B' || p[1] === 'Q')) return true;
               break;
             }
-            nr += dr;
-            nf += df;
+            nr += dr; nf += df;
           }
         }
-
         return false;
       }
-
       isInCheck(color) {
         const kSq = this.findKing(color);
-        if (kSq === -1) return false;
-        const opp = color === 'w' ? 'b' : 'w';
-        return this.isSquareAttacked(kSq, opp);
+        return kSq !== -1 && this.isSquareAttacked(kSq, color === 'w' ? 'b' : 'w');
       }
-
       generatePseudoLegalMoves(color) {
-        const moves = [];
-        const opp = color === 'w' ? 'b' : 'w';
-
+        const moves = [], opp = color === 'w' ? 'b' : 'w';
         for (let sq = 0; sq < 64; sq++) {
           const piece = this.board[sq];
           if (!piece || piece[0] !== color) continue;
-          const type = piece[1];
-          const r = Math.floor(sq / 8);
-          const f = sq % 8;
-
+          const type = piece[1], r = Math.floor(sq / 8), f = sq % 8;
           if (type === 'P') {
-            const dir = color === 'w' ? -1 : 1;
-            const startRank = color === 'w' ? 6 : 1;
-            const promoRank = color === 'w' ? 0 : 7;
-
-            // Single forward
+            const dir = color === 'w' ? -1 : 1, startRank = color === 'w' ? 6 : 1, promoRank = color === 'w' ? 0 : 7;
             const r1 = r + dir;
             if (r1 >= 0 && r1 < 8) {
               const sq1 = r1 * 8 + f;
               if (!this.board[sq1]) {
                 if (r1 === promoRank) {
-                  for (const promo of ['Q', 'R', 'B', 'N']) {
-                    moves.push({ from: sq, to: sq1, piece, promo });
-                  }
+                  for (const promo of ['Q', 'R', 'B', 'N']) moves.push({ from: sq, to: sq1, piece, promo });
                 } else {
                   moves.push({ from: sq, to: sq1, piece });
-                  // Double forward from start rank
-                  if (r === startRank) {
-                    const sq2 = (r + dir * 2) * 8 + f;
-                    if (!this.board[sq2]) {
-                      moves.push({ from: sq, to: sq2, piece, isDoublePawn: true });
-                    }
+                  if (r === startRank && !this.board[(r + dir * 2) * 8 + f]) {
+                    moves.push({ from: sq, to: (r + dir * 2) * 8 + f, piece, isDoublePawn: true });
                   }
                 }
               }
-
-              // Captures & En Passant
               for (const df of [-1, 1]) {
                 const nf = f + df;
                 if (nf < 0 || nf > 7) continue;
-                const capSq = r1 * 8 + nf;
-                const target = this.board[capSq];
+                const capSq = r1 * 8 + nf, target = this.board[capSq];
                 if (target && target[0] === opp) {
                   if (r1 === promoRank) {
-                    for (const promo of ['Q', 'R', 'B', 'N']) {
-                      moves.push({ from: sq, to: capSq, piece, capture: target, promo });
-                    }
+                    for (const promo of ['Q', 'R', 'B', 'N']) moves.push({ from: sq, to: capSq, piece, capture: target, promo });
                   } else {
                     moves.push({ from: sq, to: capSq, piece, capture: target });
                   }
@@ -2117,11 +1669,9 @@
             const deltas = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
             for (const [dr, df] of deltas) {
               const nr = r + dr, nf = f + df;
-              if (nr < 0 || nr > 7 || nf < 0 || nf > 7) continue;
-              const to = nr * 8 + nf;
-              const target = this.board[to];
-              if (!target || target[0] === opp) {
-                moves.push({ from: sq, to, piece, capture: target || null });
+              if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
+                const to = nr * 8 + nf, target = this.board[to];
+                if (!target || target[0] === opp) moves.push({ from: sq, to, piece, capture: target || null });
               }
             }
           } else if (type === 'B' || type === 'R' || type === 'Q') {
@@ -2131,16 +1681,14 @@
             for (const [dr, df] of dirs) {
               let nr = r + dr, nf = f + df;
               while (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
-                const to = nr * 8 + nf;
-                const target = this.board[to];
+                const to = nr * 8 + nf, target = this.board[to];
                 if (!target) {
                   moves.push({ from: sq, to, piece });
                 } else {
                   if (target[0] === opp) moves.push({ from: sq, to, piece, capture: target });
                   break;
                 }
-                nr += dr;
-                nf += df;
+                nr += dr; nf += df;
               }
             }
           } else if (type === 'K') {
@@ -2148,180 +1696,107 @@
               for (let df = -1; df <= 1; df++) {
                 if (dr === 0 && df === 0) continue;
                 const nr = r + dr, nf = f + df;
-                if (nr < 0 || nr > 7 || nf < 0 || nf > 7) continue;
-                const to = nr * 8 + nf;
-                const target = this.board[to];
-                if (!target || target[0] === opp) {
-                  moves.push({ from: sq, to, piece, capture: target || null });
+                if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
+                  const to = nr * 8 + nf, target = this.board[to];
+                  if (!target || target[0] === opp) moves.push({ from: sq, to, piece, capture: target || null });
                 }
               }
             }
-
-            // Castling
-            const homeRank = color === 'w' ? 7 : 0;
-            const kHome = homeRank * 8 + 4;
+            const homeRank = color === 'w' ? 7 : 0, kHome = homeRank * 8 + 4;
             if (sq === kHome && !this.isSquareAttacked(kHome, opp)) {
-              // Kingside
               if (this.castling[color + 'K']) {
-                const fSq = homeRank * 8 + 5;
-                const gSq = homeRank * 8 + 6;
-                const rSq = homeRank * 8 + 7;
-                if (!this.board[fSq] && !this.board[gSq] && this.board[rSq] === color + 'R') {
-                  if (!this.isSquareAttacked(fSq, opp) && !this.isSquareAttacked(gSq, opp)) {
-                    moves.push({ from: kHome, to: gSq, piece, isCastle: 'K' });
-                  }
+                const fSq = homeRank * 8 + 5, gSq = homeRank * 8 + 6, rSq = homeRank * 8 + 7;
+                if (!this.board[fSq] && !this.board[gSq] && this.board[rSq] === color + 'R' &&
+                    !this.isSquareAttacked(fSq, opp) && !this.isSquareAttacked(gSq, opp)) {
+                  moves.push({ from: kHome, to: gSq, piece, isCastle: 'K' });
                 }
               }
-              // Queenside
               if (this.castling[color + 'Q']) {
-                const dSq = homeRank * 8 + 3;
-                const cSq = homeRank * 8 + 2;
-                const bSq = homeRank * 8 + 1;
-                const rSq = homeRank * 8 + 0;
-                if (!this.board[dSq] && !this.board[cSq] && !this.board[bSq] && this.board[rSq] === color + 'R') {
-                  if (!this.isSquareAttacked(dSq, opp) && !this.isSquareAttacked(cSq, opp)) {
-                    moves.push({ from: kHome, to: cSq, piece, isCastle: 'Q' });
-                  }
+                const dSq = homeRank * 8 + 3, cSq = homeRank * 8 + 2, bSq = homeRank * 8 + 1, rSq = homeRank * 8 + 0;
+                if (!this.board[dSq] && !this.board[cSq] && !this.board[bSq] && this.board[rSq] === color + 'R' &&
+                    !this.isSquareAttacked(dSq, opp) && !this.isSquareAttacked(cSq, opp)) {
+                  moves.push({ from: kHome, to: cSq, piece, isCastle: 'Q' });
                 }
               }
             }
           }
         }
-
         return moves;
       }
-
       applyMoveRaw(move) {
-        const piece = this.board[move.from];
-        const color = piece[0];
-        const type = piece[1];
-
+        const piece = this.board[move.from], color = piece[0], type = piece[1];
         this.board[move.from] = null;
-
-        if (move.isEnPassant) {
-          const capSq = color === 'w' ? move.to + 8 : move.to - 8;
-          this.board[capSq] = null;
-        }
-
+        if (move.isEnPassant) this.board[color === 'w' ? move.to + 8 : move.to - 8] = null;
         if (move.isCastle) {
-          const homeRank = color === 'w' ? 7 : 0;
-          if (move.isCastle === 'K') {
-            this.board[homeRank * 8 + 5] = color + 'R';
-            this.board[homeRank * 8 + 7] = null;
-          } else {
-            this.board[homeRank * 8 + 3] = color + 'R';
-            this.board[homeRank * 8 + 0] = null;
-          }
+          const hr = color === 'w' ? 7 : 0;
+          if (move.isCastle === 'K') { this.board[hr * 8 + 5] = color + 'R'; this.board[hr * 8 + 7] = null; }
+          else { this.board[hr * 8 + 3] = color + 'R'; this.board[hr * 8 + 0] = null; }
         }
-
         this.board[move.to] = move.promo ? (color + move.promo) : piece;
-
-        // Update castling rights
-        if (type === 'K') {
-          this.castling[color + 'K'] = false;
-          this.castling[color + 'Q'] = false;
-        }
+        if (type === 'K') { this.castling[color + 'K'] = false; this.castling[color + 'Q'] = false; }
         if (move.from === 63 || move.to === 63) this.castling.wK = false;
         if (move.from === 56 || move.to === 56) this.castling.wQ = false;
         if (move.from === 7 || move.to === 7) this.castling.bK = false;
         if (move.from === 0 || move.to === 0) this.castling.bQ = false;
-
-        // Update en-passant target square
-        if (move.isDoublePawn) {
-          this.enPassant = (move.from + move.to) >> 1;
-        } else {
-          this.enPassant = -1;
-        }
-
-        // Clocks
-        if (type === 'P' || move.capture) {
-          this.halfMoveClock = 0;
-        } else {
-          this.halfMoveClock++;
-        }
-
-        if (color === 'b') {
-          this.fullMoveNumber++;
-        }
-
+        this.enPassant = move.isDoublePawn ? (move.from + move.to) >> 1 : -1;
+        if (type === 'P' || move.capture) this.halfMoveClock = 0; else this.halfMoveClock++;
+        if (color === 'b') this.fullMoveNumber++;
         this.turn = color === 'w' ? 'b' : 'w';
       }
-
       generateLegalMoves(color = this.turn) {
-        const pseudo = this.generatePseudoLegalMoves(color);
-        const legal = [];
+        const pseudo = this.generatePseudoLegalMoves(color), legal = [];
         for (const m of pseudo) {
           const snap = this.cloneState();
           this.applyMoveRaw(m);
-          if (!this.isInCheck(color)) {
-            legal.push(m);
-          }
+          if (!this.isInCheck(color)) legal.push(m);
           this.restoreState(snap);
         }
         return legal;
       }
-
       buildSAN(move, legalMovesBefore) {
         if (move.isCastle === 'K') return 'O-O';
         if (move.isCastle === 'Q') return 'O-O-O';
-        const type = move.piece[1];
-        const dest = this.sqToAlgebraic(move.to);
+        const type = move.piece[1], dest = this.sqToAlgebraic(move.to);
         let san = '';
-
         if (type === 'P') {
-          if (move.capture) {
-            san += FILES[move.from % 8] + 'x';
-          }
+          if (move.capture) san += FILES[move.from % 8] + 'x';
           san += dest;
           if (move.promo) san += '=' + move.promo;
         } else {
           san += type;
-          const sameType = legalMovesBefore.filter(
-            m => m.piece === move.piece && m.to === move.to && m.from !== move.from
-          );
-          if (sameType.length > 0) {
-            const sameFile = sameType.some(m => (m.from % 8) === (move.from % 8));
-            const sameRank = sameType.some(m => Math.floor(m.from / 8) === Math.floor(move.from / 8));
-            if (!sameFile) san += FILES[move.from % 8];
-            else if (!sameRank) san += (8 - Math.floor(move.from / 8));
+          const same = legalMovesBefore.filter(m => m.piece === move.piece && m.to === move.to && m.from !== move.from);
+          if (same.length > 0) {
+            const sf = same.some(m => (m.from % 8) === (move.from % 8));
+            const sr = same.some(m => Math.floor(m.from / 8) === Math.floor(move.from / 8));
+            if (!sf) san += FILES[move.from % 8];
+            else if (!sr) san += (8 - Math.floor(move.from / 8));
             else san += this.sqToAlgebraic(move.from);
           }
           if (move.capture) san += 'x';
           san += dest;
         }
-
-        // Check / Checkmate suffix
         const oppMoves = this.generateLegalMoves(this.turn);
-        if (this.isInCheck(this.turn)) {
-          san += oppMoves.length === 0 ? '#' : '+';
-        }
+        if (this.isInCheck(this.turn)) san += oppMoves.length === 0 ? '#' : '+';
         return san;
       }
-
       makeMove(move) {
         const legalBefore = this.generateLegalMoves(this.turn);
         const snap = this.cloneState();
         this.applyMoveRaw(move);
         const san = this.buildSAN(move, legalBefore);
         this.recordPositionKey();
-
         const record = { move, san, snapshot: snap };
         this.history.push(record);
         return record;
       }
-
       undoLastMove() {
         if (this.history.length === 0) return null;
-        const currKey = this.getPositionKey();
-        const cnt = this.positionCounts.get(currKey) || 0;
-        if (cnt <= 1) this.positionCounts.delete(currKey);
-        else this.positionCounts.set(currKey, cnt - 1);
-
+        const ck = this.getPositionKey(), cnt = this.positionCounts.get(ck) || 0;
+        if (cnt <= 1) this.positionCounts.delete(ck); else this.positionCounts.set(ck, cnt - 1);
         const last = this.history.pop();
         this.restoreState(last.snapshot);
         return last;
       }
-
       isInsufficientMaterial() {
         const pieces = [];
         for (let i = 0; i < 64; i++) {
@@ -2337,179 +1812,48 @@
         }
         return false;
       }
-
       getGameOutcome() {
-        const legal = this.generateLegalMoves(this.turn);
-        const inCheck = this.isInCheck(this.turn);
-
+        const legal = this.generateLegalMoves(this.turn), inCheck = this.isInCheck(this.turn);
         if (legal.length === 0) {
           if (inCheck) {
-            const winner = this.turn === 'w' ? 'Black' : 'White';
-            return {
-              over: true,
-              type: 'checkmate',
-              winner,
-              title: 'Checkmate!',
-              desc: `${winner} wins by checkmate.`
-            };
-          } else {
-            return {
-              over: true,
-              type: 'stalemate',
-              winner: 'Draw',
-              title: 'Draw — Stalemate',
-              desc: 'No legal moves available.'
-            };
+            const w = this.turn === 'w' ? 'Black' : 'White';
+            return { over: true, type: 'checkmate', winner: w, title: 'Checkmate!', desc: `${w} wins by checkmate.` };
           }
+          return { over: true, type: 'stalemate', winner: 'Draw', title: 'Draw — Stalemate', desc: 'No legal moves available.' };
         }
-
-        if (this.halfMoveClock >= 100) {
-          return {
-            over: true,
-            type: 'draw',
-            winner: 'Draw',
-            title: 'Draw — 50-Move Rule',
-            desc: '50 moves without pawn movement or capture.'
-          };
-        }
-
+        if (this.halfMoveClock >= 100) return { over: true, type: 'draw', winner: 'Draw', title: 'Draw — 50-Move Rule', desc: '50 moves without pawn move or capture.' };
         const key = this.getPositionKey();
-        if ((this.positionCounts.get(key) || 0) >= 3) {
-          return {
-            over: true,
-            type: 'draw',
-            winner: 'Draw',
-            title: 'Draw — Repetition',
-            desc: 'Threefold position repetition.'
-          };
-        }
-
-        if (this.isInsufficientMaterial()) {
-          return {
-            over: true,
-            type: 'draw',
-            winner: 'Draw',
-            title: 'Draw — Insufficient Material',
-            desc: 'Neither side has enough material to checkmate.'
-          };
-        }
-
+        if ((this.positionCounts.get(key) || 0) >= 3) return { over: true, type: 'draw', winner: 'Draw', title: 'Draw — Repetition', desc: 'Threefold repetition.' };
+        if (this.isInsufficientMaterial()) return { over: true, type: 'draw', winner: 'Draw', title: 'Draw — Insufficient Material', desc: 'Insufficient material.' };
         return { over: false, inCheck };
       }
     }
 
-    // =========================================================================
-    // 4. AI ENGINE (PIECE-SQUARE TABLES + ALPHA-BETA + QUIESCENCE SEARCH)
-    // =========================================================================
     const PST = {
-      P: [
-         0,  0,  0,  0,  0,  0,  0,  0,
-        50, 50, 50, 50, 50, 50, 50, 50,
-        10, 10, 20, 30, 30, 20, 10, 10,
-         5,  5, 10, 25, 25, 10,  5,  5,
-         0,  0,  0, 20, 20,  0,  0,  0,
-         5, -5,-10,  0,  0,-10, -5,  5,
-         5, 10, 10,-20,-20, 10, 10,  5,
-         0,  0,  0,  0,  0,  0,  0,  0
-      ],
-      N: [
-        -50,-40,-30,-30,-30,-30,-40,-50,
-        -40,-20,  0,  0,  0,  0,-20,-40,
-        -30,  0, 10, 15, 15, 10,  0,-30,
-        -30,  5, 15, 20, 20, 15,  5,-30,
-        -30,  0, 15, 20, 20, 15,  0,-30,
-        -30,  5, 10, 15, 15, 10,  5,-30,
-        -40,-20,  0,  5,  5,  0,-20,-40,
-        -50,-40,-30,-30,-30,-30,-40,-50
-      ],
-      B: [
-        -20,-10,-10,-10,-10,-10,-10,-20,
-        -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,  0,  5, 10, 10,  5,  0,-10,
-        -10,  5,  5, 10, 10,  5,  5,-10,
-        -10,  0, 10, 10, 10, 10,  0,-10,
-        -10, 10, 10, 10, 10, 10, 10,-10,
-        -10,  5,  0,  0,  0,  0,  5,-10,
-        -20,-10,-10,-10,-10,-10,-10,-20
-      ],
-      R: [
-         0,  0,  0,  0,  0,  0,  0,  0,
-         5, 10, 10, 10, 10, 10, 10,  5,
-        -5,  0,  0,  0,  0,  0,  0, -5,
-        -5,  0,  0,  0,  0,  0,  0, -5,
-        -5,  0,  0,  0,  0,  0,  0, -5,
-        -5,  0,  0,  0,  0,  0,  0, -5,
-        -5,  0,  0,  0,  0,  0,  0, -5,
-         0,  0,  0,  5,  5,  0,  0,  0
-      ],
-      Q: [
-        -20,-10,-10, -5, -5,-10,-10,-20,
-        -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,  0,  5,  5,  5,  5,  0,-10,
-         -5,  0,  5,  5,  5,  5,  0, -5,
-          0,  0,  5,  5,  5,  5,  0, -5,
-        -10,  5,  5,  5,  5,  5,  0,-10,
-        -10,  0,  5,  0,  0,  0,  0,-10,
-        -20,-10,-10, -5, -5,-10,-10,-20
-      ],
-      K_MID: [
-        -30,-40,-40,-50,-50,-40,-40,-30,
-        -30,-40,-40,-50,-50,-40,-40,-30,
-        -30,-40,-40,-50,-50,-40,-40,-30,
-        -30,-40,-40,-50,-50,-40,-40,-30,
-        -20,-30,-30,-40,-40,-30,-30,-20,
-        -10,-20,-20,-20,-20,-20,-20,-10,
-         20, 20,  0,  0,  0,  0, 20, 20,
-         20, 30, 10,  0,  0, 10, 30, 20
-      ],
-      K_END: [
-        -50,-40,-30,-20,-20,-30,-40,-50,
-        -30,-20,-10,  0,  0,-10,-20,-30,
-        -30,-10, 20, 30, 30, 20,-10,-30,
-        -30,-10, 30, 40, 40, 30,-10,-30,
-        -30,-10, 30, 40, 40, 30,-10,-30,
-        -30,-10, 20, 30, 30, 20,-10,-30,
-        -30,-30,  0,  0,  0,  0,-30,-30,
-        -50,-30,-30,-30,-30,-30,-30,-50
-      ]
+      P: [0,0,0,0,0,0,0,0, 50,50,50,50,50,50,50,50, 10,10,20,30,30,20,10,10, 5,5,10,25,25,10,5,5, 0,0,0,20,20,0,0,0, 5,-5,-10,0,0,-10,-5,5, 5,10,10,-20,-20,10,10,5, 0,0,0,0,0,0,0,0],
+      N: [-50,-40,-30,-30,-30,-30,-40,-50, -40,-20,0,0,0,0,-20,-40, -30,0,10,15,15,10,0,-30, -30,5,15,20,20,15,5,-30, -30,0,15,20,20,15,0,-30, -30,5,10,15,15,10,5,-30, -40,-20,0,5,5,0,-20,-40, -50,-40,-30,-30,-30,-30,-40,-50],
+      B: [-20,-10,-10,-10,-10,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,5,10,10,5,0,-10, -10,5,5,10,10,5,5,-10, -10,0,10,10,10,10,0,-10, -10,10,10,10,10,10,10,-10, -10,5,0,0,0,0,5,-10, -20,-10,-10,-10,-10,-10,-10,-20],
+      R: [0,0,0,0,0,0,0,0, 5,10,10,10,10,10,10,5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, 0,0,0,5,5,0,0,0],
+      Q: [-20,-10,-10,-5,-5,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,5,5,5,5,0,-10, -5,0,5,5,5,5,0,-5, 0,0,5,5,5,5,0,-5, -10,5,5,5,5,5,0,-10, -10,0,5,0,0,0,0,-10, -20,-10,-10,-5,-5,-10,-10,-20],
+      K_MID: [-30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -20,-30,-30,-40,-40,-30,-30,-20, -10,-20,-20,-20,-20,-20,-20,-10, 20,20,0,0,0,0,20,20, 20,30,10,0,0,10,30,20],
+      K_END: [-50,-40,-30,-20,-20,-30,-40,-50, -30,-20,-10,0,0,-10,-20,-30, -30,-10,20,30,30,20,-10,-30, -30,-10,30,40,40,30,-10,-30, -30,-10,30,40,40,30,-10,-30, -30,-10,20,30,30,20,-10,-30, -30,-30,0,0,0,0,-30,-30, -50,-30,-30,-30,-30,-30,-30,-50]
     };
 
     class ChessAI {
-      constructor() {
-        this.nodes = 0;
-        this.startTime = 0;
-        this.timeBudget = 600;
-        this.aborted = false;
-      }
-
+      constructor() { this.nodes = 0; this.startTime = 0; this.timeBudget = 600; this.aborted = false; }
       evaluate(engine) {
-        let whiteScore = 0;
-        let blackScore = 0;
-        let nonPawnMaterial = 0;
-
+        let whiteScore = 0, blackScore = 0, nonPawnMaterial = 0;
         for (let sq = 0; sq < 64; sq++) {
           const p = engine.board[sq];
           if (!p) continue;
-          const color = p[0];
-          const type = p[1];
-          const val = PIECE_VALUES[type];
+          const color = p[0], type = p[1], val = PIECE_VALUES[type];
           if (type !== 'P' && type !== 'K') nonPawnMaterial += val;
-
           const tableSq = color === 'w' ? sq : ((7 - Math.floor(sq / 8)) * 8 + (sq % 8));
-          let pstVal = 0;
-          if (type === 'K') {
-            pstVal = nonPawnMaterial <= 2600 ? PST.K_END[tableSq] : PST.K_MID[tableSq];
-          } else {
-            pstVal = PST[type][tableSq];
-          }
-
-          if (color === 'w') whiteScore += val + pstVal;
-          else blackScore += val + pstVal;
+          const pstVal = type === 'K' ? (nonPawnMaterial <= 2600 ? PST.K_END[tableSq] : PST.K_MID[tableSq]) : PST[type][tableSq];
+          if (color === 'w') whiteScore += val + pstVal; else blackScore += val + pstVal;
         }
-
         return whiteScore - blackScore;
       }
-
       orderMoves(engine, moves) {
         return moves.sort((a, b) => {
           let scoreA = 0, scoreB = 0;
@@ -2522,14 +1866,12 @@
           return scoreB - scoreA;
         });
       }
-
       quiescence(engine, alpha, beta, maximizing) {
         this.nodes++;
         if ((this.nodes & 1023) === 0 && performance.now() - this.startTime > this.timeBudget) {
           this.aborted = true;
           return this.evaluate(engine);
         }
-
         const standPat = this.evaluate(engine);
         if (maximizing) {
           if (standPat >= beta) return beta;
@@ -2538,17 +1880,14 @@
           if (standPat <= alpha) return alpha;
           if (standPat < beta) beta = standPat;
         }
-
         const legal = engine.generateLegalMoves(engine.turn);
         const tactical = this.orderMoves(engine, legal.filter(m => m.capture || m.promo));
-
         for (const m of tactical) {
           const snap = engine.cloneState();
           engine.applyMoveRaw(m);
           const score = this.quiescence(engine, alpha, beta, !maximizing);
           engine.restoreState(snap);
           if (this.aborted) return standPat;
-
           if (maximizing) {
             if (score >= beta) return beta;
             if (score > alpha) alpha = score;
@@ -2559,28 +1898,19 @@
         }
         return maximizing ? alpha : beta;
       }
-
       minimax(engine, depth, alpha, beta, maximizing) {
         this.nodes++;
         if ((this.nodes & 1023) === 0 && performance.now() - this.startTime > this.timeBudget) {
           this.aborted = true;
           return this.evaluate(engine);
         }
-
         const legal = engine.generateLegalMoves(engine.turn);
         if (legal.length === 0) {
-          if (engine.isInCheck(engine.turn)) {
-            return maximizing ? (-29000 - depth) : (29000 + depth);
-          }
+          if (engine.isInCheck(engine.turn)) return maximizing ? (-29000 - depth) : (29000 + depth);
           return 0;
         }
-
-        if (depth === 0) {
-          return this.quiescence(engine, alpha, beta, maximizing);
-        }
-
+        if (depth === 0) return this.quiescence(engine, alpha, beta, maximizing);
         this.orderMoves(engine, legal);
-
         if (maximizing) {
           let maxEval = -Infinity;
           for (const m of legal) {
@@ -2609,7 +1939,6 @@
           return minEval;
         }
       }
-
       getCustomEloProfile(elo) {
         if (elo <= 200) return { maxDepth: 1, minGuaranteedDepth: 1, budget: 80, jitter: 280, topPool: 7, blunderRate: 0.45 };
         if (elo <= 300) return { maxDepth: 1, minGuaranteedDepth: 1, budget: 90, jitter: 210, topPool: 5, blunderRate: 0.30 };
@@ -2625,16 +1954,12 @@
         if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1400, jitter: 0, topPool: 1, blunderRate: 0 };
         return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1650, jitter: 0, topPool: 1, blunderRate: 0 };
       }
-
       chooseBestMove(engine, difficulty = 'medium', customElo = 1500) {
         const legal = engine.generateLegalMoves(engine.turn);
         if (legal.length === 0) return null;
         if (legal.length === 1) return legal[0];
-
         const maximizing = engine.turn === 'w';
-        this.nodes = 0;
-        this.startTime = performance.now();
-        this.aborted = false;
+        this.nodes = 0; this.startTime = performance.now(); this.aborted = false;
 
         if (difficulty === 'easy') {
           this.timeBudget = 120;
@@ -2643,14 +1968,12 @@
             engine.applyMoveRaw(m);
             const base = this.evaluate(engine);
             engine.restoreState(snap);
-            const jitter = (Math.random() - 0.5) * 320;
-            return { move: m, score: base + jitter };
+            return { move: m, score: base + (Math.random() - 0.5) * 320 };
           });
           scored.sort((a, b) => maximizing ? (b.score - a.score) : (a.score - b.score));
           const pool = scored.slice(0, Math.min(4, scored.length));
           return pool[Math.floor(Math.random() * pool.length)].move;
         }
-
         if (difficulty === 'medium') {
           this.timeBudget = 450;
           this.orderMoves(engine, legal);
@@ -2664,9 +1987,7 @@
           }
           scored.sort((a, b) => maximizing ? (b.score - a.score) : (a.score - b.score));
           const pool = scored.slice(0, Math.min(2, scored.length));
-          if (pool.length > 1 && Math.abs(pool[0].score - pool[1].score) < 65 && Math.random() < 0.35) {
-            return pool[1].move;
-          }
+          if (pool.length > 1 && Math.abs(pool[0].score - pool[1].score) < 65 && Math.random() < 0.35) return pool[1].move;
           return pool[0].move;
         }
 
@@ -2680,22 +2001,15 @@
 
         this.timeBudget = profile.budget;
         this.orderMoves(engine, legal);
-        let bestMove = legal[0];
-        let bestScoredList = [];
+        let bestMove = legal[0], bestScoredList = [];
 
         for (let depth = 1; depth <= profile.maxDepth; depth++) {
           const isGuaranteed = depth <= profile.minGuaranteedDepth;
-          if (!isGuaranteed && performance.now() - this.startTime > this.timeBudget * 0.55) {
-            break;
-          }
-          if (isGuaranteed) {
-            this.timeBudget = Math.max(this.timeBudget, 2500);
-          }
+          if (!isGuaranteed && performance.now() - this.startTime > this.timeBudget * 0.55) break;
+          if (isGuaranteed) this.timeBudget = Math.max(this.timeBudget, 2500);
 
-          let currentBest = null;
-          let currentBestScore = maximizing ? -Infinity : Infinity;
-          let alpha = -Infinity;
-          let beta = Infinity;
+          let currentBest = null, currentBestScore = maximizing ? -Infinity : Infinity;
+          let alpha = -Infinity, beta = Infinity;
           const iterScored = [];
 
           for (const m of legal) {
@@ -2704,45 +2018,31 @@
             const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing);
             engine.restoreState(snap);
             if (!isGuaranteed && this.aborted) break;
-
             const noisyScore = profile.jitter > 0 ? sc + (Math.random() - 0.5) * profile.jitter : sc;
             iterScored.push({ move: m, score: noisyScore });
-
             if (maximizing) {
-              if (sc > currentBestScore) {
-                currentBestScore = sc;
-                currentBest = m;
-              }
+              if (sc > currentBestScore) { currentBestScore = sc; currentBest = m; }
               if (sc > alpha) alpha = sc;
             } else {
-              if (sc < currentBestScore) {
-                currentBestScore = sc;
-                currentBest = m;
-              }
+              if (sc < currentBestScore) { currentBestScore = sc; currentBest = m; }
               if (sc < beta) beta = sc;
             }
           }
-
           if ((isGuaranteed || !this.aborted) && currentBest) {
             bestMove = currentBest;
             bestScoredList = iterScored;
           }
           this.aborted = false;
         }
-
         if (profile.topPool > 1 && bestScoredList.length > 0) {
           bestScoredList.sort((a, b) => maximizing ? (b.score - a.score) : (a.score - b.score));
           const pool = bestScoredList.slice(0, Math.min(profile.topPool, bestScoredList.length));
           return pool[Math.floor(Math.random() * pool.length)].move;
         }
-
         return bestMove;
       }
     }
 
-    // =========================================================================
-    // 5. APPLICATION STATE & DOM REFERENCES
-    // =========================================================================
     const engine = new ChessEngine();
     const ai = new ChessAI();
 
@@ -2757,12 +2057,10 @@
       tabletopMode: true,
       allowUndo: false,
       allowHints: false,
-
       selectedSq: null,
       legalMovesForSelected: [],
       hintMove: null,
       pendingPromo: null,
-
       whiteTime: 600,
       blackTime: 600,
       timerInterval: null,
@@ -2772,33 +2070,18 @@
 
     const $ = id => document.getElementById(id);
 
-    // =========================================================================
-    // 6. HIGH-RES APPLE TOUCH ICON GENERATOR & MULTI-TOUCH / PINCH-ZOOM GUARD
-    // =========================================================================
     (function generateAppleTouchIcon() {
       try {
         const c = document.createElement('canvas');
-        c.width = 512;
-        c.height = 512;
+        c.width = 512; c.height = 512;
         const ctx = c.getContext('2d');
         const svgEl = document.querySelector('#top-bar .brand-icon svg');
         if (!ctx || !svgEl) return;
-
-        ctx.fillStyle = '#0b1120';
-        ctx.fillRect(0, 0, 512, 512);
-
+        ctx.fillStyle = '#0b1120'; ctx.fillRect(0, 0, 512, 512);
         const grad = ctx.createLinearGradient(0, 0, 512, 512);
-        grad.addColorStop(0, '#10b981');
-        grad.addColorStop(1, '#064e3b');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.roundRect(28, 28, 456, 456, 92);
-        ctx.fill();
-
-        ctx.strokeStyle = 'rgba(167, 243, 208, 0.45)';
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
+        grad.addColorStop(0, '#10b981'); grad.addColorStop(1, '#064e3b');
+        ctx.fillStyle = grad; ctx.beginPath(); ctx.roundRect(28, 28, 456, 456, 92); ctx.fill();
+        ctx.strokeStyle = 'rgba(167, 243, 208, 0.45)'; ctx.lineWidth = 8; ctx.stroke();
         const svgData = new XMLSerializer().serializeToString(svgEl);
         const img = new Image();
         img.onload = () => {
@@ -2811,25 +2094,10 @@
     })();
 
     document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
-    document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
-    document.addEventListener('gestureend', e => e.preventDefault(), { passive: false });
-    document.addEventListener('touchstart', e => {
-      if (e.touches.length > 1) e.preventDefault();
-    }, { passive: false });
+    document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
     document.addEventListener('touchmove', e => {
-      if (e.touches.length > 1) {
-        e.preventDefault();
-        return;
-      }
-      if (!e.target.closest('.mobile-ticker, #desktop-move-list, .modal-card')) {
-        e.preventDefault();
-      }
-    }, { passive: false });
-    let lastTouchEndTime = 0;
-    document.addEventListener('touchend', e => {
-      const now = Date.now();
-      if (now - lastTouchEndTime <= 300) e.preventDefault();
-      lastTouchEndTime = now;
+      if (e.touches.length > 1) { e.preventDefault(); return; }
+      if (!e.target.closest('.mobile-ticker, #desktop-move-list, .modal-card')) e.preventDefault();
     }, { passive: false });
 
     const els = {
@@ -2839,7 +2107,6 @@
       evalFill: $('eval-fill'),
       evalScore: $('eval-score-label'),
       dragGhost: $('drag-ghost'),
-
       topBar: $('top-player-bar'),
       bottomBar: $('bottom-player-bar'),
       topName: $('top-player-name'),
@@ -2852,7 +2119,6 @@
       bottomCaptured: $('bottom-captured'),
       topMatDiff: $('top-mat-diff'),
       bottomMatDiff: $('bottom-mat-diff'),
-
       mobileStatusText: $('mobile-status-text'),
       mobileStatusDot: $('mobile-status-dot'),
       mobileMoveCount: $('mobile-move-count'),
@@ -2862,7 +2128,6 @@
       desktopStatusDot: $('desktop-status-dot'),
       desktopMoveCount: $('desktop-move-count'),
       desktopMoveList: $('desktop-move-list'),
-
       modalConfig: $('modal-config'),
       modalPromo: $('modal-promo'),
       modalGameOver: $('modal-gameover'),
@@ -2896,7 +2161,8 @@
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
         const extraTopResign = isFriend ? 48 : 0;
-        const chromeH = 50 + 32 + extraTopResign + 44 + 44 + 44 + 32 + (hasActions ? 44 : 0) + 56;
+        const safeTopOffset = 28;
+        const chromeH = safeTopOffset + 50 + 32 + extraTopResign + 44 + 44 + 44 + 32 + (hasActions ? 44 : 0) + 56;
         const availH = vh - chromeH;
         const availW = vw - 16 - 8 - 18;
         boardSize = Math.floor(Math.min(availW, availH));
@@ -2914,12 +2180,10 @@
       els.bottomBar.style.width = barWidth;
       $('btn-resign-black-top').style.width = barWidth;
       $('board-bottom-resign-wrap').style.width = barWidth;
-
       if (!isDesktop) {
         $('mobile-status-strip').style.width = barWidth;
         $('mobile-bottom-strip').style.width = barWidth;
       }
-
       els.dragGhost.style.width = Math.round(boardSize / 8 * 1.15) + 'px';
       els.dragGhost.style.height = Math.round(boardSize / 8 * 1.15) + 'px';
     }
@@ -2927,20 +2191,9 @@
     window.addEventListener('resize', () => resizeBoard(false));
     window.addEventListener('orientationchange', () => setTimeout(() => resizeBoard(true), 120));
 
-    // =========================================================================
-    // 8. BOARD RENDERING & PERSPECTIVE MAPPING
-    // =========================================================================
-    function isBoardFlipped() {
-      return state.mode === 'ai' && state.humanColor === 'b';
-    }
-
-    function displayIdxToSq(idx) {
-      return isBoardFlipped() ? (63 - idx) : idx;
-    }
-
-    function shouldRotatePiece180(piece) {
-      return state.mode === 'friend' && state.tabletopMode && piece[0] === 'b';
-    }
+    function isBoardFlipped() { return state.mode === 'ai' && state.humanColor === 'b'; }
+    function displayIdxToSq(idx) { return isBoardFlipped() ? (63 - idx) : idx; }
+    function shouldRotatePiece180(piece) { return state.mode === 'friend' && state.tabletopMode && piece[0] === 'b'; }
 
     function buildBoardDOM() {
       els.board.innerHTML = '';
@@ -2953,7 +2206,6 @@
     }
 
     function renderBoard() {
-      const flipped = isBoardFlipped();
       const lastRecord = engine.history[engine.history.length - 1] || null;
       const lastFrom = lastRecord ? lastRecord.move.from : -1;
       const lastTo = lastRecord ? lastRecord.move.to : -1;
@@ -2964,8 +2216,7 @@
       for (let i = 0; i < 64; i++) {
         const sq = displayIdxToSq(i);
         const sqEl = squareEls[i];
-        const r = Math.floor(sq / 8);
-        const f = sq % 8;
+        const r = Math.floor(sq / 8), f = sq % 8;
         const isLight = (r + f) % 2 === 0;
 
         let cls = 'square ' + (isLight ? 'light' : 'dark');
@@ -2980,15 +2231,13 @@
         sqEl.dataset.sq = sq;
         sqEl.innerHTML = '';
 
-        const dispRow = Math.floor(i / 8);
-        const dispCol = i % 8;
-        if (dispCol === 0) {
+        if (f === 0) {
           const rankLbl = document.createElement('span');
           rankLbl.className = 'coord-rank';
           rankLbl.textContent = 8 - r;
           sqEl.appendChild(rankLbl);
         }
-        if (dispRow === 7) {
+        if (Math.floor(i / 8) === 7) {
           const fileLbl = document.createElement('span');
           fileLbl.className = 'coord-file';
           fileLbl.textContent = FILES[f];
@@ -2999,12 +2248,8 @@
         if (piece) {
           const wrap = document.createElement('div');
           wrap.className = 'piece-wrap';
-          if (shouldRotatePiece180(piece)) {
-            wrap.classList.add('rotated-180');
-          }
-          if (dragState.active && dragState.fromSq === sq && dragState.moved) {
-            wrap.classList.add('dragging-source');
-          }
+          if (shouldRotatePiece180(piece)) wrap.classList.add('rotated-180');
+          if (dragState.active && dragState.fromSq === sq && dragState.moved) wrap.classList.add('dragging-source');
           wrap.innerHTML = PIECE_SVGS[piece];
           sqEl.appendChild(wrap);
         }
@@ -3012,9 +2257,7 @@
         if (lastRecord && lastRecord.move.to === sq && lastRecord.quality) {
           const badge = document.createElement('div');
           badge.className = `move-badge ${lastRecord.quality.css}`;
-          if (state.mode === 'friend' && state.tabletopMode && lastRecord.moverColor === 'b') {
-            badge.classList.add('rotated-180');
-          }
+          if (state.mode === 'friend' && state.tabletopMode && lastRecord.moverColor === 'b') badge.classList.add('rotated-180');
           badge.textContent = lastRecord.quality.symbol;
           badge.title = `${lastRecord.san}: ${lastRecord.quality.label}`;
           sqEl.appendChild(badge);
@@ -3026,125 +2269,68 @@
           sqEl.appendChild(ind);
         }
       }
+      updateEvaluationBar();
     }
 
-    // =========================================================================
-    // 9. MOVE CLASSIFICATION, EVALUATION BAR, HINTS & AI TURN
-    // =========================================================================
     const OPENING_BOOK_LINES = [
       ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O'],
-      ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3'],
       ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3'],
-      ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4'],
-      ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6'],
-      ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4'],
-      ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5'],
-      ['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3'],
-      ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6'],
-      ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4'],
-      ['c4', 'e5', 'Nc3', 'Nf6', 'g3', 'd5'],
-      ['Nf3', 'd5', 'g3', 'Nf6', 'Bg2', 'c6', 'O-O']
+      ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5']
     ];
 
-    function isBookSequence(sanHistory) {
-      if (sanHistory.length === 0 || sanHistory.length > 10) return false;
-      const clean = sanHistory.map(s => s.replace(/[+#]/g, ''));
-      return OPENING_BOOK_LINES.some(line =>
-        clean.length <= line.length && clean.every((mv, idx) => line[idx] === mv)
-      );
-    }
-
     function classifyMoveQuality(moverColor, bestScoreForMover, playedScoreForMover, secondBestScoreForMover, isSacrifice, sanHistory) {
-      if (isBookSequence(sanHistory)) {
+      if (sanHistory.length <= 8 && OPENING_BOOK_LINES.some(line => sanHistory.every((m, idx) => line[idx] === m))) {
         return { key: 'book', symbol: '📖', label: 'Book Move', css: 'badge-book', color: '#fbbf24' };
       }
-
       const cpLoss = Math.max(0, bestScoreForMover - playedScoreForMover);
       const gapToSecond = bestScoreForMover - secondBestScoreForMover;
-
       if (cpLoss <= 20) {
-        if (isSacrifice && playedScoreForMover >= -40 && gapToSecond >= 75) {
-          return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
-        }
-        if (gapToSecond >= 135 && bestScoreForMover > -150) {
-          return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
-        }
+        if (isSacrifice && playedScoreForMover >= -40 && gapToSecond >= 75) return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
+        if (gapToSecond >= 135 && bestScoreForMover > -150) return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
         return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
       }
-      if (cpLoss <= 65) {
-        return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
-      }
-      if (cpLoss <= 135) {
-        return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
-      }
-      if (cpLoss <= 260) {
-        return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
-      }
+      if (cpLoss <= 65) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+      if (cpLoss <= 135) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+      if (cpLoss <= 260) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
       return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
     }
 
     function evaluateMoveBeforeCommit(move) {
-      const moverColor = engine.turn;
-      const maximizing = moverColor === 'w';
-      const sign = maximizing ? 1 : -1;
+      const moverColor = engine.turn, maximizing = moverColor === 'w', sign = maximizing ? 1 : -1;
       const legal = engine.generateLegalMoves(moverColor);
-
-      if (legal.length <= 1) {
-        return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
-      }
-
-      const movedPiece = engine.board[move.from];
-      const movedVal = PIECE_VALUES[movedPiece[1]] || 0;
-      const capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
-
-      ai.nodes = 0;
-      ai.startTime = performance.now();
-      ai.timeBudget = 130;
-      ai.aborted = false;
-
-      let bestScore = -Infinity;
-      let secondBestScore = -Infinity;
-      let playedScore = -Infinity;
-
+      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
+      ai.nodes = 0; ai.startTime = performance.now(); ai.timeBudget = 130; ai.aborted = false;
+      let bestScore = -Infinity, secondBestScore = -Infinity, playedScore = -Infinity;
       ai.orderMoves(engine, legal);
       for (const m of legal) {
         const snap = engine.cloneState();
         engine.applyMoveRaw(m);
         const rawEval = ai.minimax(engine, 1, -Infinity, Infinity, !maximizing);
         engine.restoreState(snap);
-
         const moverEval = rawEval * sign;
-        if (moverEval > bestScore) {
-          secondBestScore = bestScore;
-          bestScore = moverEval;
-        } else if (moverEval > secondBestScore) {
-          secondBestScore = moverEval;
-        }
-
-        if (m.from === move.from && m.to === move.to && (m.promo || null) === (move.promo || null)) {
-          playedScore = moverEval;
-        }
+        if (moverEval > bestScore) { secondBestScore = bestScore; bestScore = moverEval; }
+        else if (moverEval > secondBestScore) { secondBestScore = moverEval; }
+        if (m.from === move.from && m.to === move.to && (m.promo || null) === (move.promo || null)) playedScore = moverEval;
       }
-
       if (playedScore === -Infinity) playedScore = bestScore;
-
       const snapCheck = engine.cloneState();
       engine.applyMoveRaw(move);
-      const oppColor = moverColor === 'w' ? 'b' : 'w';
-      const destinationAttacked = engine.isSquareAttacked(move.to, oppColor);
+      const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
       engine.restoreState(snapCheck);
-
       const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
-      const futureSan = [...engine.history.map(h => h.san), engine.buildSAN(move, legal)];
-
+      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
       return classifyMoveQuality(moverColor, bestScore, playedScore, secondBestScore, isSacrifice, futureSan);
     }
 
     function updateEvaluationBar() {
       const outcome = engine.getGameOutcome();
+      const flipped = isBoardFlipped();
       let cp = 0;
 
-      if (outcome.over) {
+      if (engine.history.length === 0) {
+        cp = 0;
+      } else if (outcome.over) {
         if (outcome.winner === 'White') cp = 9900;
         else if (outcome.winner === 'Black') cp = -9900;
         else cp = 0;
@@ -3154,9 +2340,15 @@
 
       const pawns = cp / 100;
       const clamped = Math.max(-10, Math.min(10, pawns));
-      const whitePct = 50 + 50 * (2 / (1 + Math.exp(-0.42 * clamped)) - 1);
+      const whitePct = engine.history.length === 0
+        ? 50
+        : (50 + 50 * (2 / (1 + Math.exp(-0.42 * clamped)) - 1));
 
-      els.evalFill.style.height = `${whitePct.toFixed(1)}%`;
+      // Fill from bottom up for whichever player sits at the bottom of the board
+      const bottomPlayerPct = flipped ? (100 - whitePct) : whitePct;
+
+      els.evalWrap.classList.toggle('flipped-eval', flipped);
+      els.evalFill.style.height = `${bottomPlayerPct.toFixed(1)}%`;
 
       if (Math.abs(cp) >= 9000) {
         els.evalScore.textContent = cp > 0 ? '1-0' : '0-1';
@@ -3164,10 +2356,10 @@
         els.evalScore.textContent = Math.abs(pawns).toFixed(1);
       }
 
-      if (whitePct < 45) {
-        els.evalScore.classList.add('black-advantage');
+      if (bottomPlayerPct < 45) {
+        els.evalScore.classList.add('top-advantage');
       } else {
-        els.evalScore.classList.remove('black-advantage');
+        els.evalScore.classList.remove('top-advantage');
       }
     }
 
@@ -3184,81 +2376,49 @@
     }
 
     function scheduleAITurnIfNeeded() {
-      if (state.gameOver || state.mode !== 'ai') return;
-      if (engine.turn === state.humanColor) return;
-
+      if (state.gameOver || state.mode !== 'ai' || engine.turn === state.humanColor) return;
       state.aiThinking = true;
       updateStatusUI();
-
       setTimeout(() => {
-        if (state.gameOver || state.mode !== 'ai' || engine.turn === state.humanColor) {
-          state.aiThinking = false;
-          return;
-        }
+        if (state.gameOver || state.mode !== 'ai' || engine.turn === state.humanColor) { state.aiThinking = false; return; }
         const move = ai.chooseBestMove(engine, state.difficulty, state.customElo);
         state.aiThinking = false;
-        if (move) {
-          commitMove(move);
-        }
+        if (move) commitMove(move);
       }, 240);
     }
 
-    // =========================================================================
-    // 10. MOVE EXECUTION, PROMOTION, UNDO & TIMERS
-    // =========================================================================
     function commitMove(move) {
       const moverColor = engine.turn;
       const quality = evaluateMoveBeforeCommit(move);
       const record = engine.makeMove(move);
       record.quality = quality;
       record.moverColor = moverColor;
-      state.selectedSq = null;
-      state.legalMovesForSelected = [];
-      state.hintMove = null;
+      state.selectedSq = null; state.legalMovesForSelected = []; state.hintMove = null;
 
       const outcome = engine.getGameOutcome();
-      if (outcome.over) {
-        sfx.play('gameover');
-      } else if (outcome.inCheck) {
-        sfx.play('check');
-      } else if (move.isCastle) {
-        sfx.play('castle');
-      } else if (move.capture) {
-        sfx.play('capture');
-      } else {
-        sfx.play('move');
-      }
+      if (outcome.over) sfx.play('gameover');
+      else if (outcome.inCheck) sfx.play('check');
+      else if (move.isCastle) sfx.play('castle');
+      else if (move.capture) sfx.play('capture');
+      else sfx.play('move');
 
       renderBoard();
       updateMoveHistoryUI();
       updateCapturedUI();
-      updateEvaluationBar();
       updateStatusUI();
 
-      if (outcome.over) {
-        handleGameOver(outcome);
-      } else {
-        scheduleAITurnIfNeeded();
-      }
+      if (outcome.over) handleGameOver(outcome);
+      else scheduleAITurnIfNeeded();
     }
 
     function openPromotionModal(baseMove) {
       state.pendingPromo = baseMove;
-      const color = engine.turn;
-      const grid = $('promo-choices');
+      const color = engine.turn, grid = $('promo-choices');
       grid.innerHTML = '';
-
-      const options = [
-        { type: 'Q', label: 'Queen' },
-        { type: 'R', label: 'Rook' },
-        { type: 'B', label: 'Bishop' },
-        { type: 'N', label: 'Knight' }
-      ];
-
-      for (const opt of options) {
+      for (const opt of [{ type: 'Q', label: 'Queen' }, { type: 'R', label: 'Rook' }, { type: 'B', label: 'Bishop' }, { type: 'N', label: 'Knight' }]) {
         const btn = document.createElement('button');
         btn.className = 'promo-choice';
-        btn.innerHTML = `${PIECE_SVGS[color + opt.type]}<span>${opt.label}</span>`;
+        btn.innerHTML = `${PIECE_SVGS[color === 'w' ? ('w' + opt.type) : ('b' + opt.type)]}<span>${opt.label}</span>`;
         btn.addEventListener('click', () => {
           els.modalPromo.classList.remove('open');
           const chosen = { ...state.pendingPromo, promo: opt.type };
@@ -3267,88 +2427,40 @@
         });
         grid.appendChild(btn);
       }
-
       els.modalPromo.classList.add('open');
     }
 
     function attemptPlayerMove(fromSq, toSq) {
       if (state.gameOver || state.aiThinking) return false;
       if (state.mode === 'ai' && engine.turn !== state.humanColor) return false;
-
-      const legal = engine.generateLegalMoves(engine.turn);
-      const matching = legal.filter(m => m.from === fromSq && m.to === toSq);
+      const legal = engine.generateLegalMoves(engine.turn), matching = legal.filter(m => m.from === fromSq && m.to === toSq);
       if (matching.length === 0) return false;
-
-      if (matching[0].promo) {
-        openPromotionModal(matching[0]);
-        return true;
-      }
-
+      if (matching[0].promo) { openPromotionModal(matching[0]); return true; }
       commitMove(matching[0]);
       return true;
     }
 
     function handleUndo() {
       if (!state.allowUndo || state.aiThinking || engine.history.length === 0) return;
-
-      if (state.gameOver) {
-        state.gameOver = false;
-        els.modalGameOver.classList.remove('open');
-        startClockLoop();
-      }
-
-      if (state.mode === 'ai') {
-        if (engine.turn === state.humanColor && engine.history.length >= 2) {
-          engine.undoLastMove();
-          engine.undoLastMove();
-        } else {
-          engine.undoLastMove();
-        }
+      if (state.gameOver) { state.gameOver = false; els.modalGameOver.classList.remove('open'); startClockLoop(); }
+      if (state.mode === 'ai' && engine.turn === state.humanColor && engine.history.length >= 2) {
+        engine.undoLastMove(); engine.undoLastMove();
       } else {
         engine.undoLastMove();
       }
-
-      state.selectedSq = null;
-      state.legalMovesForSelected = [];
-      state.hintMove = null;
-
-      renderBoard();
-      updateMoveHistoryUI();
-      updateCapturedUI();
-      updateEvaluationBar();
-      updateStatusUI();
+      state.selectedSq = null; state.legalMovesForSelected = []; state.hintMove = null;
+      renderBoard(); updateMoveHistoryUI(); updateCapturedUI(); updateStatusUI();
       showToast('Move undone');
     }
 
-    // =========================================================================
-    // 11. UNIFIED POINTER DRAG-AND-DROP & TAP-TO-MOVE
-    // =========================================================================
-    const dragState = {
-      active: false,
-      pointerId: null,
-      fromSq: -1,
-      startX: 0,
-      startY: 0,
-      moved: false
-    };
+    const dragState = { active: false, pointerId: null, fromSq: -1, startX: 0, startY: 0, moved: false };
 
     function getSquareFromPoint(clientX, clientY) {
       const rect = els.boardFrame.getBoundingClientRect();
-      if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
-        return -1;
-      }
+      if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return -1;
       const col = Math.floor(((clientX - rect.left) / rect.width) * 8);
       const row = Math.floor(((clientY - rect.top) / rect.height) * 8);
-      const dispIdx = Math.max(0, Math.min(7, row)) * 8 + Math.max(0, Math.min(7, col));
-      return displayIdxToSq(dispIdx);
-    }
-
-    function canSelectPieceAt(sq) {
-      if (sq < 0 || sq > 63 || state.gameOver || state.aiThinking) return false;
-      const p = engine.board[sq];
-      if (!p || p[0] !== engine.turn) return false;
-      if (state.mode === 'ai' && p[0] !== state.humanColor) return false;
-      return true;
+      return displayIdxToSq(Math.max(0, Math.min(7, row)) * 8 + Math.max(0, Math.min(7, col)));
     }
 
     els.boardFrame.addEventListener('pointerdown', e => {
@@ -3356,50 +2468,36 @@
       sfx.init();
       const sq = getSquareFromPoint(e.clientX, e.clientY);
       if (sq === -1) return;
-
       if (state.selectedSq !== null && state.selectedSq !== sq) {
-        const moved = attemptPlayerMove(state.selectedSq, sq);
-        if (moved) return;
+        if (attemptPlayerMove(state.selectedSq, sq)) return;
       }
-
-      if (canSelectPieceAt(sq)) {
+      const piece = engine.board[sq];
+      if (piece && piece[0] === engine.turn && (state.mode === 'friend' || piece[0] === state.humanColor)) {
         state.selectedSq = sq;
         state.legalMovesForSelected = engine.generateLegalMoves(engine.turn).filter(m => m.from === sq);
-
-        dragState.active = true;
-        dragState.pointerId = e.pointerId;
-        dragState.fromSq = sq;
-        dragState.startX = e.clientX;
-        dragState.startY = e.clientY;
-        dragState.moved = false;
-
+        dragState.active = true; dragState.pointerId = e.pointerId; dragState.fromSq = sq;
+        dragState.startX = e.clientX; dragState.startY = e.clientY; dragState.moved = false;
         try { els.boardFrame.setPointerCapture(e.pointerId); } catch (_) {}
         renderBoard();
       } else {
-        state.selectedSq = null;
-        state.legalMovesForSelected = [];
+        state.selectedSq = null; state.legalMovesForSelected = [];
         renderBoard();
       }
     });
 
     els.boardFrame.addEventListener('pointermove', e => {
       if (!dragState.active || e.pointerId !== dragState.pointerId) return;
-      const dx = e.clientX - dragState.startX;
-      const dy = e.clientY - dragState.startY;
-
+      const dx = e.clientX - dragState.startX, dy = e.clientY - dragState.startY;
       if (!dragState.moved && Math.hypot(dx, dy) > 6) {
         dragState.moved = true;
         const piece = engine.board[dragState.fromSq];
         if (piece) {
           els.dragGhost.innerHTML = PIECE_SVGS[piece];
           els.dragGhost.style.display = 'block';
-          els.dragGhost.style.transform = shouldRotatePiece180(piece)
-            ? 'translate(-50%, -50%) scale(1.18) rotate(180deg)'
-            : 'translate(-50%, -50%) scale(1.18)';
+          els.dragGhost.style.transform = shouldRotatePiece180(piece) ? 'translate(-50%, -50%) scale(1.18) rotate(180deg)' : 'translate(-50%, -50%) scale(1.18)';
           renderBoard();
         }
       }
-
       if (dragState.moved) {
         els.dragGhost.style.left = e.clientX + 'px';
         els.dragGhost.style.top = e.clientY + 'px';
@@ -3408,91 +2506,48 @@
 
     function finishPointerDrag(e) {
       if (!dragState.active || e.pointerId !== dragState.pointerId) return;
-      const wasDragged = dragState.moved;
-      const fromSq = dragState.fromSq;
-
-      dragState.active = false;
-      dragState.pointerId = null;
-      dragState.fromSq = -1;
-      dragState.moved = false;
+      const wasDragged = dragState.moved, fromSq = dragState.fromSq;
+      dragState.active = false; dragState.pointerId = null; dragState.fromSq = -1; dragState.moved = false;
       els.dragGhost.style.display = 'none';
-
       if (wasDragged) {
         const dropSq = getSquareFromPoint(e.clientX, e.clientY);
-        if (dropSq !== -1 && dropSq !== fromSq) {
-          const ok = attemptPlayerMove(fromSq, dropSq);
-          if (ok) return;
-        }
+        if (dropSq !== -1 && dropSq !== fromSq && attemptPlayerMove(fromSq, dropSq)) return;
         renderBoard();
       }
     }
-
     els.boardFrame.addEventListener('pointerup', finishPointerDrag);
     els.boardFrame.addEventListener('pointercancel', finishPointerDrag);
 
-    // =========================================================================
-    // 12. CLOCKS, CAPTURED PIECES, MOVE HISTORY & STATUS SYNC
-    // =========================================================================
     function formatTime(sec) {
       if (state.timeControl === 0) return '∞';
       const s = Math.max(0, Math.floor(sec));
-      const m = Math.floor(s / 60);
-      const rem = s % 60;
-      return `${String(m).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+      return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
     }
 
     function updateClocksUI() {
       const flipped = isBoardFlipped();
       const topSec = flipped ? state.whiteTime : state.blackTime;
       const botSec = flipped ? state.blackTime : state.whiteTime;
-
       els.topClock.textContent = formatTime(topSec);
       els.bottomClock.textContent = formatTime(botSec);
-
       els.topClock.classList.toggle('low-time', state.timeControl > 0 && topSec <= 30 && topSec > 0);
       els.bottomClock.classList.toggle('low-time', state.timeControl > 0 && botSec <= 30 && botSec > 0);
-
-      const topColor = flipped ? 'w' : 'b';
-      const botColor = flipped ? 'b' : 'w';
-      els.topBar.classList.toggle('active-turn', !state.gameOver && engine.turn === topColor);
-      els.bottomBar.classList.toggle('active-turn', !state.gameOver && engine.turn === botColor);
+      els.topBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'w' : 'b'));
+      els.bottomBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'b' : 'w'));
     }
 
     function startClockLoop() {
       clearInterval(state.timerInterval);
       updateClocksUI();
       if (state.timeControl === 0) return;
-
       state.timerInterval = setInterval(() => {
         if (state.gameOver || engine.history.length === 0) return;
         if (engine.turn === 'w') {
-          state.whiteTime--;
-          if (state.whiteTime <= 0) {
-            state.whiteTime = 0;
-            updateClocksUI();
-            handleGameOver({
-              over: true,
-              type: 'timeout',
-              winner: 'Black',
-              title: 'Time Out!',
-              desc: 'Black wins on time.'
-            });
-            return;
-          }
+          state.whiteTime = Math.max(0, state.whiteTime - 1);
+          if (state.whiteTime === 0) { handleGameOver({ over: true, type: 'timeout', winner: 'Black', title: 'Time Out!', desc: 'Black wins on time.' }); return; }
         } else {
-          state.blackTime--;
-          if (state.blackTime <= 0) {
-            state.blackTime = 0;
-            updateClocksUI();
-            handleGameOver({
-              over: true,
-              type: 'timeout',
-              winner: 'White',
-              title: 'Time Out!',
-              desc: 'White wins on time.'
-            });
-            return;
-          }
+          state.blackTime = Math.max(0, state.blackTime - 1);
+          if (state.blackTime === 0) { handleGameOver({ over: true, type: 'timeout', winner: 'White', title: 'Time Out!', desc: 'White wins on time.' }); return; }
         }
         updateClocksUI();
       }, 1000);
@@ -3500,39 +2555,22 @@
 
     function updateCapturedUI() {
       const startCounts = { P: 8, N: 2, B: 2, R: 2, Q: 1 };
-      const currW = { P: 0, N: 0, B: 0, R: 0, Q: 0 };
-      const currB = { P: 0, N: 0, B: 0, R: 0, Q: 0 };
-
+      const currW = { P: 0, N: 0, B: 0, R: 0, Q: 0 }, currB = { P: 0, N: 0, B: 0, R: 0, Q: 0 };
       for (let i = 0; i < 64; i++) {
         const p = engine.board[i];
         if (!p || p[1] === 'K') continue;
-        if (p[0] === 'w') currW[p[1]]++;
-        else currB[p[1]]++;
+        if (p[0] === 'w') currW[p[1]]++; else currB[p[1]]++;
       }
-
-      const order = ['Q', 'R', 'B', 'N', 'P'];
-      let wCapturedHtml = '';
-      let bCapturedHtml = '';
-      let wMat = 0, bMat = 0;
-
-      for (const t of order) {
-        const lostB = Math.max(0, startCounts[t] - currB[t]);
-        const lostW = Math.max(0, startCounts[t] - currW[t]);
-        wMat += currW[t] * PIECE_VALUES[t];
-        bMat += currB[t] * PIECE_VALUES[t];
-
-        for (let k = 0; k < lostB; k++) wCapturedHtml += PIECE_SVGS['b' + t];
-        for (let k = 0; k < lostW; k++) bCapturedHtml += PIECE_SVGS['w' + t];
+      let wCap = '', bCap = '', wMat = 0, bMat = 0;
+      for (const t of ['Q', 'R', 'B', 'N', 'P']) {
+        wMat += currW[t] * PIECE_VALUES[t]; bMat += currB[t] * PIECE_VALUES[t];
+        for (let k = 0; k < Math.max(0, startCounts[t] - currB[t]); k++) wCap += PIECE_SVGS['b' + t];
+        for (let k = 0; k < Math.max(0, startCounts[t] - currW[t]); k++) bCap += PIECE_SVGS['w' + t];
       }
-
       const flipped = isBoardFlipped();
-      els.bottomCaptured.innerHTML = flipped ? bCapturedHtml : wCapturedHtml;
-      els.topCaptured.innerHTML = flipped ? wCapturedHtml : bCapturedHtml;
-
-      const diff = wMat - bMat;
-      const botDiff = flipped ? -diff : diff;
-      const topDiff = -botDiff;
-
+      els.bottomCaptured.innerHTML = flipped ? bCap : wCap;
+      els.topCaptured.innerHTML = flipped ? wCap : bCap;
+      const diff = wMat - bMat, botDiff = flipped ? -diff : diff, topDiff = -botDiff;
       els.bottomMatDiff.textContent = botDiff > 0 ? `+${Math.round(botDiff / 100)}` : '';
       els.topMatDiff.textContent = topDiff > 0 ? `+${Math.round(topDiff / 100)}` : '';
     }
@@ -3544,35 +2582,17 @@
         els.mobileMoveTicker.innerHTML = `<span style="color: var(--text-muted); font-family: inherit;">Tap a piece to start playing...</span>`;
         return;
       }
-
-      let desktopHTML = '';
-      let tickerHTML = '';
+      let desktopHTML = '', tickerHTML = '';
       for (let i = 0; i < hist.length; i += 2) {
-        const moveNum = Math.floor(i / 2) + 1;
-        const wMove = hist[i];
-        const bMove = hist[i + 1];
-        const isLastW = i === hist.length - 1;
-        const isLastB = i + 1 === hist.length - 1;
-
+        const moveNum = Math.floor(i / 2) + 1, wMove = hist[i], bMove = hist[i + 1];
         const wBadge = wMove.quality ? `<span class="hist-badge" style="color:${wMove.quality.color}">${wMove.quality.symbol}</span>` : '';
         const bBadge = bMove && bMove.quality ? `<span class="hist-badge" style="color:${bMove.quality.color}">${bMove.quality.symbol}</span>` : '';
-
-        desktopHTML += `
-          <div class="move-row">
-            <span class="move-num">${moveNum}.</span>
-            <span class="move-cell ${isLastW ? 'latest' : ''}">${wMove.san}${wBadge}</span>
-            <span class="move-cell ${isLastB ? 'latest' : ''}">${bMove ? bMove.san + bBadge : ''}</span>
-          </div>`;
-
-        tickerHTML += `<span style="color: var(--text-muted);">${moveNum}.</span> <strong style="color:${isLastW ? '#6ee7b7' : '#f8fafc'}">${wMove.san}</strong>${wBadge} `;
-        if (bMove) {
-          tickerHTML += `<strong style="color:${isLastB ? '#6ee7b7' : '#e2e8f0'}">${bMove.san}</strong>${bBadge} `;
-        }
+        desktopHTML += `<div class="move-row"><span class="move-num">${moveNum}.</span><span class="move-cell ${i === hist.length - 1 ? 'latest' : ''}">${wMove.san}${wBadge}</span><span class="move-cell ${i + 1 === hist.length - 1 ? 'latest' : ''}">${bMove ? bMove.san + bBadge : ''}</span></div>`;
+        tickerHTML += `<span style="color: var(--text-muted);">${moveNum}.</span> <strong style="color:${i === hist.length - 1 ? '#6ee7b7' : '#f8fafc'}">${wMove.san}</strong>${wBadge} `;
+        if (bMove) tickerHTML += `<strong style="color:${i + 1 === hist.length - 1 ? '#6ee7b7' : '#e2e8f0'}">${bMove.san}</strong>${bBadge} `;
       }
-
       els.desktopMoveList.innerHTML = desktopHTML;
       els.desktopMoveList.scrollTop = els.desktopMoveList.scrollHeight;
-
       els.mobileMoveTicker.innerHTML = tickerHTML;
       els.mobileMoveTicker.scrollLeft = els.mobileMoveTicker.scrollWidth;
     }
@@ -3597,16 +2617,11 @@
     function updateStatusUI() {
       const turnLabel = engine.turn === 'w' ? 'White to move' : 'Black to move';
       let statusStr = turnLabel;
-
-      if (state.aiThinking) {
-        statusStr = `${getDifficultyDisplayLabel()} thinking…`;
-      } else if (engine.isInCheck(engine.turn)) {
-        statusStr = `${engine.turn === 'w' ? 'White' : 'Black'} is in Check!`;
-      }
+      if (state.aiThinking) statusStr = `${getDifficultyDisplayLabel()} thinking…`;
+      else if (engine.isInCheck(engine.turn)) statusStr = `${engine.turn === 'w' ? 'White' : 'Black'} is in Check!`;
 
       els.mobileStatusText.textContent = statusStr;
       els.desktopStatusText.textContent = statusStr;
-
       const moveNum = Math.floor(engine.history.length / 2) + 1;
       els.mobileMoveCount.textContent = `Move ${moveNum}`;
       els.desktopMoveCount.textContent = `Move ${moveNum}`;
@@ -3615,17 +2630,9 @@
       els.mobileStatusDot.style.background = dotColor;
       els.desktopStatusDot.style.background = dotColor;
 
-      const canUndoNow = state.allowUndo && !state.aiThinking && engine.history.length > 0;
-      $('btn-undo-mobile').disabled = !canUndoNow;
-      $('btn-undo-desktop').disabled = !canUndoNow;
-
-      const canHintNow = state.allowHints && !state.aiThinking && !state.gameOver &&
-        (state.mode === 'friend' || engine.turn === state.humanColor);
-      $('btn-hint-mobile').disabled = !canHintNow;
-      $('btn-hint-desktop').disabled = !canHintNow;
-
-      $('btn-resign-board-bottom').disabled = state.gameOver;
-      $('btn-resign-black-top').disabled = state.gameOver;
+      $('btn-undo-mobile').disabled = $('btn-undo-desktop').disabled = !state.allowUndo || state.aiThinking || engine.history.length === 0;
+      $('btn-hint-mobile').disabled = $('btn-hint-desktop').disabled = !state.allowHints || state.aiThinking || state.gameOver || (state.mode === 'ai' && engine.turn !== state.humanColor);
+      $('btn-resign-board-bottom').disabled = $('btn-resign-black-top').disabled = state.gameOver;
 
       updateClocksUI();
     }
@@ -3634,28 +2641,19 @@
       state.gameOver = true;
       clearInterval(state.timerInterval);
       updateStatusUI();
-
       $('go-icon').textContent = outcome.winner === 'Draw' ? '🤝' : '🏆';
       $('go-title').textContent = outcome.title;
       $('go-desc').textContent = outcome.desc;
       els.modalGameOver.classList.add('open');
     }
 
-    // =========================================================================
-    // 13. NEW GAME CONFIGURATION & MATCH STARTUP
-    // =========================================================================
     function syncCustomEloUI() {
-      const slider = $('custom-elo-slider');
-      const badge = $('custom-elo-badge');
-      const title = $('custom-elo-title');
+      const slider = $('custom-elo-slider'), badge = $('custom-elo-badge'), title = $('custom-elo-title');
       if (!slider || !badge || !title) return;
-
       slider.value = String(state.customElo);
       badge.textContent = `${state.customElo} ELO`;
-
       const matchedKey = Object.keys(PERSONA_MAP).find(k => PERSONA_MAP[k].elo === state.customElo) || null;
       state.customPersona = matchedKey;
-
       title.textContent = matchedKey ? PERSONA_MAP[matchedKey].name : 'Custom Rating';
       document.querySelectorAll('#persona-selector .persona-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.persona === matchedKey);
@@ -3663,25 +2661,16 @@
     }
 
     function setCustomElo(val) {
-      const clamped = Math.max(100, Math.min(3000, Math.round(Number(val) / 100) * 100));
-      state.customElo = clamped;
+      state.customElo = Math.max(100, Math.min(3000, Math.round(Number(val) / 100) * 100));
       syncCustomEloUI();
     }
 
     function syncConfigModalUI() {
-      document.querySelectorAll('#mode-selector .seg-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.mode === state.mode);
-      });
-      document.querySelectorAll('#difficulty-selector .seg-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.diff === state.difficulty);
-      });
+      document.querySelectorAll('#mode-selector .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === state.mode));
+      document.querySelectorAll('#difficulty-selector .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.diff === state.difficulty));
       syncCustomEloUI();
-      document.querySelectorAll('#time-selector .seg-btn').forEach(b => {
-        b.classList.toggle('active', Number(b.dataset.time) === state.timeControl);
-      });
-      document.querySelectorAll('#color-selector .seg-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.color === state.colorPref);
-      });
+      document.querySelectorAll('#time-selector .seg-btn').forEach(b => b.classList.toggle('active', Number(b.dataset.time) === state.timeControl));
+      document.querySelectorAll('#color-selector .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.color === state.colorPref));
 
       const isAI = state.mode === 'ai';
       $('ai-difficulty-section').style.display = isAI ? 'flex' : 'none';
@@ -3695,16 +2684,10 @@
     }
 
     function updateAssistControlsVisibility() {
-      const showHint = state.allowHints;
-      const showUndo = state.allowUndo;
-      const anyMobileAssist = showHint || showUndo;
-      const anyDesktopAssist = showHint || showUndo;
-      const isFriend = state.mode === 'friend';
-
+      const showHint = state.allowHints, showUndo = state.allowUndo, isFriend = state.mode === 'friend';
       $('btn-hint-mobile').style.display = showHint ? 'flex' : 'none';
       $('btn-undo-mobile').style.display = showUndo ? 'flex' : 'none';
-      $('mobile-action-row').style.display = anyMobileAssist ? 'flex' : 'none';
-      $('mobile-bottom-strip').classList.toggle('no-actions', !anyMobileAssist);
+      $('mobile-action-row').style.display = (showHint || showUndo) ? 'flex' : 'none';
 
       const topResignBtn = $('btn-resign-black-top');
       topResignBtn.style.display = isFriend ? 'flex' : 'none';
@@ -3714,7 +2697,7 @@
 
       $('btn-hint-desktop').style.display = showHint ? 'flex' : 'none';
       $('btn-undo-desktop').style.display = showUndo ? 'flex' : 'none';
-      $('desktop-assist-grid').style.display = anyDesktopAssist ? 'grid' : 'none';
+      $('desktop-assist-grid').style.display = (showHint || showUndo) ? 'grid' : 'none';
       $('desktop-assist-grid').style.gridTemplateColumns = (showHint && showUndo) ? '1fr 1fr' : '1fr';
 
       resizeBoard(true);
@@ -3723,45 +2706,30 @@
     function startNewMatch() {
       clearInterval(state.timerInterval);
       engine.reset();
-
       if (state.mode === 'ai') {
-        state.humanColor = state.colorPref === 'random'
-          ? (Math.random() < 0.5 ? 'w' : 'b')
-          : state.colorPref;
+        state.humanColor = state.colorPref === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : state.colorPref;
       } else {
         state.humanColor = 'w';
       }
-
-      state.selectedSq = null;
-      state.legalMovesForSelected = [];
-      state.hintMove = null;
-      state.pendingPromo = null;
-      state.aiThinking = false;
-      state.gameOver = false;
-      state.whiteTime = state.timeControl;
-      state.blackTime = state.timeControl;
+      state.selectedSq = null; state.legalMovesForSelected = []; state.hintMove = null; state.pendingPromo = null;
+      state.aiThinking = false; state.gameOver = false;
+      state.whiteTime = state.timeControl; state.blackTime = state.timeControl;
 
       const diffLabel = getDifficultyDisplayLabel();
       if (state.mode === 'ai') {
         els.desktopModeSub.textContent = `vs Computer • ${diffLabel}`;
         if (state.humanColor === 'w') {
-          els.topName.textContent = diffLabel;
-          els.bottomName.textContent = 'You (White)';
-          els.topAvatar.innerHTML = PIECE_SVGS.bK;
-          els.bottomAvatar.innerHTML = PIECE_SVGS.wK;
+          els.topName.textContent = diffLabel; els.bottomName.textContent = 'You (White)';
+          els.topAvatar.innerHTML = PIECE_SVGS.bK; els.bottomAvatar.innerHTML = PIECE_SVGS.wK;
         } else {
-          els.topName.textContent = diffLabel;
-          els.bottomName.textContent = 'You (Black)';
-          els.topAvatar.innerHTML = PIECE_SVGS.wK;
-          els.bottomAvatar.innerHTML = PIECE_SVGS.bK;
+          els.topName.textContent = diffLabel; els.bottomName.textContent = 'You (Black)';
+          els.topAvatar.innerHTML = PIECE_SVGS.wK; els.bottomAvatar.innerHTML = PIECE_SVGS.bK;
         }
         els.topBar.classList.remove('rotated-180');
       } else {
         els.desktopModeSub.textContent = 'vs Friend • Pass & Play';
-        els.topName.textContent = 'Player 2 (Black)';
-        els.bottomName.textContent = 'Player 1 (White)';
-        els.topAvatar.innerHTML = PIECE_SVGS.bK;
-        els.bottomAvatar.innerHTML = PIECE_SVGS.wK;
+        els.topName.textContent = 'Player 2 (Black)'; els.bottomName.textContent = 'Player 1 (White)';
+        els.topAvatar.innerHTML = PIECE_SVGS.bK; els.bottomAvatar.innerHTML = PIECE_SVGS.wK;
         els.topBar.classList.toggle('rotated-180', state.tabletopMode);
       }
 
@@ -3773,104 +2741,47 @@
       renderBoard();
       updateMoveHistoryUI();
       updateCapturedUI();
-      updateEvaluationBar();
       updateStatusUI();
       startClockLoop();
       scheduleAITurnIfNeeded();
     }
 
-    // =========================================================================
-    // 14. EVENT LISTENERS WIRING
-    // =========================================================================
     function toggleSound() {
       sfx.enabled = !sfx.enabled;
       const icon = sfx.enabled ? '🔊' : '🔇';
-      $('btn-sound-mobile').textContent = icon;
-      $('btn-sound-desktop').textContent = icon;
+      $('btn-sound-mobile').textContent = $('btn-sound-desktop').textContent = icon;
       showToast(sfx.enabled ? 'Sound enabled' : 'Sound muted');
     }
 
     $('btn-sound-mobile').addEventListener('click', toggleSound);
     $('btn-sound-desktop').addEventListener('click', toggleSound);
 
-    const openConfig = () => {
-      syncConfigModalUI();
-      els.modalConfig.classList.add('open');
-    };
+    const openConfig = () => { syncConfigModalUI(); els.modalConfig.classList.add('open'); };
     $('btn-new-mobile').addEventListener('click', openConfig);
     $('btn-new-desktop').addEventListener('click', openConfig);
     $('btn-close-config').addEventListener('click', () => els.modalConfig.classList.remove('open'));
 
-    document.querySelectorAll('#mode-selector .seg-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.mode = btn.dataset.mode;
-        syncConfigModalUI();
-      });
-    });
-
-    document.querySelectorAll('#difficulty-selector .seg-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.difficulty = btn.dataset.diff;
-        syncConfigModalUI();
-      });
-    });
-
-    document.querySelectorAll('#persona-selector .persona-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.difficulty = 'custom';
-        state.customPersona = btn.dataset.persona;
-        state.customElo = Number(btn.dataset.elo) || 1500;
-        syncConfigModalUI();
-      });
-    });
-
-    $('custom-elo-slider').addEventListener('input', e => {
+    document.querySelectorAll('#mode-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; syncConfigModalUI(); }));
+    document.querySelectorAll('#difficulty-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.difficulty = b.dataset.diff; syncConfigModalUI(); }));
+    document.querySelectorAll('#persona-selector .persona-btn').forEach(b => b.addEventListener('click', () => {
       state.difficulty = 'custom';
-      setCustomElo(e.target.value);
-    });
-
-    $('btn-elo-minus').addEventListener('click', () => {
-      state.difficulty = 'custom';
-      setCustomElo(state.customElo - 100);
-    });
-
-    $('btn-elo-plus').addEventListener('click', () => {
-      state.difficulty = 'custom';
-      setCustomElo(state.customElo + 100);
-    });
-
-    document.querySelectorAll('#time-selector .seg-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.timeControl = Number(btn.dataset.time);
-        syncConfigModalUI();
-      });
-    });
-
-    document.querySelectorAll('#color-selector .seg-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.colorPref = btn.dataset.color;
-        syncConfigModalUI();
-      });
-    });
-
-    $('toggle-tabletop').addEventListener('click', () => {
-      state.tabletopMode = !state.tabletopMode;
+      state.customPersona = b.dataset.persona;
+      state.customElo = Number(b.dataset.elo) || 1500;
       syncConfigModalUI();
-    });
-    $('toggle-undo').addEventListener('click', () => {
-      state.allowUndo = !state.allowUndo;
-      syncConfigModalUI();
-    });
-    $('toggle-hints').addEventListener('click', () => {
-      state.allowHints = !state.allowHints;
-      syncConfigModalUI();
-    });
+    }));
 
-    $('btn-start-match').addEventListener('click', () => {
-      sfx.init();
-      startNewMatch();
-    });
+    $('custom-elo-slider').addEventListener('input', e => { state.difficulty = 'custom'; setCustomElo(e.target.value); });
+    $('btn-elo-minus').addEventListener('click', () => { state.difficulty = 'custom'; setCustomElo(state.customElo - 100); });
+    $('btn-elo-plus').addEventListener('click', () => { state.difficulty = 'custom'; setCustomElo(state.customElo + 100); });
 
+    document.querySelectorAll('#time-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.timeControl = Number(b.dataset.time); syncConfigModalUI(); }));
+    document.querySelectorAll('#color-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.colorPref = b.dataset.color; syncConfigModalUI(); }));
+
+    $('toggle-tabletop').addEventListener('click', () => { state.tabletopMode = !state.tabletopMode; syncConfigModalUI(); });
+    $('toggle-undo').addEventListener('click', () => { state.allowUndo = !state.allowUndo; syncConfigModalUI(); });
+    $('toggle-hints').addEventListener('click', () => { state.allowHints = !state.allowHints; syncConfigModalUI(); });
+
+    $('btn-start-match').addEventListener('click', () => { sfx.init(); startNewMatch(); });
     $('btn-hint-mobile').addEventListener('click', triggerHint);
     $('btn-hint-desktop').addEventListener('click', triggerHint);
     $('btn-undo-mobile').addEventListener('click', handleUndo);
@@ -3878,58 +2789,30 @@
 
     function handleResign(resigningColor = null) {
       if (state.gameOver) return;
-      let loser;
-      if (resigningColor === 'w') {
-        loser = 'White';
-      } else if (resigningColor === 'b') {
-        loser = 'Black';
-      } else {
-        loser = state.mode === 'ai' ? (state.humanColor === 'w' ? 'White' : 'Black') : (engine.turn === 'w' ? 'White' : 'Black');
-      }
+      let loser = resigningColor === 'w' ? 'White' : (resigningColor === 'b' ? 'Black' : (state.mode === 'ai' ? (state.humanColor === 'w' ? 'White' : 'Black') : (engine.turn === 'w' ? 'White' : 'Black')));
       const winner = loser === 'White' ? 'Black' : 'White';
-      handleGameOver({
-        over: true,
-        type: 'resign',
-        winner,
-        title: `${winner} Wins!`,
-        desc: `${loser} resigned the game.`
-      });
+      handleGameOver({ over: true, type: 'resign', winner, title: `${winner} Wins!`, desc: `${loser} resigned the game.` });
     }
 
     $('btn-resign-black-top').addEventListener('click', () => handleResign('b'));
     $('btn-resign-board-bottom').addEventListener('click', () => handleResign(state.mode === 'friend' ? 'w' : null));
 
     $('btn-go-rematch').addEventListener('click', startNewMatch);
-    $('btn-go-settings').addEventListener('click', () => {
-      els.modalGameOver.classList.remove('open');
-      openConfig();
-    });
-    $('btn-go-review').addEventListener('click', () => {
-      els.modalGameOver.classList.remove('open');
-    });
+    $('btn-go-settings').addEventListener('click', () => { els.modalGameOver.classList.remove('open'); openConfig(); });
+    $('btn-go-review').addEventListener('click', () => els.modalGameOver.classList.remove('open'));
 
     $('btn-copy-pgn').addEventListener('click', () => {
-      if (engine.history.length === 0) {
-        showToast('No moves to copy');
-        return;
-      }
+      if (engine.history.length === 0) { showToast('No moves to copy'); return; }
       let pgn = '';
       for (let i = 0; i < engine.history.length; i += 2) {
         pgn += `${Math.floor(i / 2) + 1}. ${engine.history[i].san} `;
         if (engine.history[i + 1]) pgn += `${engine.history[i + 1].san} `;
       }
       const ta = document.createElement('textarea');
-      ta.value = pgn.trim();
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
+      ta.value = pgn.trim(); document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
       showToast('PGN copied to clipboard');
     });
 
-    // =========================================================================
-    // 15. BOOTSTRAP APPLICATION
-    // =========================================================================
     buildBoardDOM();
     startNewMatch();
     requestAnimationFrame(() => resizeBoard(true));
