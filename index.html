@@ -881,11 +881,14 @@
     .btn-full-primary:hover { background: #34d399; }
 
     @media (min-width: 900px) {
+      #app {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
       #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
-      #main-workspace { flex-direction: row; padding: 18px 24px; gap: 24px; }
-      #board-column { width: auto; flex: 0 1 auto; gap: 10px; }
+      #main-workspace { flex-direction: row; padding: 12px 24px; gap: 24px; }
+      #board-column { width: auto; flex: 0 1 auto; gap: 8px; }
       #desktop-sidebar { display: flex; }
-      .player-bar { height: 48px; padding: 0 14px; }
+      .player-bar { height: 44px; min-height: 44px; padding: 0 14px; }
     }
 
     .modal-backdrop {
@@ -2315,10 +2318,10 @@
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const extraTopResign = isFriend ? 50 : 0;
+        const extraTopResign = isFriend ? 48 : 0;
         const availW = vw - 340 - 26 - 72;
-        const availH = vh - 116 - 52 - extraTopResign - 36;
-        boardSize = Math.floor(Math.min(availW, availH, 680));
+        const availH = vh - 88 - 44 - extraTopResign - 48;
+        boardSize = Math.floor(Math.min(availW, availH, 660));
       } else {
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
@@ -2336,6 +2339,13 @@
       els.boardFrame.style.width = boardSize + 'px';
       els.boardFrame.style.height = boardSize + 'px';
       els.evalWrap.style.height = boardSize + 'px';
+
+      if (isDesktop) {
+        const isFriend = state.mode === 'friend';
+        const totalColumnHeight = boardSize + 44 + 44 + 44 + (isFriend ? 48 : 0) + (isFriend ? 32 : 24);
+        $('desktop-sidebar').style.height = totalColumnHeight + 'px';
+        $('desktop-sidebar').style.maxHeight = (vh - 24) + 'px';
+      }
 
       const barWidth = (boardSize + 8 + 18) + 'px';
       els.topBar.style.width = barWidth;
