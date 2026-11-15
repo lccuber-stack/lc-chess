@@ -97,6 +97,7 @@
       flex-direction: column;
       width: 100%;
       height: 100dvh;
+      /* Safe area padding with 20px offset for iPhone standalone / PWA mode */
       padding-top: max(22px, env(safe-area-inset-top, 0px));
       padding-bottom: env(safe-area-inset-bottom, 0px);
       padding-left: env(safe-area-inset-left, 0px);
@@ -347,29 +348,23 @@
       display: none;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       width: 100%;
-      height: 44px;
-      min-height: 44px;
+      height: 38px;
       padding: 0 12px;
       border-radius: var(--radius-md);
-      background: rgba(239, 68, 68, 0.14);
-      border: 1px solid rgba(239, 68, 68, 0.42);
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.45);
       color: #fca5a5;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       white-space: nowrap;
       flex-shrink: 0;
       transition: background 0.15s ease, transform 0.2s ease;
     }
-    .top-resign-btn:hover:not(:disabled) {
-      background: rgba(239, 68, 68, 0.24);
-      border-color: rgba(239, 68, 68, 0.65);
-      color: #fecaca;
-    }
     .top-resign-btn.rotated-180 { transform: rotate(180deg); }
 
-    /* Celebrity Coach / Bot Commentary Bubble */
+    /* Bot & Celebrity Personality Commentary Bar */
     .celeb-comment-bar {
       display: none;
       align-items: center;
@@ -408,29 +403,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
       width: 100%;
       flex-shrink: 0;
     }
-
-    .start-black-btn {
-      display: none;
-      flex: 1;
-      height: 44px;
-      min-height: 44px;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      border-radius: var(--radius-md);
-      background: var(--accent-emerald);
-      color: #042f2e;
-      font-size: 14px;
-      font-weight: 800;
-      box-shadow: 0 4px 14px var(--accent-emerald-glow);
-      transition: background 0.15s ease, transform 0.1s ease;
-    }
-    .start-black-btn:hover { background: #34d399; }
-    .start-black-btn:active { transform: scale(0.98); }
 
     @keyframes pulseClock {
       from { opacity: 1; }
@@ -445,6 +420,7 @@
       flex-shrink: 0;
     }
 
+    /* Live Evaluation Bar */
     #eval-bar-wrap {
       position: relative;
       width: 18px;
@@ -817,7 +793,7 @@
       background: rgba(9, 13, 22, 0.45);
     }
     .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .footer-grid .action-btn { height: 44px; min-height: 44px; }
+    .footer-grid .action-btn { height: 38px; }
 
     .btn-full-primary {
       width: 100%;
@@ -838,11 +814,26 @@
     .btn-full-primary:hover { background: #34d399; }
 
     @media (min-width: 900px) {
+      #app {
+        height: 100%;
+        height: 100dvh;
+        padding-top: env(safe-area-inset-top, 0px);
+        justify-content: center;
+      }
       #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
-      #main-workspace { flex-direction: row; padding: 18px 24px; gap: 24px; }
-      #board-column { width: auto; flex: 0 1 auto; gap: 10px; }
+      #main-workspace {
+        flex: 0 1 auto;
+        height: 100%;
+        max-height: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 24px;
+        gap: 24px;
+      }
+      #board-column { width: auto; flex: 0 1 auto; gap: 8px; }
       #desktop-sidebar { display: flex; }
-      .player-bar { height: 48px; padding: 0 14px; }
+      .player-bar { height: 44px; min-height: 44px; padding: 0 14px; }
     }
 
     .modal-backdrop {
@@ -1114,8 +1105,8 @@
         </div>
 
         <div id="celeb-comment-bar" class="celeb-comment-bar" aria-live="polite">
-          <span id="celeb-comment-tag" class="celeb-comment-tag">💬 Magnus:</span>
-          <span id="celeb-comment-text" class="celeb-comment-text">"Let's play some chess."</span>
+          <span id="celeb-comment-tag" class="celeb-comment-tag">💬 Bot:</span>
+          <span id="celeb-comment-text" class="celeb-comment-text">"Let's play!"</span>
         </div>
 
         <div id="board-and-eval">
@@ -1147,8 +1138,7 @@
         </div>
 
         <div id="board-bottom-resign-wrap">
-          <button id="btn-resign-board-bottom" class="resign-btn-lg" style="flex: 1;">🏳 Resign</button>
-          <button id="btn-start-black-match" class="start-black-btn">▶ Start Game</button>
+          <button id="btn-resign-board-bottom" class="resign-btn-lg">🏳 Resign</button>
         </div>
 
         <div id="mobile-bottom-strip">
@@ -1432,6 +1422,7 @@
     const PIECE_VALUES = { P: 100, N: 320, B: 330, R: 500, Q: 900, K: 20000 };
     const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
+    // Complete, authentic classical Staunton chess piece SVG definitions
     const PIECE_SVGS = {
       wP: `<svg viewBox="0 0 45 45"><path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 H 34 C 34,31.58 29.59,27.09 26.59,26.03 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z" fill="#ffffff" stroke="#273244" stroke-width="1.35" stroke-linecap="round"/></svg>`,
       wR: `<svg viewBox="0 0 45 45"><g fill="#ffffff" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/><path d="M 34,14 L 31,17 L 14,17 L 11,14"/><path d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"/><path d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5"/><path d="M 11,14 L 34,14" fill="none" stroke-linejoin="miter"/></g></svg>`,
@@ -1927,12 +1918,12 @@
         if (elo <= 900) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 320, jitter: 45, topPool: 3, blunderRate: 0.03 };
         if (elo <= 1100) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 380, jitter: 22, topPool: 2, blunderRate: 0 };
         if (elo <= 1300) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 450, jitter: 10, topPool: 2, blunderRate: 0 };
-        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 700, jitter: 5, topPool: 2, blunderRate: 0 };
-        if (elo <= 1900) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 950, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2200) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1250, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2500) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1450, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1700, jitter: 0, topPool: 1, blunderRate: 0 };
-        return { maxDepth: 6, minGuaranteedDepth: 4, budget: 2200, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 2, budget: 600, jitter: 5, topPool: 2, blunderRate: 0 };
+        if (elo <= 1900) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 780, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2200) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 950, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2500) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 1150, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1400, jitter: 0, topPool: 1, blunderRate: 0 };
+        return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1650, jitter: 0, topPool: 1, blunderRate: 0 };
       }
       chooseBestMove(engine, difficulty = 'medium', customElo = 1500) {
         const legal = engine.generateLegalMoves(engine.turn);
@@ -2045,7 +2036,6 @@
       blackTime: 600,
       timerInterval: null,
       aiThinking: false,
-      waitingForBlackStart: false,
       gameOver: false
     };
 
@@ -2122,15 +2112,13 @@
       els.toast._t = setTimeout(() => els.toast.classList.remove('show'), 2200);
     }
 
-    // =========================================================================
-    // 7. RESPONSIVE EXACT-FIT BOARD SIZING
-    // =========================================================================
     function resizeBoard(force = false) {
       if (dragState && dragState.active && !force) return;
       const isDesktop = window.innerWidth >= 900;
       const vw = document.documentElement.clientWidth || window.innerWidth;
-      const vh = window.innerHeight;
-      const hasCelebComment = $('celeb-comment-bar').classList.contains('visible');
+      const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const celebEl = $('celeb-comment-bar');
+      const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
       const celebExtraH = hasCelebComment ? 38 : 0;
 
       let boardSize;
@@ -2138,8 +2126,8 @@
         const isFriend = state.mode === 'friend';
         const extraTopResign = isFriend ? 52 : 0;
         const availW = vw - 340 - 26 - 72;
-        const availH = vh - 88 - 44 - extraTopResign - celebExtraH - 56;
-        boardSize = Math.floor(Math.min(availW, availH, 660));
+        const availH = vh - 132 - extraTopResign - celebExtraH - 44;
+        boardSize = Math.floor(Math.min(availW, availH, 640));
       } else {
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
@@ -2161,14 +2149,14 @@
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
         const totalColumnHeight = boardSize + 44 + 44 + 44 + (isFriend ? 52 : 0) + celebExtraH + (isFriend ? 32 : 24);
-        $('desktop-sidebar').style.height = totalColumnHeight + 'px';
-        $('desktop-sidebar').style.maxHeight = (vh - 24) + 'px';
+        $('desktop-sidebar').style.height = Math.min(totalColumnHeight, vh - 32) + 'px';
+        $('desktop-sidebar').style.maxHeight = (vh - 32) + 'px';
       }
 
       const barWidth = (boardSize + 8 + 18) + 'px';
       els.topBar.style.width = barWidth;
       els.bottomBar.style.width = barWidth;
-      $('celeb-comment-bar').style.width = barWidth;
+      if (celebEl) celebEl.style.width = barWidth;
       $('btn-resign-black-top').style.width = barWidth;
       $('board-bottom-resign-wrap').style.width = barWidth;
       if (!isDesktop) {
@@ -2180,6 +2168,9 @@
       els.dragGhost.style.height = Math.round(boardSize / 8 * 1.15) + 'px';
     }
 
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => resizeBoard(false));
+    }
     window.addEventListener('resize', () => resizeBoard(false));
     window.addEventListener('orientationchange', () => setTimeout(() => resizeBoard(true), 120));
 
@@ -2223,8 +2214,7 @@
         sqEl.dataset.sq = sq;
         sqEl.innerHTML = '';
 
-        // Always render rank numbers (1-8) along the left edge of the board regardless of board orientation
-        if (i % 8 === 0) {
+        if (f === 0) {
           const rankLbl = document.createElement('span');
           rankLbl.className = 'coord-rank';
           rankLbl.textContent = 8 - r;
@@ -2277,37 +2267,68 @@
       }
       const cpLoss = Math.max(0, bestScoreForMover - playedScoreForMover);
       const gapToSecond = bestScoreForMover - secondBestScoreForMover;
-      if (cpLoss <= 20) {
+      if (cpLoss <= 5) {
         if (isSacrifice && playedScoreForMover >= -40 && gapToSecond >= 75) return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
         if (gapToSecond >= 135 && bestScoreForMover > -150) return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
         return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
       }
-      if (cpLoss <= 65) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
-      if (cpLoss <= 135) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
-      if (cpLoss <= 260) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
+      if (cpLoss <= 55) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+      if (cpLoss <= 125) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+      if (cpLoss <= 250) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
       return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
     }
 
-    function evaluateMoveBeforeCommit(move) {
+    function analyzeAllLegalMoves() {
       const moverColor = engine.turn, maximizing = moverColor === 'w', sign = maximizing ? 1 : -1;
       const legal = engine.generateLegalMoves(moverColor);
-      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+      if (legal.length === 0) return { bestMove: null, bestScore: 0, secondBestScore: 0, scoredMoves: [] };
 
-      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
-      ai.nodes = 0; ai.startTime = performance.now(); ai.timeBudget = 260; ai.aborted = false;
-      let bestScore = -Infinity, secondBestScore = -Infinity, playedScore = -Infinity;
+      // Deterministic 3-ply evaluation with generous budget so every root move is evaluated identically
+      ai.nodes = 0; ai.startTime = performance.now(); ai.timeBudget = 4000; ai.aborted = false;
       ai.orderMoves(engine, legal);
+
+      const scoredMoves = [];
+      let bestScore = -Infinity, secondBestScore = -Infinity, bestMove = legal[0];
+
       for (const m of legal) {
         const snap = engine.cloneState();
         engine.applyMoveRaw(m);
         const rawEval = ai.minimax(engine, 2, -Infinity, Infinity, !maximizing);
         engine.restoreState(snap);
         const moverEval = rawEval * sign;
-        if (moverEval > bestScore) { secondBestScore = bestScore; bestScore = moverEval; }
-        else if (moverEval > secondBestScore) { secondBestScore = moverEval; }
-        if (m.from === move.from && m.to === move.to && (m.promo || null) === (move.promo || null)) playedScore = moverEval;
+        scoredMoves.push({ move: m, score: moverEval });
+
+        if (moverEval > bestScore) {
+          secondBestScore = bestScore;
+          bestScore = moverEval;
+          bestMove = m;
+        } else if (moverEval > secondBestScore) {
+          secondBestScore = moverEval;
+        }
       }
-      if (playedScore === -Infinity) playedScore = bestScore;
+      return { bestMove, bestScore, secondBestScore, scoredMoves };
+    }
+
+    function evaluateMoveBeforeCommit(move) {
+      const moverColor = engine.turn;
+      const legal = engine.generateLegalMoves(moverColor);
+      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+
+      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
+      const { bestScore, secondBestScore, scoredMoves } = analyzeAllLegalMoves();
+
+      const matched = scoredMoves.find(item =>
+        item.move.from === move.from &&
+        item.move.to === move.to &&
+        (item.move.promo || null) === (move.promo || null)
+      );
+      let playedScore = matched ? matched.score : bestScore;
+
+      // Guarantee that playing the exact suggested Hint move always matches its top rating
+      if (state.hintMove && state.hintMove.from === move.from && state.hintMove.to === move.to && (state.hintMove.promo || null) === (move.promo || null)) {
+        playedScore = bestScore;
+      }
+
       const snapCheck = engine.cloneState();
       engine.applyMoveRaw(move);
       const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
@@ -2330,6 +2351,7 @@
       const pawns = cp / 100, clamped = Math.max(-10, Math.min(10, pawns));
       let whitePct = engine.history.length === 0 ? 50 : (50 + 50 * (2 / (1 + Math.exp(-0.42 * clamped)) - 1));
 
+      // Dynamic orientation: when board is flipped (playing as Black), evaluation bar fills relative to Black's perspective from bottom up
       if (isBoardFlipped()) {
         whitePct = 100 - whitePct;
       }
@@ -2343,11 +2365,11 @@
       if (!state.allowHints || state.gameOver || state.aiThinking) return;
       if (state.mode === 'ai' && engine.turn !== state.humanColor) return;
 
-      const best = ai.chooseBestMove(engine, 'custom', 3200);
-      if (best) {
-        state.hintMove = best;
+      const { bestMove } = analyzeAllLegalMoves();
+      if (bestMove) {
+        state.hintMove = bestMove;
         renderBoard();
-        showToast(`Hint (3200 ELO): ${engine.sqToAlgebraic(best.from)} → ${engine.sqToAlgebraic(best.to)}`);
+        showToast(`Hint: ${engine.sqToAlgebraic(bestMove.from)} → ${engine.sqToAlgebraic(bestMove.to)}`);
       }
     }
 
@@ -2383,23 +2405,24 @@
       updateCapturedUI();
       updateStatusUI();
 
-      // Trigger personalized celebrity commentary on EVERY single move (both human and bot)
-      if (state.mode === 'ai' && state.difficulty === 'custom' && state.customPersona) {
+      // Trigger ELO-matched or celebrity personality commentary on every single move
+      if (state.mode === 'ai') {
         if (outcome.over) {
-          if (outcome.winner === 'Draw') updateCelebrityComment('draw');
-          else if ((outcome.winner === 'White' && state.humanColor === 'w') || (outcome.winner === 'Black' && state.humanColor === 'b')) updateCelebrityComment('humanWin');
-          else updateCelebrityComment('botWin');
+          if (outcome.winner === 'Draw') updateBotComment('draw');
+          else if ((outcome.winner === 'White' && state.humanColor === 'w') || (outcome.winner === 'Black' && state.humanColor === 'b')) updateBotComment('humanWin');
+          else updateBotComment('botWin');
         } else if (moverColor === state.humanColor) {
-          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateCelebrityComment('humanBlunder');
-          else if (quality && quality.key === 'inaccuracy') updateCelebrityComment('humanInaccuracy');
-          else if (quality && (quality.key === 'brilliant' || quality.key === 'great')) updateCelebrityComment('humanBrilliant');
-          else if (move.capture && move.capture[1] === 'Q') updateCelebrityComment('humanCaptureQueen');
-          else if (move.isCastle) updateCelebrityComment('humanCastle');
-          else updateCelebrityComment('humanGood');
+          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateBotComment('humanBlunder');
+          else if (quality && quality.key === 'inaccuracy') updateBotComment('humanInaccuracy');
+          else if (quality && (quality.key === 'brilliant' || quality.key === 'great')) updateBotComment('humanBrilliant');
+          else if (move.capture && move.capture[1] === 'Q') updateBotComment('humanCaptureQueen');
+          else if (move.isCastle) updateBotComment('humanCastle');
+          else updateBotComment('humanGood');
         } else {
-          if (outcome.inCheck) updateCelebrityComment('botCheck');
-          else if (move.capture) updateCelebrityComment('botCapture');
-          else updateCelebrityComment('botNormal');
+          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateBotComment('botBlunder');
+          else if (outcome.inCheck) updateBotComment('botCheck');
+          else if (move.capture) updateBotComment('botCapture');
+          else updateBotComment('botNormal');
         }
       }
 
@@ -2537,7 +2560,7 @@
       updateClocksUI();
       if (state.timeControl === 0) return;
       state.timerInterval = setInterval(() => {
-        if (state.gameOver || state.waitingForBlackStart || engine.history.length === 0) return;
+        if (state.gameOver || engine.history.length === 0) return;
         if (engine.turn === 'w') {
           state.whiteTime = Math.max(0, state.whiteTime - 1);
           if (state.whiteTime === 0) { handleGameOver({ over: true, type: 'timeout', winner: 'Black', title: 'Time Out!', desc: 'Black wins on time.' }); return; }
@@ -2574,14 +2597,8 @@
     function updateMoveHistoryUI() {
       const hist = engine.history;
       if (hist.length === 0) {
-        const desktopEmptyMsg = state.waitingForBlackStart
-          ? 'You are playing as Black.<br/>Press <strong>Start Game</strong> to begin.'
-          : 'No moves played yet.<br/>Tap or drag a White piece to begin.';
-        const mobileEmptyMsg = state.waitingForBlackStart
-          ? 'Tap <strong>▶ Start Game</strong> below so White can move'
-          : 'Tap or drag a White piece to begin';
-        els.desktopMoveList.innerHTML = `<div style="color: var(--text-secondary); font-family: inherit; font-size: 12px; text-align: center; padding: 28px 12px; line-height: 1.5;">${desktopEmptyMsg}</div>`;
-        els.mobileMoveTicker.innerHTML = `<span style="color: var(--text-secondary); font-family: inherit;">${mobileEmptyMsg}</span>`;
+        els.desktopMoveList.innerHTML = `<div style="color: var(--text-muted); font-family: inherit; font-size: 12px; text-align: center; padding: 28px 12px;">No moves played yet.<br/>Tap or drag a piece to start.</div>`;
+        els.mobileMoveTicker.innerHTML = `<span style="color: var(--text-muted); font-family: inherit;">Tap a piece to start playing...</span>`;
         return;
       }
       let desktopHTML = '', tickerHTML = '';
@@ -2604,8 +2621,8 @@
       alexandra: { name: 'Alexandra Botez', short: 'Alexandra', elo: 2050 },
       anna: { name: 'Anna Cramling', short: 'Anna', elo: 2100 },
       gotham: { name: 'GothamChess', short: 'Gotham', elo: 2350 },
-      hikaru: { name: 'Hikaru Nakamura', short: 'Hikaru', elo: 2800 },
-      magnus: { name: 'Magnus Carlsen', short: 'Magnus', elo: 2850 }
+      hikaru: { name: 'Hikaru', short: 'Hikaru', elo: 2800 },
+      magnus: { name: 'Magnus', short: 'Magnus', elo: 2850 }
     };
 
     const CELEBRITY_LINES = {
@@ -2613,13 +2630,11 @@
         start: [
           "Full send! Attack mode activated!",
           "Let's go! No passive chess today!",
-          "Hope you're ready for fireworks on the board!",
-          "Time to push every pawn and go for checkmate!"
+          "Hope you're ready for fireworks on the board!"
         ],
         humanBlunder: [
           "Ooh, free material! Botez Gambit reversed!",
           "Wait, did you just hang that?! I'll take it!",
-          "Yikes, that piece was completely undefended!",
           "Thank youuu! Adding that to my collection!"
         ],
         humanInaccuracy: [
@@ -2630,16 +2645,12 @@
         humanBrilliant: [
           "Whoa, okay! Respect for finding that!",
           "Wait—that's actually super nasty!",
-          "Hold on, did you calculate all of that?!",
           "Okay, I see you! What a tactical shot!"
         ],
         humanGood: [
           "Solid move! Keeping the tension high!",
           "Nice! You're not making this easy for me.",
-          "Ooh, good defense!",
-          "Okay, clean development!",
-          "Respect—you're covering all the key squares!",
-          "Smart move! Let's see what happens next!"
+          "Clean development! Let's see what happens next!"
         ],
         humanCastle: [
           "Castled to safety! Smart, because I was coming for your king!",
@@ -2647,75 +2658,60 @@
         ],
         humanCaptureQueen: [
           "NOOO, my queen!! Classic Botez Gambit...",
-          "I meant to sacrifice the queen! Totally planned!",
-          "Chat, clip that—I just hung my queen again!"
+          "I meant to sacrifice the queen! Totally planned!"
+        ],
+        botBlunder: [
+          "Wait… ignore that move, it's a galaxy-brain trap!",
+          "Botez Gambit activated! Who needs pieces anyway?!"
         ],
         botCapture: [
           "Snatched! Keep your pieces defended!",
           "Boom! One piece closer to victory.",
-          "Yoink! I'll take that!",
-          "Clearing the board for my attack!"
+          "Yoink! I'll take that!"
         ],
         botCheck: [
           "Check! Nowhere to hide!",
-          "Watch your king!",
-          "Check! Feel the pressure!",
-          "Run, king, run!"
+          "Watch your king! Feel the pressure!"
         ],
         botNormal: [
           "Let's open up the board!",
           "I'm coming straight for your king!",
-          "All my pieces are joining the party!",
-          "No retreat, only forward!",
-          "Pushing forward—time to create some chaos!",
-          "Watch out, my pieces are lining up!"
+          "Pushing forward—time to create some chaos!"
         ],
         humanWin: [
           "GG! You out-tacticked me today!",
-          "Okay, rematch right now!",
-          "Well played! You completely shut down my attack!"
+          "Okay, rematch right now!"
         ],
         botWin: [
           "Let's go!! Aggressive chess pays off!",
-          "GG! That attack was unstoppable!",
-          "Checkmate energy! Good game!"
+          "GG! That attack was unstoppable!"
         ],
         draw: [
-          "A draw?! After all that chaos?! GG!",
-          "Nobody backed down—respect for the draw!"
+          "A draw?! After all that chaos?! GG!"
         ]
       },
       alexandra: {
         start: [
           "Let's keep the center tight. Good luck!",
-          "Ready when you are—play sharp!",
-          "Let's see who controls the key squares today.",
           "Focus, structure, and clean tactics. Have fun!"
         ],
         humanBlunder: [
           "That leaves a big hole in your position.",
-          "Careful—that piece was undefended.",
           "Oof, that drops material right away.",
           "I have to punish that oversight!"
         ],
         humanInaccuracy: [
           "A bit passive—that lets me activate my pieces.",
-          "Interesting, though you had a sharper option there.",
           "That weakens your dark squares slightly."
         ],
         humanBrilliant: [
           "Very clean calculation! Well played.",
-          "Impressive! I didn't expect that move.",
-          "Super sharp tactic—you spotted the weak point!",
-          "That's tournament-level precision right there."
+          "Super sharp tactic—you spotted the weak point!"
         ],
         humanGood: [
           "Very solid! Good positional awareness.",
-          "Nice move—maintaining the balance.",
-          "You're defending all the entry squares well.",
           "Clean and principled chess.",
-          "Good structure—hard to break through.",
-          "Accurate response, keeping everything coordinated."
+          "Good structure—hard to break through."
         ],
         humanCastle: [
           "King is safe—now the real middlegame battle begins.",
@@ -2723,74 +2719,60 @@
         ],
         humanCaptureQueen: [
           "Ugh, walked right into that tactic!",
-          "Well, playing without a queen builds character…",
-          "Completely missed that pin on my queen!"
+          "Well, playing without a queen builds character…"
+        ],
+        botBlunder: [
+          "Not my cleanest move—let's see if you find the refutation.",
+          "A slight miscalculation on my part!"
         ],
         botCapture: [
           "I'll gladly simplify into a winning endgame.",
-          "Clean trade—up material now.",
-          "Taking control of the material balance.",
-          "Step by step, converting the advantage."
+          "Clean trade—up material now."
         ],
         botCheck: [
           "Check! Let's see how you defend this.",
-          "Putting pressure on your king now.",
-          "Check—your king is caught in the crossfire."
+          "Putting pressure on your king now."
         ],
         botNormal: [
           "Control the open files, control the game.",
           "Solid positional squeeze.",
-          "Improving my worst-placed piece.",
-          "Building pressure slowly on both wings.",
-          "Securing the center before launching an attack.",
-          "Let's see how you respond to this setup."
+          "Improving my worst-placed piece."
         ],
         humanWin: [
           "Well played! You converted that cleanly.",
-          "GG! Your tactics were on point.",
-          "Great game—you deserved the win!"
+          "GG! Your tactics were on point."
         ],
         botWin: [
           "GG! Positional pressure wins again.",
-          "Good game—keep practicing those endgames!",
           "Thanks for the game! Solid effort."
         ],
         draw: [
-          "A hard-fought draw! Well played.",
-          "Super even game—neither side gave an inch."
+          "A hard-fought draw! Well played."
         ]
       },
       anna: {
         start: [
           "Hiii! Good luck and have fun!",
-          "Let's have an awesome game! Maybe the Cow opening?",
-          "Yay, chess time! Let's see what you play!",
-          "Wishing you a super fun and creative game!"
+          "Yay, chess time! Let's see what you play!"
         ],
         humanBlunder: [
           "Oh no! I think you missed a threat there!",
           "Eek, thank you for the free piece!",
-          "Oopsie! Don't worry, keep fighting!",
-          "Aha! My piece was eyeing that square!"
+          "Oopsie! Don't worry, keep fighting!"
         ],
         humanInaccuracy: [
           "Ooh, interesting idea! A tiny bit risky though.",
-          "Hmm, let me see if I can sneak in now!",
-          "Not bad, not bad—let's see what happens!"
+          "Hmm, let me see if I can sneak in now!"
         ],
         humanBrilliant: [
           "Whaaat?! That move is so cool!",
           "Ooh, super sneaky! Amazing find!",
-          "No way!! You found the best tactic on the board!",
-          "So creative! I love that move!"
+          "No way!! You found the best tactic on the board!"
         ],
         humanGood: [
           "Ooh, really nice move!",
           "Super solid! You're playing great!",
-          "I like that setup a lot!",
-          "Very nice! You're making this super interesting!",
-          "Great coordination with your pieces!",
-          "Ooh, clean move! Let's keep going!"
+          "Great coordination with your pieces!"
         ],
         humanCastle: [
           "Cozy king! Safety first!",
@@ -2798,75 +2780,60 @@
         ],
         humanCaptureQueen: [
           "Nooo, my queen! You got me!",
-          "Oh no, I walked right into it!",
           "Bye-bye queen… time for a miracle comeback!"
+        ],
+        botBlunder: [
+          "Oopsie! Did I just leave that square open?!",
+          "Hehe, pretend you didn't see that!"
         ],
         botCapture: [
           "Yay, got a piece! Let's keep going!",
-          "Nice! My pieces are working together!",
-          "Snip! Clearing some space on the board.",
-          "Ooh, a freebie! Thank you!"
+          "Snip! Clearing some space on the board."
         ],
         botCheck: [
           "Check! Exciting position!",
-          "Watch out, check!",
-          "Peekaboo—check!",
-          "Check! Where will your king go?"
+          "Peekaboo—check!"
         ],
         botNormal: [
           "I love this position, so many fun ideas!",
           "Let's bring all the pieces into the game!",
-          "Planning a sneaky little maneuver…",
-          "Chess is so fun when the board is dynamic!",
-          "Developing smoothly and eyeing the center!",
-          "Let's see what happens if I put my piece here!"
+          "Developing smoothly and eyeing the center!"
         ],
         humanWin: [
           "Yay, congrats!! You played so well!",
-          "GG! That was super fun!",
-          "Amazing job! You totally earned that win!"
+          "GG! That was super fun!"
         ],
         botWin: [
           "GG!! Thank you for playing with me!",
-          "Woohoo! What a fun game!",
-          "Good game! Let's play again sometime!"
+          "Woohoo! What a fun game!"
         ],
         draw: [
-          "A draw! That was such a close game, GG!",
-          "Tie game! Both of us played super hard!"
+          "A draw! That was such a close game, GG!"
         ]
       },
       gotham: {
         start: [
           "Welcome to Guess the ELO—show me what you've got!",
-          "Remember: always look for checks, captures, and attacks!",
-          "Let's see if you play like a 600 or a Grandmaster!",
-          "Develop your pieces and don't hang anything on move 4!"
+          "Remember: always look for checks, captures, and attacks!"
         ],
         humanBlunder: [
           "OH NO! What is that move?! Danger levels!!",
           "You just hung a piece in one move!",
-          "Stop the clock! Why did you put that there?!",
           "That's going straight into the blunder compilation!"
         ],
         humanInaccuracy: [
           "A little bit sus… you had a much cleaner move!",
-          "Not a blunder, but definitely giving me free tempo.",
-          "Your pieces are stepping on each other's toes!"
+          "Not a blunder, but definitely giving me free tempo."
         ],
         humanBrilliant: [
           "AND HE SACRIFICES… EVERYTHING!! Brilliant move!",
           "Stop the video! That move is pure genius!",
-          "Okay, who gave you Stockfish?! What a shot!",
-          "OH! Look at the geometry on that move!!"
+          "Okay, who gave you Stockfish?! What a shot!"
         ],
         humanGood: [
           "Textbook! Clean, principled chess.",
           "Very nice—following all the opening principles.",
-          "Okay, I respect that move. Solid.",
-          "Good move! No hanging pieces so far.",
-          "Developing with purpose—I like it!",
-          "Keeping the position together nicely."
+          "Developing with purpose—I like it!"
         ],
         humanCastle: [
           "Castled! King safety is paramount!",
@@ -2874,75 +2841,60 @@
         ],
         humanCaptureQueen: [
           "OH NO, MY QUEEN!! Anyway…",
-          "I totally sacrificed my queen for positional compensation.",
-          "Wait… my queen was trapped?! Unbelievable!"
+          "I totally sacrificed my queen for positional compensation."
+        ],
+        botBlunder: [
+          "Wait… why did I play that?! Danger levels!!",
+          "I'm sacrificing for content, obviously!"
         ],
         botCapture: [
           "Takes, takes, and I'm just up material!",
-          "Free real estate! Thank you very much.",
-          "Danger levels! I'll take the bigger piece.",
-          "Simplifying straight into a winning endgame."
+          "Free real estate! Thank you very much."
         ],
         botCheck: [
           "CHECK! King safety is non-existent!",
-          "Danger levels! Your king is wide open!",
-          "CHECK! Always look for forcing moves!",
-          "BONGCLOUD ENERGY—check!!"
+          "Danger levels! Your king is wide open!"
         ],
         botNormal: [
           "Develop your pieces, castle early, dominate the center.",
           "Look at that pawn structure—textbook!",
-          "Applying maximum pressure on the weak squares.",
-          "Every piece is coordinated like a symphony.",
-          "Controlling the center like a true Grandmaster.",
-          "Watch the diagonals—everything is opening up!"
+          "Applying maximum pressure on the weak squares."
         ],
         humanWin: [
           "Incredible game! Definitely 2400 ELO energy!",
-          "GG! You played like a true tactician!",
-          "Take a bow—you dismantled my entire setup!"
+          "GG! You played like a true tactician!"
         ],
         botWin: [
           "GG! Subscribe for more tactical masterclasses!",
-          "And THAT is why you never neglect king safety!",
-          "Checkmate! Review the game and spot the tactics!"
+          "And THAT is why you never neglect king safety!"
         ],
         draw: [
-          "A draw?! Honestly, we both deserve credit for that fight.",
-          "Dead even! Not a single pawn left to push."
+          "A draw?! Honestly, we both deserve credit for that fight."
         ]
       },
       hikaru: {
         start: [
           "Alright, let's play. Don't blunder anything early!",
-          "Let's go, let's go—keep up the pace!",
-          "Let's see what opening you're going for today.",
           "Fast calculation, clean execution. Let's play!"
         ],
         humanBlunder: [
           "Wait, what?! You just blundered! Easy game!",
           "Takes, takes—I'm completely winning here!",
-          "Oh, you missed that! It's just over now.",
           "Yeah, that loses on the spot. Thank you!"
         ],
         humanInaccuracy: [
           "Hmm, not the most accurate. I'm slightly better now.",
-          "Okay, that gives me a nice edge on the dark squares.",
           "A bit slow—I can take over the center now."
         ],
         humanBrilliant: [
           "Okay, okay, nice find! Very tricky.",
-          "Actually, that's a really good move.",
           "Wait—did you see that whole line? Pretty clean!",
           "Alright, fair play, that was the best move."
         ],
         humanGood: [
           "Yep, best move. Logical.",
           "Solid, very solid. Keeping things tight.",
-          "Good move—no weaknesses yet.",
-          "Okay, very natural move.",
-          "Makes sense, keeping everything defended.",
-          "Clean move, let's keep going."
+          "Makes sense, keeping everything defended."
         ],
         humanCastle: [
           "Castled, standard stuff. Now let's play real chess.",
@@ -2950,75 +2902,60 @@
         ],
         humanCaptureQueen: [
           "Wait—I missed that! Okay, fine, still playable… maybe.",
-          "Chat, did you see that tactic?!",
-          "Ugh, I played way too fast there!"
+          "Chat, did you see that tactic?!"
+        ],
+        botBlunder: [
+          "Wait—I premoved that! Okay, still fine.",
+          "Chat, ignore that—totally fine!"
         ],
         botCapture: [
           "Takes, takes, takes—I'm just up a clean piece.",
-          "Simple chess, clean conversion.",
-          "Captures, captures, and my position plays itself.",
-          "Just trading down into an easy win."
+          "Simple chess, clean conversion."
         ],
         botCheck: [
           "Check! You have zero counterplay.",
-          "Check—now your king has to run.",
-          "Check, check, and everything is collapsing.",
-          "Check! Notice how all your pieces are tied down."
+          "Check, check, and everything is collapsing."
         ],
         botNormal: [
           "I don't even need to calculate, it's just winning.",
           "Keep squeezing, no counterplay at all.",
-          "Everything is protected, zero weaknesses.",
-          "Just improving the position—takes, takes, easy.",
-          "Super comfortable position for me here.",
-          "No rush, just slowly taking over the board."
+          "Just improving the position—takes, takes, easy."
         ],
         humanWin: [
           "Okay, you played really well. GG!",
-          "Respect—you didn't give me a single chance.",
-          "GGs! Very clean tactical game from you."
+          "Respect—you didn't give me a single chance."
         ],
         botWin: [
           "GGs! Too fast, too clean.",
-          "Completely winning from move 15. GGs!",
-          "Good game—just too much pressure in the end."
+          "Completely winning from move 15. GGs!"
         ],
         draw: [
-          "Draw? Fine, I'll take the half point. GGs!",
-          "Nothing left on the board. Solid draw, GGs!"
+          "Draw? Fine, I'll take the half point. GGs!"
         ]
       },
       magnus: {
         start: [
           "Interesting setup. Let's see how long you can hold on.",
-          "Play whatever you like—I'll outplay you in the endgame.",
-          "Let's play. I'm always looking for a small edge.",
-          "Show me your preparation."
+          "Play whatever you like—I'll outplay you in the endgame."
         ],
         humanBlunder: [
           "That's a serious mistake. I won't let you off the hook.",
-          "You gave me an inch, and now the position is lost.",
           "A fatal slip. From here, the technique is straightforward.",
           "You can't afford inaccuracies like that against me."
         ],
         humanInaccuracy: [
           "A slight concession. My endgame prospects just improved.",
-          "Subtle, but that gives me long-term pressure.",
-          "You're slowly drifting into a passive defense."
+          "Subtle, but that gives me long-term pressure."
         ],
         humanBrilliant: [
           "Not bad at all. You actually found the only move.",
           "Impressive—that's engine-level precision.",
-          "Well spotted. Most players would have missed that resource.",
-          "Very sharp. You're making me work for this."
+          "Well spotted. Most players would have missed that resource."
         ],
         humanGood: [
           "Accurate. You're holding the balance well.",
-          "Good move. No easy breakthroughs for me yet.",
           "Sound defense.",
-          "Logical continuation. Let's see your next idea.",
-          "Solid enough, keeping the position together.",
-          "Reasonable move. Now the real maneuvering starts."
+          "Logical continuation. Let's see your next idea."
         ],
         humanCastle: [
           "Sensible. Now let's see how you handle the maneuvering.",
@@ -3026,75 +2963,392 @@
         ],
         humanCaptureQueen: [
           "Well… that makes things slightly more challenging.",
-          "A rare slip. Let's see if you can actually finish it.",
-          "Interesting. Now I have to play for tricks."
+          "A rare slip. Let's see if you can actually finish it."
+        ],
+        botBlunder: [
+          "Hmm, uncharacteristic. Let's see if you can convert it.",
+          "Interesting—I've given you a chance."
         ],
         botCapture: [
           "Just a small advantage… which is all I need.",
-          "Every pawn counts in the endgame.",
-          "Removing your best defender.",
-          "Simplifying into a technically winning position."
+          "Every pawn counts in the endgame."
         ],
         botCheck: [
           "Check. Your coordination is falling apart.",
-          "Check—now every move is forced.",
-          "Check. There is no comfortable square left.",
-          "Check—the squeeze is complete."
+          "Check—now every move is forced."
         ],
         botNormal: [
           "Slowly improving every piece. No rush.",
-          "You have no active plan left.",
           "Patience is everything in positions like this.",
-          "Creating a second weakness on the other side of the board.",
-          "Tightening the grip square by square.",
-          "Let's see how you handle a long positional grind."
+          "Tightening the grip square by square."
         ],
         humanWin: [
           "Well played. You earned that win today.",
-          "Impressive game—you outcalculated me.",
           "Congratulations. You played with real precision."
         ],
         botWin: [
           "As expected. Good effort, though.",
-          "Once we reached the endgame, it was over.",
-          "Good game. Keep studying those rook endgames."
+          "Once we reached the endgame, it was over."
         ],
         draw: [
-          "A solid draw. You defended very well.",
-          "Neither of us broke through. Well played.",
-          "A fair result. Let's play another one."
+          "A solid draw. You defended very well."
         ]
       }
     };
 
-    let lastCelebLine = '';
-    function updateCelebrityComment(eventKey) {
+    const ELO_BOT_LINES = {
+      rookie: {
+        start: [
+          "Hi! I just learned how the knight moves! Let's play!",
+          "Watch out—I'm gonna push all my pawns right away!",
+          "My strategy today: move pieces randomly and hope for checkmate!",
+          "Ready! By the way, is the king allowed to jump over pawns?"
+        ],
+        humanBlunder: [
+          "Ooh, a free piece! I actually saw that one!",
+          "Wait… is that piece really free?! Yoink!",
+          "Haha, even I noticed that was undefended!",
+          "Yay! My pieces are finally capturing things!"
+        ],
+        humanInaccuracy: [
+          "Hmm, that looks super scary… what are you planning?",
+          "Ooh, fancy move! I have no idea what it means though!",
+          "Wait, am I in trouble? Everything looks fine to me!"
+        ],
+        humanBrilliant: [
+          "Whoa!! Are you secretly a Grandmaster?!",
+          "I didn't see ANY of that coming!",
+          "Wait—how did your pieces do that?!",
+          "Okay, that move looked way too smart for me!"
+        ],
+        humanGood: [
+          "Nice move! I'm just gonna move this guy over here.",
+          "Ooh, good one! Now watch my brilliant counter-plan…",
+          "You're developing so fast! Meanwhile my rooks are still sleeping.",
+          "Solid! I think I'm winning though… wait, am I?",
+          "Hmm, interesting! Let me push another pawn!"
+        ],
+        humanCastle: [
+          "Whoa, two pieces moved at once! Is that legal?!",
+          "Nice castle! My king prefers standing right in the middle!"
+        ],
+        humanCaptureQueen: [
+          "Hey!! That was my favorite piece!!",
+          "Oh no, my queen! Good thing I still have… lots of pawns!",
+          "Totally meant to sacrifice her! Mastermind strategy!"
+        ],
+        botBlunder: [
+          "Hehe, look at my piece right in front of yours—pure genius!",
+          "I'm a tactical mastermind! Nobody can touch that square!",
+          "Watch this! Moving my queen straight into the action!",
+          "Grandmaster level move right there—unstoppable!",
+          "Totally calculated five moves ahead… maybe half a move."
+        ],
+        botCapture: [
+          "Got one!! I'm practically a chess prodigy!",
+          "Boom! Captured! I'm totally winning now!",
+          "Look at me go! Taking pieces left and right!"
+        ],
+        botCheck: [
+          "CHECK!! Did I just win?!",
+          "Check! Wait… why didn't the game end?!",
+          "Surprise check! Look at my piece!"
+        ],
+        botNormal: [
+          "I have a super secret plan… even I don't know what it is yet!",
+          "Moving this piece because it looked lonely!",
+          "Watch out, I'm building a giant pawn wall!",
+          "I feel like Magnus Carlsen right now!",
+          "Everything is going according to my master plan!"
+        ],
+        humanWin: [
+          "GG! Wait—how did I lose?! I was sure I was winning!",
+          "You're way too good! Teach me that opening!",
+          "Rematch! Next time I'll keep my queen on the board!"
+        ],
+        botWin: [
+          "WAIT WHAT?! I ACTUALLY WON?!",
+          "GG!! Put me in the Candidates Tournament right now!",
+          "Unbelievable! My random pawn pushes worked!"
+        ],
+        draw: [
+          "A tie?! That means I'm basically half a Grandmaster!",
+          "GG! Neither of us got checkmated—victory!"
+        ]
+      },
+      club: {
+        start: [
+          "Good luck! Let's see a clean battle for the center.",
+          "Control the center, develop knights before bishops—let's go!",
+          "Ready for a solid rapid game. Have fun!",
+          "Let's see who spots the tactics first!"
+        ],
+        humanBlunder: [
+          "Oof, that leaves a piece hanging!",
+          "I think you overlooked a tactic there—thank you!",
+          "That drops material! Always double-check before releasing!",
+          "Nice gift—I'll gladly take the extra material."
+        ],
+        humanInaccuracy: [
+          "A bit slow—that lets me grab the initiative.",
+          "Hmm, now my pieces get much better squares.",
+          "Slightly passive, I'll take the space advantage."
+        ],
+        humanBrilliant: [
+          "Whoa, sharp tactic! I completely missed that resource!",
+          "Great find—that turns the tables immediately!",
+          "Clean calculation! Respect for spotting that shot."
+        ],
+        humanGood: [
+          "Solid move—keeping everything protected.",
+          "Good developing move, staying true to opening principles.",
+          "Nice and steady. Let's see how the middlegame unfolds.",
+          "Accurate response—no weak squares yet.",
+          "Good defense, holding the center together."
+        ],
+        humanCastle: [
+          "King is safe—time to connect the rooks!",
+          "Smart castling before opening up the center."
+        ],
+        humanCaptureQueen: [
+          "Ugh, walked right into a pin! My queen is gone!",
+          "Completely missed that discovered attack on my queen!"
+        ],
+        botBlunder: [
+          "Wait… did I just leave that undefended?! Good catch if you see it!",
+          "Hmm, I think I miscalculated that exchange."
+        ],
+        botCapture: [
+          "Clean trade—simplifying while ahead.",
+          "Snatched a pawn! Every little advantage counts.",
+          "Taking control of the material balance."
+        ],
+        botCheck: [
+          "Check! Your king is feeling the heat.",
+          "Check—let's see how you untangle your pieces."
+        ],
+        botNormal: [
+          "Putting my rook on the open file—classic club strategy.",
+          "Looking for forks, pins, and skewers…",
+          "Improving my pieces step by step.",
+          "Maintaining tension in the center.",
+          "Let's see if you spot what my bishop is eyeing."
+        ],
+        humanWin: [
+          "Well played! Your tactics were sharper than mine today.",
+          "GG! Clean conversion in the endgame."
+        ],
+        botWin: [
+          "GG! Tactics win games!",
+          "Good game—controlling the open files paid off!"
+        ],
+        draw: [
+          "A fair draw! Both sides played solid chess.",
+          "Dead even in the endgame—good game!"
+        ]
+      },
+      tactical: {
+        start: [
+          "Sharp calculation required. Let's begin.",
+          "I'll punish every loose piece and weak square. Good luck.",
+          "Let's test your opening preparation and endgame technique.",
+          "Focus on initiative and king safety. Your move."
+        ],
+        humanBlunder: [
+          "Fatal oversight. That loses material immediately.",
+          "You left a tactical weakness—and now it collapses.",
+          "At this rating, a blunder like that decides the game.",
+          "Punished immediately. Always check your opponent's forcing moves."
+        ],
+        humanInaccuracy: [
+          "A subtle inaccuracy—my piece coordination is superior now.",
+          "You conceded key dark squares. I'll press that advantage.",
+          "Too slow. I'm taking over the initiative."
+        ],
+        humanBrilliant: [
+          "Impressive calculation. You found the sharpest continuation.",
+          "Strong tactical vision—I have to respect that threat.",
+          "Precise move. You're keeping the tension alive."
+        ],
+        humanGood: [
+          "Principled and accurate.",
+          "Solid prophylaxis—preventing my break.",
+          "Good positional sense. The balance holds.",
+          "Clean move, maintaining harmony between your pieces.",
+          "Sound defense. Let's see your next plan."
+        ],
+        humanCastle: [
+          "King tucked away—now the real middlegame maneuvering starts.",
+          "Proper timing on castling."
+        ],
+        humanCaptureQueen: [
+          "Unacceptable oversight on my part. Well spotted.",
+          "A rare tactical blind spot—now I must fight for a fortress."
+        ],
+        botBlunder: [
+          "A rare miscalculation—let's see if your technique is sharp enough.",
+          "You have an opening now; make the most of it."
+        ],
+        botCapture: [
+          "Eliminating your active defender.",
+          "Converting structural pressure into material.",
+          "Clinical simplification into a winning endgame."
+        ],
+        botCheck: [
+          "Check. Your king is caught in the crossfire.",
+          "Check—every tempo works in my favor now."
+        ],
+        botNormal: [
+          "Targeting the backward pawn and controlling the key outposts.",
+          "Restricting your counterplay before launching the breakthrough.",
+          "Harmonizing rooks and minor pieces on active diagonals.",
+          "Increasing pressure on your kingside structure.",
+          "Precision is everything in closed maneuvers."
+        ],
+        humanWin: [
+          "Strong performance. You outcalculated me in the critical phase.",
+          "Well earned victory. Clean tactical execution."
+        ],
+        botWin: [
+          "GG. Superior piece activity decided the game.",
+          "Good game—once the initiative was mine, there was no escape."
+        ],
+        draw: [
+          "Accurate defense on both sides. A well-earned draw.",
+          "Neither side cracked under pressure. Good game."
+        ]
+      },
+      grandmaster: {
+        start: [
+          "Maximum precision required. Show me your best chess.",
+          "Every tempo and square matters from move one. Let's begin.",
+          "I will convert even the smallest positional edge. Good luck.",
+          "Deep calculation engaged. Make your move."
+        ],
+        humanBlunder: [
+          "Decisive error. The evaluation is completely winning now.",
+          "A critical tactical slip—from here the conversion is ruthless.",
+          "You cannot leave a single loose pawn at this level.",
+          "Game-deciding inaccuracy. Watch the technique."
+        ],
+        humanInaccuracy: [
+          "A microscopic concession—enough to build a winning squeeze.",
+          "Subtle, yet permanent structural damage.",
+          "My long-term endgame advantage just became decisive."
+        ],
+        humanBrilliant: [
+          "Engine-level precision. You found the sole drawing or winning resource.",
+          "Remarkable calculation—that refutes my entire idea.",
+          "Deep tactical sight. Truly Grandmaster-caliber."
+        ],
+        humanGood: [
+          "Top engine choice. The equilibrium holds.",
+          "Accurate prophylaxis. You anticipated my threat.",
+          "Clean, principled, and resilient.",
+          "Exact defense—no entry squares conceded.",
+          "Strong positional understanding. Let's continue."
+        ],
+        humanCastle: [
+          "Sound king safety. Now the deep strategic battle begins.",
+          "Textbook development and king shelter."
+        ],
+        humanCaptureQueen: [
+          "An extraordinary tactical sequence—well calculated.",
+          "Even against full strength, that combination was lethal."
+        ],
+        botBlunder: [
+          "An unexpected tactical twist—show me your endgame precision.",
+          "Interesting complication—prove the advantage."
+        ],
+        botCapture: [
+          "Cashing in positional dominance for concrete material.",
+          "Removing the key defender and entering a winning endgame.",
+          "Clinical conversion."
+        ],
+        botCheck: [
+          "Check. Every escape square is covered.",
+          "Check—the mating net is closing."
+        ],
+        botNormal: [
+          "Prophylaxis first, then inexorable expansion.",
+          "Dominating the central files and restricting all counterplay.",
+          "Improving my worst piece while binding your position.",
+          "Creating dual weaknesses across both flanks.",
+          "Endgame technique starts in the middlegame."
+        ],
+        humanWin: [
+          "Extraordinary game. You defeated 3000-level calculation cleanly.",
+          "Flawless execution. Truly impressive chess."
+        ],
+        botWin: [
+          "GG. Precision from opening to endgame.",
+          "Good effort—every small advantage accumulated into checkmate."
+        ],
+        draw: [
+          "A masterclass in resilience. Holding a draw here is no small feat.",
+          "Perfect balance from start to finish. Well played."
+        ]
+      }
+    };
+
+    function getActiveBotProfileForComments() {
+      if (state.difficulty === 'custom' && state.customPersona && CELEBRITY_LINES[state.customPersona]) {
+        return {
+          shortName: PERSONA_MAP[state.customPersona].short,
+          lines: CELEBRITY_LINES[state.customPersona]
+        };
+      }
+      const effElo = state.difficulty === 'easy' ? 300
+        : state.difficulty === 'medium' ? 1200
+        : state.difficulty === 'hard' ? 1800
+        : state.customElo;
+
+      if (effElo <= 600) {
+        return { shortName: `Rookie (${effElo})`, lines: ELO_BOT_LINES.rookie };
+      }
+      if (effElo <= 1500) {
+        return { shortName: `Club Bot (${effElo})`, lines: ELO_BOT_LINES.club };
+      }
+      if (effElo <= 2200) {
+        return { shortName: `Tactician (${effElo})`, lines: ELO_BOT_LINES.tactical };
+      }
+      return { shortName: `Grandmaster (${effElo})`, lines: ELO_BOT_LINES.grandmaster };
+    }
+
+    let lastBotLine = '';
+    function updateBotComment(eventKey) {
       const bar = $('celeb-comment-bar'), tag = $('celeb-comment-tag'), txt = $('celeb-comment-text');
       if (!bar || !tag || !txt) return;
-      const isCelebActive = state.mode === 'ai' && state.difficulty === 'custom' && state.customPersona && CELEBRITY_LINES[state.customPersona];
-      if (!isCelebActive) {
+      if (state.mode !== 'ai') {
         bar.classList.remove('visible');
         return;
       }
-      const persona = PERSONA_MAP[state.customPersona];
-      const pool = CELEBRITY_LINES[state.customPersona][eventKey] || CELEBRITY_LINES[state.customPersona].botNormal;
+      const profile = getActiveBotProfileForComments();
+      const pool = profile.lines[eventKey] || profile.lines.botNormal;
       let line = pool[Math.floor(Math.random() * pool.length)];
-      if (pool.length > 1 && line === lastCelebLine) {
+      if (pool.length > 1 && line === lastBotLine) {
         line = pool[(pool.indexOf(line) + 1) % pool.length];
       }
-      lastCelebLine = line;
-      tag.textContent = `💬 ${persona.short}:`;
+      lastBotLine = line;
+      tag.textContent = `💬 ${profile.shortName}:`;
       txt.textContent = `"${line}"`;
       const wasHidden = !bar.classList.contains('visible');
       bar.classList.add('visible');
       if (wasHidden) resizeBoard(true);
     }
 
+    function getDifficultyDisplayLabel() {
+      if (state.difficulty === 'easy') return 'Easy (300)';
+      if (state.difficulty === 'medium') return 'Intermediate (1200)';
+      if (state.difficulty === 'hard') return 'Hard (1800)';
+      const p = state.customPersona ? PERSONA_MAP[state.customPersona] : null;
+      return p ? `${p.name} (${state.customElo})` : `Custom (${state.customElo} ELO)`;
+    }
+
     function updateStatusUI() {
       const turnLabel = engine.turn === 'w' ? 'White to move' : 'Black to move';
       let statusStr = turnLabel;
-      if (state.waitingForBlackStart) statusStr = 'Press Start Game when ready';
-      else if (state.aiThinking) statusStr = `${getDifficultyDisplayLabel()} thinking…`;
+      if (state.aiThinking) statusStr = `${getDifficultyDisplayLabel()} thinking…`;
       else if (engine.isInCheck(engine.turn)) statusStr = `${engine.turn === 'w' ? 'White' : 'Black'} is in Check!`;
 
       els.mobileStatusText.textContent = statusStr;
@@ -3108,19 +3362,10 @@
       els.desktopStatusDot.style.background = dotColor;
 
       $('btn-undo-mobile').disabled = $('btn-undo-desktop').disabled = !state.allowUndo || state.aiThinking || engine.history.length === 0;
-      $('btn-hint-mobile').disabled = $('btn-hint-desktop').disabled = !state.allowHints || state.aiThinking || state.waitingForBlackStart || state.gameOver || (state.mode === 'ai' && engine.turn !== state.humanColor);
+      $('btn-hint-mobile').disabled = $('btn-hint-desktop').disabled = !state.allowHints || state.aiThinking || state.gameOver || (state.mode === 'ai' && engine.turn !== state.humanColor);
       $('btn-resign-board-bottom').disabled = $('btn-resign-black-top').disabled = state.gameOver;
-      $('btn-start-black-match').style.display = (state.waitingForBlackStart && !state.gameOver) ? 'inline-flex' : 'none';
 
       updateClocksUI();
-    }
-
-    function getDifficultyDisplayLabel() {
-      if (state.difficulty === 'easy') return 'Easy (300)';
-      if (state.difficulty === 'medium') return 'Intermediate (1200)';
-      if (state.difficulty === 'hard') return 'Hard (1800)';
-      const p = state.customPersona ? PERSONA_MAP[state.customPersona] : null;
-      return p ? `${p.name} (${state.customElo})` : `Custom (${state.customElo} ELO)`;
     }
 
     function handleGameOver(outcome) {
@@ -3199,7 +3444,6 @@
       }
       state.selectedSq = null; state.legalMovesForSelected = []; state.hintMove = null; state.pendingPromo = null;
       state.aiThinking = false; state.gameOver = false;
-      state.waitingForBlackStart = (state.mode === 'ai' && state.humanColor === 'b');
       state.whiteTime = state.timeControl; state.blackTime = state.timeControl;
 
       const diffLabel = getDifficultyDisplayLabel();
@@ -3225,8 +3469,8 @@
       els.modalPromo.classList.remove('open');
 
       updateAssistControlsVisibility();
-      if (state.mode === 'ai' && state.difficulty === 'custom' && state.customPersona) {
-        updateCelebrityComment('start');
+      if (state.mode === 'ai') {
+        updateBotComment('start');
       } else {
         $('celeb-comment-bar').classList.remove('visible');
       }
@@ -3236,9 +3480,7 @@
       updateCapturedUI();
       updateStatusUI();
       startClockLoop();
-      if (!state.waitingForBlackStart) {
-        scheduleAITurnIfNeeded();
-      }
+      scheduleAITurnIfNeeded();
     }
 
     function toggleSound() {
@@ -3291,14 +3533,6 @@
 
     $('btn-resign-black-top').addEventListener('click', () => handleResign('b'));
     $('btn-resign-board-bottom').addEventListener('click', () => handleResign(state.mode === 'friend' ? 'w' : null));
-    $('btn-start-black-match').addEventListener('click', () => {
-      if (!state.waitingForBlackStart || state.gameOver) return;
-      sfx.init();
-      state.waitingForBlackStart = false;
-      updateMoveHistoryUI();
-      updateStatusUI();
-      scheduleAITurnIfNeeded();
-    });
 
     $('btn-go-rematch').addEventListener('click', startNewMatch);
     $('btn-go-settings').addEventListener('click', () => { els.modalGameOver.classList.remove('open'); openConfig(); });
