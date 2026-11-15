@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>LC Chess — Tactical Board &amp; Adaptive Engine</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LC Chess" />
   <meta name="theme-color" content="#090d16" />
   <!-- Crisp Staunton Knight App Icon -->
@@ -29,10 +29,7 @@
 
       --accent-emerald: #10b981;
       --accent-emerald-glow: rgba(16, 185, 129, 0.25);
-      --accent-amber: #f59e0b;
-      --accent-rose: #ef4444;
 
-      /* Classic Tournament Board Colors */
       --sq-light: #ebecd0;
       --sq-dark: #739552;
       --sq-last-light: #f5f682;
@@ -62,9 +59,7 @@
 
     html, body {
       width: 100%;
-      max-width: 100vw;
-      height: 100%;
-      height: 100svh;
+      height: 100dvh;
       overflow: hidden;
       overscroll-behavior: none;
       touch-action: none;
@@ -83,109 +78,44 @@
       touch-action: manipulation;
     }
 
-    /* =========================================================================
-       2. APP SHELL & RESPONSIVE LAYOUT
-       ========================================================================= */
-    #app {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      max-width: 100vw;
-      height: 100dvh;
-      padding-top: max(26px, env(safe-area-inset-top, 0px));
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      padding-left: env(safe-area-inset-left, 0px);
-      padding-right: env(safe-area-inset-right, 0px);
-      background-color: var(--bg-canvas);
-      overflow: hidden;
-      overscroll-behavior: none;
-      touch-action: none;
+    .modal-card,
+    #desktop-move-list,
+    .mobile-ticker {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .modal-card::-webkit-scrollbar,
+    #desktop-move-list::-webkit-scrollbar,
+    .mobile-ticker::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
     }
 
-    @media all and (display-mode: standalone) {
-      #app {
-        padding-top: calc(env(safe-area-inset-top, 20px) + 12px);
-      }
-    }
-
-    /* Top Header Bar (visible on mobile/tablet, compact on desktop) */
-    #top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: calc(100% - 20px);
-      max-width: 100%;
-      height: 48px;
-      min-height: 48px;
-      margin: 4px auto 0;
-      padding: 0 10px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      gap: 8px;
-      z-index: 20;
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 16px;
-      letter-spacing: -0.02em;
-      white-space: nowrap;
-      min-width: 0;
-      flex-shrink: 1;
-    }
-
-    button {
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      background: none;
-      color: inherit;
-      touch-action: manipulation;
-    }
-
-    /* =========================================================================
-       2. APP SHELL & RESPONSIVE LAYOUT
-       ========================================================================= */
     #app {
       display: flex;
       flex-direction: column;
       width: 100%;
       height: 100dvh;
-      padding-top: max(26px, env(safe-area-inset-top, 0px));
+      padding-top: max(22px, env(safe-area-inset-top, 0px));
       padding-bottom: env(safe-area-inset-bottom, 0px);
       padding-left: env(safe-area-inset-left, 0px);
       padding-right: env(safe-area-inset-right, 0px);
-      background-color: var(--bg-canvas);
       overflow: hidden;
       overscroll-behavior: none;
       touch-action: none;
     }
 
-    @media all and (display-mode: standalone) {
-      #app {
-        padding-top: calc(env(safe-area-inset-top, 20px) + 12px);
-      }
-    }
-
-    /* Top Header Bar (visible on mobile/tablet, compact on desktop) */
     #top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: calc(100% - 20px);
-      height: 48px;
-      min-height: 48px;
-      margin: 4px auto 0;
-      padding: 0 10px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
+      width: 100%;
+      height: 50px;
+      min-height: 50px;
+      padding: 0 14px;
+      background: #111827;
+      border-bottom: 1px solid var(--border-subtle);
       gap: 8px;
       z-index: 20;
       flex-shrink: 0;
@@ -199,77 +129,6 @@
       font-size: 16px;
       letter-spacing: -0.02em;
       white-space: nowrap;
-    }
-
-    /* Live Evaluation Bar */
-    #eval-bar-wrap {
-      position: relative;
-      width: 18px;
-      height: 320px;
-      border-radius: 6px;
-      background: #181c24;
-      border: 1px solid var(--border-strong);
-      overflow: hidden;
-      flex-shrink: 0;
-      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
-    }
-
-    #eval-bar-wrap.flipped-eval {
-      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
-    }
-
-    #eval-fill {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
-      transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    #eval-bar-wrap.flipped-eval #eval-fill {
-      background: linear-gradient(180deg, #1e2430 0%, #111622 100%);
-    }
-
-    #eval-midline {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 1.5px;
-      background: rgba(16, 185, 129, 0.7);
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    #eval-score-label {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 3px;
-      text-align: center;
-      font-size: 8.5px;
-      font-weight: 800;
-      font-family: "SF Mono", Menlo, monospace;
-      color: #0f172a;
-      z-index: 3;
-      pointer-events: none;
-      line-height: 1;
-    }
-
-    #eval-score-label.top-advantage {
-      bottom: auto;
-      top: 4px;
-      color: #f8fafc;
-    }
-
-    #eval-bar-wrap.flipped-eval #eval-score-label {
-      color: #f8fafc;
-    }
-
-    #eval-bar-wrap.flipped-eval #eval-score-label.top-advantage {
-      color: #0f172a;
     }
 
     .brand-icon {
@@ -287,7 +146,7 @@
 
     .brand-icon svg { width: 22px; height: 22px; }
 
-    .top-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .top-actions { display: flex; align-items: center; gap: 6px; }
 
     .icon-btn {
       display: inline-flex;
@@ -307,13 +166,6 @@
     .icon-btn:hover { background: var(--bg-hover); }
     .icon-btn:active { transform: scale(0.96); }
 
-    .sound-toggle-btn {
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      flex-shrink: 0;
-    }
-
     .icon-btn.primary {
       background: var(--accent-emerald);
       color: #042f2e;
@@ -331,8 +183,8 @@
       width: 100%;
       max-width: 1280px;
       margin: 0 auto;
-      padding: 8px 10px;
-      gap: 8px;
+      padding: 6px 10px;
+      gap: 6px;
       overflow: hidden;
       min-height: 0;
     }
@@ -345,7 +197,7 @@
       width: 100%;
       flex: 0 1 auto;
       min-height: 0;
-      gap: 8px;
+      gap: 6px;
     }
 
     #mobile-status-strip {
@@ -353,8 +205,8 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      height: 32px;
-      min-height: 32px;
+      height: 30px;
+      min-height: 30px;
       padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
@@ -368,8 +220,8 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      height: 44px;
-      min-height: 44px;
+      height: 40px;
+      min-height: 40px;
       padding: 0 10px;
       border-radius: var(--radius-md);
       background: var(--bg-surface);
@@ -389,19 +241,19 @@
     }
 
     .player-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 7px;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       display: grid;
       place-items: center;
-      font-size: 14px;
+      font-size: 13px;
       flex-shrink: 0;
     }
     .player-avatar svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
 
@@ -411,7 +263,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
@@ -434,7 +286,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      height: 16px;
+      height: 14px;
       font-size: 11px;
       color: var(--text-secondary);
       overflow: hidden;
@@ -444,12 +296,12 @@
       display: inline-flex;
       align-items: center;
       letter-spacing: -1px;
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1;
     }
     .captured-icons svg {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       margin-right: -3px;
       vertical-align: middle;
       filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
@@ -466,14 +318,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 70px;
-      height: 32px;
-      padding: 0 10px;
+      min-width: 66px;
+      height: 28px;
+      padding: 0 8px;
       border-radius: var(--radius-sm);
       background: #0b1120;
       border: 1px solid var(--border-subtle);
       font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--text-secondary);
       letter-spacing: 0.03em;
@@ -490,31 +342,67 @@
       color: #fca5a5 !important;
       animation: pulseClock 1s infinite alternate;
     }
-    .clock-box.unlimited-time {
-      font-size: 22px;
-      line-height: 1;
-      letter-spacing: 0;
-    }
 
     .top-resign-btn {
       display: none;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       width: 100%;
-      height: 40px;
+      height: 44px;
+      min-height: 44px;
       padding: 0 12px;
       border-radius: var(--radius-md);
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.45);
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.42);
       color: #fca5a5;
-      font-size: 13.5px;
+      font-size: 14px;
       font-weight: 700;
       white-space: nowrap;
       flex-shrink: 0;
       transition: background 0.15s ease, transform 0.2s ease;
     }
+    .top-resign-btn:hover:not(:disabled) {
+      background: rgba(239, 68, 68, 0.24);
+      border-color: rgba(239, 68, 68, 0.65);
+      color: #fecaca;
+    }
     .top-resign-btn.rotated-180 { transform: rotate(180deg); }
+
+    /* Celebrity Coach / Bot Commentary Bubble */
+    .celeb-comment-bar {
+      display: none;
+      align-items: center;
+      gap: 7px;
+      width: 100%;
+      min-height: 30px;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      background: rgba(16, 185, 129, 0.09);
+      border: 1px solid rgba(16, 185, 129, 0.28);
+      font-size: 11.5px;
+      line-height: 1.3;
+      color: #e2e8f0;
+      flex-shrink: 0;
+    }
+    .celeb-comment-bar.visible {
+      display: flex;
+    }
+    .celeb-comment-tag {
+      font-weight: 800;
+      color: #34d399;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .celeb-comment-text {
+      color: #f1f5f9;
+      font-style: italic;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
 
     #board-bottom-resign-wrap {
       display: flex;
@@ -767,7 +655,7 @@
       align-items: stretch;
       width: 100%;
       margin: 0 auto;
-      gap: 8px;
+      gap: 6px;
       flex-shrink: 0;
     }
 
@@ -776,7 +664,7 @@
       align-items: center;
       gap: 6px;
       width: 100%;
-      height: 32px;
+      height: 30px;
       padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
@@ -795,7 +683,7 @@
       justify-content: center;
       width: 100%;
       gap: 8px;
-      height: 44px;
+      height: 40px;
     }
 
     .action-btn {
@@ -808,7 +696,7 @@
       border-radius: var(--radius-md);
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--text-primary);
       transition: all 0.15s ease;
@@ -822,8 +710,8 @@
 
     .resign-btn-lg {
       width: 100%;
-      height: 44px;
-      min-height: 44px;
+      height: 40px;
+      min-height: 40px;
       flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
@@ -833,7 +721,7 @@
       background: rgba(239, 68, 68, 0.14);
       border: 1px solid rgba(239, 68, 68, 0.42);
       color: #fca5a5;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       transition: all 0.15s ease;
     }
@@ -929,7 +817,7 @@
       background: rgba(9, 13, 22, 0.45);
     }
     .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .footer-grid .action-btn { height: 38px; }
+    .footer-grid .action-btn { height: 44px; min-height: 44px; }
 
     .btn-full-primary {
       width: 100%;
@@ -950,24 +838,11 @@
     .btn-full-primary:hover { background: #34d399; }
 
     @media (min-width: 900px) {
-      #app {
-        height: 100%;
-        padding-top: env(safe-area-inset-top, 0px);
-        justify-content: center;
-      }
       #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
-      #main-workspace {
-        flex: 0 1 auto;
-        height: 100%;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        padding: 16px 24px;
-        gap: 24px;
-      }
-      #board-column { width: auto; flex: 0 1 auto; gap: 8px; }
+      #main-workspace { flex-direction: row; padding: 18px 24px; gap: 24px; }
+      #board-column { width: auto; flex: 0 1 auto; gap: 10px; }
       #desktop-sidebar { display: flex; }
-      .player-bar { height: 44px; min-height: 44px; padding: 0 14px; }
+      .player-bar { height: 48px; padding: 0 14px; }
     }
 
     .modal-backdrop {
@@ -975,7 +850,6 @@
       inset: 0;
       background: rgba(4, 7, 15, 0.78);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -989,9 +863,6 @@
       max-width: 440px;
       max-height: 92dvh;
       overflow-y: auto;
-      overflow-x: hidden;
-      overscroll-behavior-x: none;
-      touch-action: pan-y;
       background: var(--bg-surface);
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-xl);
@@ -1000,20 +871,6 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .modal-card::-webkit-scrollbar,
-    #desktop-move-list::-webkit-scrollbar,
-    .mobile-ticker::-webkit-scrollbar {
-      display: none;
-      width: 0;
-      height: 0;
-    }
-    #desktop-move-list,
-    .mobile-ticker {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
     }
 
     .modal-header { display: flex; align-items: center; justify-content: space-between; }
@@ -1027,22 +884,12 @@
       background: var(--bg-elevated);
       border: 1px solid var(--border-strong);
       color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 700;
     }
     .close-modal-btn:hover { background: var(--bg-hover); }
-
-    #color-selector .seg-btn-main svg {
-      filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
-    }
-    #color-selector .seg-btn {
-      padding: 10px 13px 10px 7px;
-    }
-    #color-selector .seg-btn[data-color="random"] {
-      padding: 10px 12px 10px 8px;
-    }
 
     .config-section { display: flex; flex-direction: column; gap: 8px; }
     .config-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); }
@@ -1071,71 +918,22 @@
     .seg-btn-sub { font-size: 10px; color: var(--text-secondary); }
     .seg-btn.active .seg-btn-sub { color: #6ee7b7; }
 
-    /* Horizontal Icon-Left Option Cards (Opponent & Computer Strength) */
-    .seg-btn.card-left-icon {
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 13px 10px 10px;
-      gap: 9px;
-    }
-
-    .seg-card-icon {
-      width: 26px;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .seg-card-text {
-      flex: 0 1 auto;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      text-align: left;
-      gap: 2px;
-    }
-
-    .persona-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .persona-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .persona-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-width: 0;
-      padding: 9px 10px;
+      padding: 9px 11px;
       border-radius: var(--radius-md);
       background: var(--bg-elevated);
       border: 1.5px solid transparent;
       text-align: left;
-      gap: 6px;
+      gap: 8px;
     }
     .persona-btn:hover { background: var(--bg-hover); }
     .persona-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--accent-emerald); }
-    .persona-name {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--text-primary);
-      min-width: 0;
-    }
-    .persona-label-stack {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-    .persona-piece-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
-    }
-    .persona-elo { font-size: 10.5px; font-weight: 700; font-family: "SF Mono", Menlo, monospace; color: var(--text-secondary); background: rgba(9, 13, 22, 0.55); padding: 2px 5px; border-radius: 6px; flex-shrink: 0; }
+    .persona-name { font-size: 12.5px; font-weight: 700; color: var(--text-primary); }
+    .persona-elo { font-size: 11px; font-weight: 700; font-family: "SF Mono", Menlo, monospace; color: var(--text-secondary); background: rgba(9, 13, 22, 0.55); padding: 2px 6px; border-radius: 6px; }
     .persona-btn.active .persona-elo { color: #6ee7b7; background: rgba(16, 185, 129, 0.2); }
 
     .elo-slider-card {
@@ -1150,64 +948,34 @@
     .elo-slider-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .elo-badge-live { font-family: "SF Mono", Menlo, monospace; font-size: 13px; font-weight: 800; color: #6ee7b7; background: rgba(16, 185, 129, 0.16); border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 9px; border-radius: 8px; }
 
-    .elo-stepper-controls { display: flex; align-items: center; gap: 10px; }
+    .elo-stepper-controls { display: flex; align-items: center; gap: 8px; }
     .elo-step-btn {
-      width: 34px;
-      height: 34px;
-      min-width: 34px;
-      min-height: 34px;
-      flex: 0 0 34px;
-      aspect-ratio: 1 / 1;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       background: #0b1120;
       border: 1px solid var(--border-strong);
       color: var(--text-primary);
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
+      display: grid;
+      place-items: center;
     }
     .elo-step-btn:hover { background: var(--bg-hover); }
 
     .elo-range-input {
       -webkit-appearance: none;
       appearance: none;
-      flex: 1;
-      min-width: 0;
       width: 100%;
-      height: 36px;
-      padding: 15px 0;
-      background: transparent;
-      background-clip: content-box;
+      height: 6px;
+      border-radius: 999px;
+      background: #0b1120;
       outline: none;
       cursor: pointer;
-      touch-action: pan-x;
-    }
-    .elo-range-input::-webkit-slider-runnable-track {
-      height: 6px;
-      border-radius: 999px;
-      background: #0b1120;
-    }
-    .elo-range-input::-moz-range-track {
-      height: 6px;
-      border-radius: 999px;
-      background: #0b1120;
     }
     .elo-range-input::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 20px;
-      height: 20px;
-      margin-top: -7px;
-      border-radius: 50%;
-      background: var(--accent-emerald);
-      border: 2px solid #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-    .elo-range-input::-moz-range-thumb {
       width: 20px;
       height: 20px;
       border-radius: 50%;
@@ -1311,9 +1079,7 @@
         <span>LC Chess</span>
       </div>
       <div class="top-actions">
-        <button id="btn-sound-mobile" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-        </button>
+        <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound">🔊</button>
         <button id="btn-new-mobile" class="icon-btn primary">New Game</button>
       </div>
     </header>
@@ -1345,6 +1111,11 @@
             </div>
           </div>
           <div id="top-clock" class="clock-box">10:00</div>
+        </div>
+
+        <div id="celeb-comment-bar" class="celeb-comment-bar" aria-live="polite">
+          <span id="celeb-comment-tag" class="celeb-comment-tag">💬 Magnus:</span>
+          <span id="celeb-comment-text" class="celeb-comment-text">"Let's play some chess."</span>
         </div>
 
         <div id="board-and-eval">
@@ -1382,7 +1153,7 @@
 
         <div id="mobile-bottom-strip">
           <div id="mobile-move-ticker" class="mobile-ticker">
-            <span style="color: var(--text-secondary); font-family: inherit;">Tap or drag a White piece to begin</span>
+            <span style="color: var(--text-muted); font-family: inherit;">Tap a piece to start playing...</span>
           </div>
           <div id="mobile-action-row" class="mobile-action-row">
             <button id="btn-hint-mobile" class="action-btn hint-style">💡 Hint</button>
@@ -1408,9 +1179,7 @@
                 <div id="desktop-mode-sub" style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">vs Computer • Intermediate (1200)</div>
               </div>
             </div>
-            <button id="btn-sound-desktop" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-            </button>
+            <button id="btn-sound-desktop" class="icon-btn" title="Toggle Sound">🔊</button>
           </div>
 
           <div class="status-banner">
@@ -1460,34 +1229,28 @@
           </div>
           <div>
             <div id="cfg-title" class="modal-title">LC Chess</div>
-            <div class="modal-subtitle">Configure your game</div>
+            <div class="modal-subtitle">Configure your match</div>
           </div>
         </div>
-        <button id="btn-close-config" class="close-modal-btn" aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
+        <button id="btn-close-config" class="close-modal-btn" aria-label="Close">✕</button>
       </div>
 
       <div class="config-section">
         <span class="config-label">Opponent</span>
         <div id="mode-selector" class="seg-grid-2">
-          <button class="seg-btn card-left-icon active" data-mode="ai">
-            <span class="seg-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          <button class="seg-btn active" data-mode="ai">
+            <span class="seg-btn-main">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+              <span>vs Computer</span>
             </span>
-            <span class="seg-card-text">
-              <span class="seg-btn-main">vs Computer</span>
-              <span class="seg-btn-sub">100 – 3000 ELO</span>
-            </span>
+            <span class="seg-btn-sub">100 – 3000 ELO</span>
           </button>
-          <button class="seg-btn card-left-icon" data-mode="friend">
-            <span class="seg-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <button class="seg-btn" data-mode="friend">
+            <span class="seg-btn-main">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>vs Friend</span>
             </span>
-            <span class="seg-card-text">
-              <span class="seg-btn-main">vs Friend</span>
-              <span class="seg-btn-sub">Pass &amp; Play</span>
-            </span>
+            <span class="seg-btn-sub">Pass &amp; Play</span>
           </button>
         </div>
       </div>
@@ -1495,41 +1258,33 @@
       <div id="ai-difficulty-section" class="config-section">
         <span class="config-label">Computer Strength</span>
         <div id="difficulty-selector" class="seg-grid-4">
-          <button class="seg-btn card-left-icon" data-diff="easy">
-            <span class="seg-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          <button class="seg-btn" data-diff="easy">
+            <span class="seg-btn-main">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+              <span>Easy</span>
             </span>
-            <span class="seg-card-text">
-              <span class="seg-btn-main">Easy</span>
-              <span class="seg-btn-sub">300 ELO</span>
-            </span>
+            <span class="seg-btn-sub">300 ELO</span>
           </button>
-          <button class="seg-btn card-left-icon active" data-diff="medium">
-            <span class="seg-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <button class="seg-btn active" data-diff="medium">
+            <span class="seg-btn-main">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              <span>Intermediate</span>
             </span>
-            <span class="seg-card-text">
-              <span class="seg-btn-main">Intermediate</span>
-              <span class="seg-btn-sub">1200 ELO</span>
-            </span>
+            <span class="seg-btn-sub">1200 ELO</span>
           </button>
-          <button class="seg-btn card-left-icon" data-diff="hard">
-            <span class="seg-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+          <button class="seg-btn" data-diff="hard">
+            <span class="seg-btn-main">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+              <span>Hard</span>
             </span>
-            <span class="seg-card-text">
-              <span class="seg-btn-main">Hard</span>
-              <span class="seg-btn-sub">1800 ELO</span>
-            </span>
+            <span class="seg-btn-sub">1800 ELO</span>
           </button>
-          <button class="seg-btn card-left-icon" data-diff="custom">
-            <span class="seg-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
+          <button class="seg-btn" data-diff="custom">
+            <span class="seg-btn-main">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
+              <span>Custom</span>
             </span>
-            <span class="seg-card-text">
-              <span class="seg-btn-main">Custom</span>
-              <span class="seg-btn-sub">100 – 3000 ELO</span>
-            </span>
+            <span class="seg-btn-sub">100 – 3000 ELO</span>
           </button>
         </div>
       </div>
@@ -1551,45 +1306,27 @@
         <span class="config-label" style="margin-top: 4px;">Or Select Player Preset (Sorted by ELO)</span>
         <div id="persona-selector" class="persona-grid">
           <button class="persona-btn" data-persona="andrea" data-elo="1800">
-            <span class="persona-name">
-              <svg class="persona-piece-icon" viewBox="0 0 45 45"><path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 H 34 C 34,31.58 29.59,27.09 26.59,26.03 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z" fill="#ffffff" stroke="#273244" stroke-width="1.35" stroke-linecap="round"/></svg>
-              <span class="persona-label-stack"><span>Andrea</span><span>Botez</span></span>
-            </span>
+            <span class="persona-name">♟ Andrea Botez</span>
             <span class="persona-elo">1800</span>
           </button>
           <button class="persona-btn" data-persona="alexandra" data-elo="2050">
-            <span class="persona-name">
-              <svg class="persona-piece-icon" viewBox="0 0 45 45"><g fill="#ffffff" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/><path d="M 34,14 L 31,17 L 14,17 L 11,14"/><path d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"/><path d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5"/><path d="M 11,14 L 34,14" fill="none" stroke-linejoin="miter"/></g></svg>
-              <span class="persona-label-stack"><span>Alexandra</span><span>Botez</span></span>
-            </span>
+            <span class="persona-name">♜ Alexandra Botez</span>
             <span class="persona-elo">2050</span>
           </button>
           <button class="persona-btn" data-persona="anna" data-elo="2100">
-            <span class="persona-name">
-              <svg class="persona-piece-icon" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff"/><path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff"/><path d="M 9.5 25.5 A 0.5 0.5 0 1 1 8.5,25.5 A 0.5 0.5 0 1 1 9.5 25.5 z" fill="#273244"/><path d="M 15 15.5 A 0.5 1.5 0 1 1 14,15.5 A 0.5 1.5 0 1 1 15 15.5 z" transform="matrix(0.866,0.5,-0.5,0.866,9.693,-5.173)" fill="#273244"/></g></svg>
-              <span class="persona-label-stack"><span>Anna</span><span>Cramling</span></span>
-            </span>
+            <span class="persona-name">♞ Anna Cramling</span>
             <span class="persona-elo">2100</span>
           </button>
           <button class="persona-btn" data-persona="gotham" data-elo="2350">
-            <span class="persona-name">
-              <svg class="persona-piece-icon" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><g fill="#ffffff" stroke-linecap="butt"><path d="M 9,36 C 12.39,35.03 19.11,36.43 22.5,34 C 25.89,36.43 32.61,35.03 36,36 C 36,36 37.65,36.54 39,38 C 38.32,38.97 37.35,38.99 36,38.5 C 32.61,37.53 25.89,38.96 22.5,37.5 C 19.11,38.96 12.39,37.53 9,38.5 C 7.646,38.99 6.677,38.97 6,38 C 7.354,36.06 9,36 9,36 z"/><path d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,30 30,30 C 30,27.5 27.5,26 27.5,26 C 33,24.5 33.5,14.5 22.5,10.5 C 11.5,14.5 12,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32 z"/><path d="M 25 8 A 2.5 2.5 0 1 1 20,8 A 2.5 2.5 0 1 1 25 8 z"/></g><path d="M 17.5,26 L 27.5,26 M 15,30 L 30,30 M 22.5,15.5 L 22.5,20.5 M 20,18 L 25,18" stroke-linejoin="miter"/></g></svg>
-              <span class="persona-label-stack"><span>Gotham</span><span>Chess</span></span>
-            </span>
+            <span class="persona-name">♝ GothamChess</span>
             <span class="persona-elo">2350</span>
           </button>
           <button class="persona-btn" data-persona="hikaru" data-elo="2800">
-            <span class="persona-name">
-              <svg class="persona-piece-icon" viewBox="0 0 45 45"><g fill="#ffffff" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 8 12 A 2 2 0 1 1 4,12 A 2 2 0 1 1 8 12 z"/><path d="M 24.5 7.5 A 2 2 0 1 1 20.5,7.5 A 2 2 0 1 1 24.5 7.5 z"/><path d="M 41 12 A 2 2 0 1 1 37,12 A 2 2 0 1 1 41 12 z"/><path d="M 16 8.5 A 2 2 0 1 1 12,8.5 A 2 2 0 1 1 16 8.5 z"/><path d="M 33 9 A 2 2 0 1 1 29,9 A 2 2 0 1 1 33 9 z"/><path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38,14 L 31,25 L 31,11 L 25.5,24.5 L 22.5,9.5 L 19.5,24.5 L 14,10.5 L 14,25 L 7,14 L 9,26 z" stroke-linecap="butt"/><path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z" stroke-linecap="butt"/><path d="M 11.5,30 C 15,29 30,29 33.5,30" fill="none"/><path d="M 12,33.5 C 18,32.5 27,32.5 33,33.5" fill="none"/></g></svg>
-              <span class="persona-label-stack"><span>Hikaru</span><span>Nakamura</span></span>
-            </span>
+            <span class="persona-name">♛ Hikaru</span>
             <span class="persona-elo">2800</span>
           </button>
           <button class="persona-btn" data-persona="magnus" data-elo="2850">
-            <span class="persona-name">
-              <svg class="persona-piece-icon" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/><path d="M 11.5,30 C 17,27 27,27 32.5,30"/><path d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"/><path d="M 11.5,37 C 17,34 27,34 32.5,37"/></g></svg>
-              <span class="persona-label-stack"><span>Magnus</span><span>Carlsen</span></span>
-            </span>
+            <span class="persona-name">♚ Magnus</span>
             <span class="persona-elo">2850</span>
           </button>
         </div>
@@ -1598,7 +1335,7 @@
       <div class="config-section">
         <span class="config-label">Time Control</span>
         <div id="time-selector" class="seg-grid-5">
-          <button class="seg-btn" data-time="0"><span class="seg-btn-main">None</span><span class="seg-btn-sub" style="font-size: 14px; line-height: 1;">∞</span></button>
+          <button class="seg-btn" data-time="0"><span class="seg-btn-main">None</span><span class="seg-btn-sub">∞</span></button>
           <button class="seg-btn" data-time="300"><span class="seg-btn-main">5m</span><span class="seg-btn-sub">Blitz</span></button>
           <button class="seg-btn active" data-time="600"><span class="seg-btn-main">10m</span><span class="seg-btn-sub">Rapid</span></button>
           <button class="seg-btn" data-time="900"><span class="seg-btn-main">15m</span><span class="seg-btn-sub">Rapid</span></button>
@@ -1611,19 +1348,19 @@
         <div id="color-selector" class="seg-grid-3">
           <button class="seg-btn active" data-color="w">
             <span class="seg-btn-main">
-              <svg width="22" height="22" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/><path d="M 11.5,30 C 17,27 27,27 32.5,30"/><path d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"/><path d="M 11.5,37 C 17,34 27,34 32.5,37"/></g></svg>
+              <svg width="16" height="16" viewBox="0 0 45 45"><g fill="#ffffff" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6"/><path d="M 20,8 L 25,8"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z"/></g></svg>
               <span>White</span>
             </span>
           </button>
           <button class="seg-btn" data-color="random">
             <span class="seg-btn-main">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="8.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="12" cy="12" r="1.35" fill="#0f172a" stroke="none"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="8.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="12" cy="12" r="1.35" fill="#0f172a" stroke="none"/></svg>
               <span>Random</span>
             </span>
           </button>
           <button class="seg-btn" data-color="b">
             <span class="seg-btn-main">
-              <svg width="22" height="22" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#18181b" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#18181b"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85" stroke="#cbd5e1" stroke-width="1"/><path d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37" stroke="#cbd5e1" stroke-width="1"/></g></svg>
+              <svg width="16" height="16" viewBox="0 0 45 45"><g fill="#18181b" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6"/><path d="M 20,8 L 25,8"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z"/></g></svg>
               <span>Black</span>
             </span>
           </button>
@@ -1642,9 +1379,9 @@
       </div>
 
       <div class="config-section">
-        <span class="config-label">Assistance</span>
+        <span class="config-label">Match Assistance</span>
         <div class="toggle-row">
-          <div class="toggle-info"><span class="toggle-title">Allow Undo Move</span><span class="toggle-desc">Enable takebacks during the game</span></div>
+          <div class="toggle-info"><span class="toggle-title">Allow Undo Move</span><span class="toggle-desc">Enable takebacks during the match</span></div>
           <button id="toggle-undo" class="switch" role="switch" aria-checked="false"><span class="switch-knob"></span></button>
         </div>
         <div class="toggle-row">
@@ -1653,7 +1390,7 @@
         </div>
       </div>
 
-      <button id="btn-start-match" class="btn-full-primary" style="margin-top: 4px;">Start Game</button>
+      <button id="btn-start-match" class="btn-full-primary" style="margin-top: 4px;">Start Match</button>
     </div>
   </div>
 
@@ -1689,7 +1426,7 @@
   <script>
     /**
      * =========================================================================
-     * LC CHESS — COMPLETE STAUNTON PIECES, EVAL BAR ON LEFT & AI ENGINE
+     * LC CHESS — CLASSIC STAUNTON PIECES, SAFE-AREA TOP & DYNAMIC EVAL BAR
      * =========================================================================
      */
     const PIECE_VALUES = { P: 100, N: 320, B: 330, R: 500, Q: 900, K: 20000 };
@@ -2190,12 +1927,12 @@
         if (elo <= 900) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 320, jitter: 45, topPool: 3, blunderRate: 0.03 };
         if (elo <= 1100) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 380, jitter: 22, topPool: 2, blunderRate: 0 };
         if (elo <= 1300) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 450, jitter: 10, topPool: 2, blunderRate: 0 };
-        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 2, budget: 600, jitter: 5, topPool: 2, blunderRate: 0 };
-        if (elo <= 1900) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 780, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2200) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 950, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2500) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 1150, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1400, jitter: 0, topPool: 1, blunderRate: 0 };
-        return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1650, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 700, jitter: 5, topPool: 2, blunderRate: 0 };
+        if (elo <= 1900) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 950, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2200) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1250, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2500) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1450, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1700, jitter: 0, topPool: 1, blunderRate: 0 };
+        return { maxDepth: 6, minGuaranteedDepth: 4, budget: 2200, jitter: 0, topPool: 1, blunderRate: 0 };
       }
       chooseBestMove(engine, difficulty = 'medium', customElo = 1500) {
         const legal = engine.generateLegalMoves(engine.turn);
@@ -2393,20 +2130,22 @@
       const isDesktop = window.innerWidth >= 900;
       const vw = document.documentElement.clientWidth || window.innerWidth;
       const vh = window.innerHeight;
+      const hasCelebComment = $('celeb-comment-bar').classList.contains('visible');
+      const celebExtraH = hasCelebComment ? 38 : 0;
 
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const extraTopResign = isFriend ? 48 : 0;
+        const extraTopResign = isFriend ? 52 : 0;
         const availW = vw - 340 - 26 - 72;
-        const availH = vh - 88 - 44 - extraTopResign - 56;
+        const availH = vh - 88 - 44 - extraTopResign - celebExtraH - 56;
         boardSize = Math.floor(Math.min(availW, availH, 660));
       } else {
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
-        const extraTopResign = isFriend ? 48 : 0;
+        const extraTopResign = isFriend ? 52 : 0;
         const safeTopOffset = 28;
-        const chromeH = safeTopOffset + 50 + 32 + extraTopResign + 44 + 44 + 44 + 32 + (hasActions ? 44 : 0) + 56;
+        const chromeH = safeTopOffset + 50 + 32 + extraTopResign + celebExtraH + 44 + 44 + 44 + 32 + (hasActions ? 44 : 0) + 56;
         const availH = vh - chromeH;
         const availW = vw - 16 - 8 - 18;
         boardSize = Math.floor(Math.min(availW, availH));
@@ -2421,7 +2160,7 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const totalColumnHeight = boardSize + 44 + 44 + 44 + (isFriend ? 48 : 0) + (isFriend ? 32 : 24);
+        const totalColumnHeight = boardSize + 44 + 44 + 44 + (isFriend ? 52 : 0) + celebExtraH + (isFriend ? 32 : 24);
         $('desktop-sidebar').style.height = totalColumnHeight + 'px';
         $('desktop-sidebar').style.maxHeight = (vh - 24) + 'px';
       }
@@ -2429,6 +2168,7 @@
       const barWidth = (boardSize + 8 + 18) + 'px';
       els.topBar.style.width = barWidth;
       els.bottomBar.style.width = barWidth;
+      $('celeb-comment-bar').style.width = barWidth;
       $('btn-resign-black-top').style.width = barWidth;
       $('board-bottom-resign-wrap').style.width = barWidth;
       if (!isDesktop) {
@@ -2483,7 +2223,8 @@
         sqEl.dataset.sq = sq;
         sqEl.innerHTML = '';
 
-        if (f === 0) {
+        // Always render rank numbers (1-8) along the left edge of the board regardless of board orientation
+        if (i % 8 === 0) {
           const rankLbl = document.createElement('span');
           rankLbl.className = 'coord-rank';
           rankLbl.textContent = 8 - r;
@@ -2552,19 +2293,14 @@
       const legal = engine.generateLegalMoves(moverColor);
       if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
 
-      // If the player followed the active Hint move, always classify it as Best Move
-      if (state.hintMove && state.hintMove.from === move.from && state.hintMove.to === move.to && (state.hintMove.promo || null) === (move.promo || null)) {
-        return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
-      }
-
       const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
-      ai.nodes = 0; ai.startTime = performance.now(); ai.timeBudget = 130; ai.aborted = false;
+      ai.nodes = 0; ai.startTime = performance.now(); ai.timeBudget = 260; ai.aborted = false;
       let bestScore = -Infinity, secondBestScore = -Infinity, playedScore = -Infinity;
       ai.orderMoves(engine, legal);
       for (const m of legal) {
         const snap = engine.cloneState();
         engine.applyMoveRaw(m);
-        const rawEval = ai.minimax(engine, 1, -Infinity, Infinity, !maximizing);
+        const rawEval = ai.minimax(engine, 2, -Infinity, Infinity, !maximizing);
         engine.restoreState(snap);
         const moverEval = rawEval * sign;
         if (moverEval > bestScore) { secondBestScore = bestScore; bestScore = moverEval; }
@@ -2583,53 +2319,35 @@
 
     function updateEvaluationBar() {
       const outcome = engine.getGameOutcome();
-      const flipped = isBoardFlipped();
       let cp = 0;
-
       if (engine.history.length === 0) {
         cp = 0;
       } else if (outcome.over) {
-        if (outcome.winner === 'White') cp = 9900;
-        else if (outcome.winner === 'Black') cp = -9900;
-        else cp = 0;
+        cp = outcome.winner === 'White' ? 9900 : (outcome.winner === 'Black' ? -9900 : 0);
       } else {
         cp = ai.evaluate(engine);
       }
+      const pawns = cp / 100, clamped = Math.max(-10, Math.min(10, pawns));
+      let whitePct = engine.history.length === 0 ? 50 : (50 + 50 * (2 / (1 + Math.exp(-0.42 * clamped)) - 1));
 
-      const pawns = cp / 100;
-      const clamped = Math.max(-10, Math.min(10, pawns));
-      const whitePct = engine.history.length === 0
-        ? 50
-        : (50 + 50 * (2 / (1 + Math.exp(-0.42 * clamped)) - 1));
-
-      // Fill from bottom up for whichever player sits at the bottom of the board
-      const bottomPlayerPct = flipped ? (100 - whitePct) : whitePct;
-
-      els.evalWrap.classList.toggle('flipped-eval', flipped);
-      els.evalFill.style.height = `${bottomPlayerPct.toFixed(1)}%`;
-
-      if (Math.abs(cp) >= 9000) {
-        els.evalScore.textContent = cp > 0 ? '1-0' : '0-1';
-      } else {
-        els.evalScore.textContent = Math.abs(pawns).toFixed(1);
+      if (isBoardFlipped()) {
+        whitePct = 100 - whitePct;
       }
 
-      if (bottomPlayerPct < 45) {
-        els.evalScore.classList.add('top-advantage');
-      } else {
-        els.evalScore.classList.remove('top-advantage');
-      }
+      els.evalFill.style.height = `${whitePct.toFixed(1)}%`;
+      els.evalScore.textContent = Math.abs(cp) >= 9000 ? (cp > 0 ? '1-0' : '0-1') : Math.abs(pawns).toFixed(1);
+      els.evalScore.classList.toggle('black-advantage', whitePct < 45);
     }
 
     function triggerHint() {
       if (!state.allowHints || state.gameOver || state.aiThinking) return;
       if (state.mode === 'ai' && engine.turn !== state.humanColor) return;
 
-      const best = ai.chooseBestMove(engine, 'custom', 3000);
+      const best = ai.chooseBestMove(engine, 'custom', 3200);
       if (best) {
         state.hintMove = best;
         renderBoard();
-        showToast(`Hint: ${engine.sqToAlgebraic(best.from)} → ${engine.sqToAlgebraic(best.to)}`);
+        showToast(`Hint (3200 ELO): ${engine.sqToAlgebraic(best.from)} → ${engine.sqToAlgebraic(best.to)}`);
       }
     }
 
@@ -2664,6 +2382,26 @@
       updateMoveHistoryUI();
       updateCapturedUI();
       updateStatusUI();
+
+      // Trigger personalized celebrity commentary on EVERY single move (both human and bot)
+      if (state.mode === 'ai' && state.difficulty === 'custom' && state.customPersona) {
+        if (outcome.over) {
+          if (outcome.winner === 'Draw') updateCelebrityComment('draw');
+          else if ((outcome.winner === 'White' && state.humanColor === 'w') || (outcome.winner === 'Black' && state.humanColor === 'b')) updateCelebrityComment('humanWin');
+          else updateCelebrityComment('botWin');
+        } else if (moverColor === state.humanColor) {
+          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateCelebrityComment('humanBlunder');
+          else if (quality && quality.key === 'inaccuracy') updateCelebrityComment('humanInaccuracy');
+          else if (quality && (quality.key === 'brilliant' || quality.key === 'great')) updateCelebrityComment('humanBrilliant');
+          else if (move.capture && move.capture[1] === 'Q') updateCelebrityComment('humanCaptureQueen');
+          else if (move.isCastle) updateCelebrityComment('humanCastle');
+          else updateCelebrityComment('humanGood');
+        } else {
+          if (outcome.inCheck) updateCelebrityComment('botCheck');
+          else if (move.capture) updateCelebrityComment('botCapture');
+          else updateCelebrityComment('botNormal');
+        }
+      }
 
       if (outcome.over) handleGameOver(outcome);
       else scheduleAITurnIfNeeded();
@@ -2784,15 +2522,12 @@
 
     function updateClocksUI() {
       const flipped = isBoardFlipped();
-      const isUnlimited = state.timeControl === 0;
       const topSec = flipped ? state.whiteTime : state.blackTime;
       const botSec = flipped ? state.blackTime : state.whiteTime;
       els.topClock.textContent = formatTime(topSec);
       els.bottomClock.textContent = formatTime(botSec);
-      els.topClock.classList.toggle('unlimited-time', isUnlimited);
-      els.bottomClock.classList.toggle('unlimited-time', isUnlimited);
-      els.topClock.classList.toggle('low-time', !isUnlimited && topSec <= 30 && topSec > 0);
-      els.bottomClock.classList.toggle('low-time', !isUnlimited && botSec <= 30 && botSec > 0);
+      els.topClock.classList.toggle('low-time', state.timeControl > 0 && topSec <= 30 && topSec > 0);
+      els.bottomClock.classList.toggle('low-time', state.timeControl > 0 && botSec <= 30 && botSec > 0);
       els.topBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'w' : 'b'));
       els.bottomBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'b' : 'w'));
     }
@@ -2843,7 +2578,7 @@
           ? 'You are playing as Black.<br/>Press <strong>Start Game</strong> to begin.'
           : 'No moves played yet.<br/>Tap or drag a White piece to begin.';
         const mobileEmptyMsg = state.waitingForBlackStart
-          ? 'Tap <strong>▶ Start Game</strong> above so White can move'
+          ? 'Tap <strong>▶ Start Game</strong> below so White can move'
           : 'Tap or drag a White piece to begin';
         els.desktopMoveList.innerHTML = `<div style="color: var(--text-secondary); font-family: inherit; font-size: 12px; text-align: center; padding: 28px 12px; line-height: 1.5;">${desktopEmptyMsg}</div>`;
         els.mobileMoveTicker.innerHTML = `<span style="color: var(--text-secondary); font-family: inherit;">${mobileEmptyMsg}</span>`;
@@ -2865,20 +2600,494 @@
     }
 
     const PERSONA_MAP = {
-      andrea: { name: 'Andrea Botez', elo: 1800 },
-      alexandra: { name: 'Alexandra Botez', elo: 2050 },
-      anna: { name: 'Anna Cramling', elo: 2100 },
-      gotham: { name: 'GothamChess', elo: 2350 },
-      hikaru: { name: 'Hikaru Nakamura', elo: 2800 },
-      magnus: { name: 'Magnus Carlsen', elo: 2850 }
+      andrea: { name: 'Andrea Botez', short: 'Andrea', elo: 1800 },
+      alexandra: { name: 'Alexandra Botez', short: 'Alexandra', elo: 2050 },
+      anna: { name: 'Anna Cramling', short: 'Anna', elo: 2100 },
+      gotham: { name: 'GothamChess', short: 'Gotham', elo: 2350 },
+      hikaru: { name: 'Hikaru Nakamura', short: 'Hikaru', elo: 2800 },
+      magnus: { name: 'Magnus Carlsen', short: 'Magnus', elo: 2850 }
     };
 
-    function getDifficultyDisplayLabel() {
-      if (state.difficulty === 'easy') return 'Easy (300)';
-      if (state.difficulty === 'medium') return 'Intermediate (1200)';
-      if (state.difficulty === 'hard') return 'Hard (1800)';
-      const p = state.customPersona ? PERSONA_MAP[state.customPersona] : null;
-      return p ? `${p.name} (${state.customElo})` : `Custom (${state.customElo} ELO)`;
+    const CELEBRITY_LINES = {
+      andrea: {
+        start: [
+          "Full send! Attack mode activated!",
+          "Let's go! No passive chess today!",
+          "Hope you're ready for fireworks on the board!",
+          "Time to push every pawn and go for checkmate!"
+        ],
+        humanBlunder: [
+          "Ooh, free material! Botez Gambit reversed!",
+          "Wait, did you just hang that?! I'll take it!",
+          "Yikes, that piece was completely undefended!",
+          "Thank youuu! Adding that to my collection!"
+        ],
+        humanInaccuracy: [
+          "Hmm, are you sure about that square?",
+          "Ooh, a tiny slip—let me see how I can punish that!",
+          "Careful, you're giving me initiative!"
+        ],
+        humanBrilliant: [
+          "Whoa, okay! Respect for finding that!",
+          "Wait—that's actually super nasty!",
+          "Hold on, did you calculate all of that?!",
+          "Okay, I see you! What a tactical shot!"
+        ],
+        humanGood: [
+          "Solid move! Keeping the tension high!",
+          "Nice! You're not making this easy for me.",
+          "Ooh, good defense!",
+          "Okay, clean development!",
+          "Respect—you're covering all the key squares!",
+          "Smart move! Let's see what happens next!"
+        ],
+        humanCastle: [
+          "Castled to safety! Smart, because I was coming for your king!",
+          "Tucking the king away—let's see if it stays safe!"
+        ],
+        humanCaptureQueen: [
+          "NOOO, my queen!! Classic Botez Gambit...",
+          "I meant to sacrifice the queen! Totally planned!",
+          "Chat, clip that—I just hung my queen again!"
+        ],
+        botCapture: [
+          "Snatched! Keep your pieces defended!",
+          "Boom! One piece closer to victory.",
+          "Yoink! I'll take that!",
+          "Clearing the board for my attack!"
+        ],
+        botCheck: [
+          "Check! Nowhere to hide!",
+          "Watch your king!",
+          "Check! Feel the pressure!",
+          "Run, king, run!"
+        ],
+        botNormal: [
+          "Let's open up the board!",
+          "I'm coming straight for your king!",
+          "All my pieces are joining the party!",
+          "No retreat, only forward!",
+          "Pushing forward—time to create some chaos!",
+          "Watch out, my pieces are lining up!"
+        ],
+        humanWin: [
+          "GG! You out-tacticked me today!",
+          "Okay, rematch right now!",
+          "Well played! You completely shut down my attack!"
+        ],
+        botWin: [
+          "Let's go!! Aggressive chess pays off!",
+          "GG! That attack was unstoppable!",
+          "Checkmate energy! Good game!"
+        ],
+        draw: [
+          "A draw?! After all that chaos?! GG!",
+          "Nobody backed down—respect for the draw!"
+        ]
+      },
+      alexandra: {
+        start: [
+          "Let's keep the center tight. Good luck!",
+          "Ready when you are—play sharp!",
+          "Let's see who controls the key squares today.",
+          "Focus, structure, and clean tactics. Have fun!"
+        ],
+        humanBlunder: [
+          "That leaves a big hole in your position.",
+          "Careful—that piece was undefended.",
+          "Oof, that drops material right away.",
+          "I have to punish that oversight!"
+        ],
+        humanInaccuracy: [
+          "A bit passive—that lets me activate my pieces.",
+          "Interesting, though you had a sharper option there.",
+          "That weakens your dark squares slightly."
+        ],
+        humanBrilliant: [
+          "Very clean calculation! Well played.",
+          "Impressive! I didn't expect that move.",
+          "Super sharp tactic—you spotted the weak point!",
+          "That's tournament-level precision right there."
+        ],
+        humanGood: [
+          "Very solid! Good positional awareness.",
+          "Nice move—maintaining the balance.",
+          "You're defending all the entry squares well.",
+          "Clean and principled chess.",
+          "Good structure—hard to break through.",
+          "Accurate response, keeping everything coordinated."
+        ],
+        humanCastle: [
+          "King is safe—now the real middlegame battle begins.",
+          "Good timing on castling."
+        ],
+        humanCaptureQueen: [
+          "Ugh, walked right into that tactic!",
+          "Well, playing without a queen builds character…",
+          "Completely missed that pin on my queen!"
+        ],
+        botCapture: [
+          "I'll gladly simplify into a winning endgame.",
+          "Clean trade—up material now.",
+          "Taking control of the material balance.",
+          "Step by step, converting the advantage."
+        ],
+        botCheck: [
+          "Check! Let's see how you defend this.",
+          "Putting pressure on your king now.",
+          "Check—your king is caught in the crossfire."
+        ],
+        botNormal: [
+          "Control the open files, control the game.",
+          "Solid positional squeeze.",
+          "Improving my worst-placed piece.",
+          "Building pressure slowly on both wings.",
+          "Securing the center before launching an attack.",
+          "Let's see how you respond to this setup."
+        ],
+        humanWin: [
+          "Well played! You converted that cleanly.",
+          "GG! Your tactics were on point.",
+          "Great game—you deserved the win!"
+        ],
+        botWin: [
+          "GG! Positional pressure wins again.",
+          "Good game—keep practicing those endgames!",
+          "Thanks for the game! Solid effort."
+        ],
+        draw: [
+          "A hard-fought draw! Well played.",
+          "Super even game—neither side gave an inch."
+        ]
+      },
+      anna: {
+        start: [
+          "Hiii! Good luck and have fun!",
+          "Let's have an awesome game! Maybe the Cow opening?",
+          "Yay, chess time! Let's see what you play!",
+          "Wishing you a super fun and creative game!"
+        ],
+        humanBlunder: [
+          "Oh no! I think you missed a threat there!",
+          "Eek, thank you for the free piece!",
+          "Oopsie! Don't worry, keep fighting!",
+          "Aha! My piece was eyeing that square!"
+        ],
+        humanInaccuracy: [
+          "Ooh, interesting idea! A tiny bit risky though.",
+          "Hmm, let me see if I can sneak in now!",
+          "Not bad, not bad—let's see what happens!"
+        ],
+        humanBrilliant: [
+          "Whaaat?! That move is so cool!",
+          "Ooh, super sneaky! Amazing find!",
+          "No way!! You found the best tactic on the board!",
+          "So creative! I love that move!"
+        ],
+        humanGood: [
+          "Ooh, really nice move!",
+          "Super solid! You're playing great!",
+          "I like that setup a lot!",
+          "Very nice! You're making this super interesting!",
+          "Great coordination with your pieces!",
+          "Ooh, clean move! Let's keep going!"
+        ],
+        humanCastle: [
+          "Cozy king! Safety first!",
+          "Nice castle! Now your rook can join the game!"
+        ],
+        humanCaptureQueen: [
+          "Nooo, my queen! You got me!",
+          "Oh no, I walked right into it!",
+          "Bye-bye queen… time for a miracle comeback!"
+        ],
+        botCapture: [
+          "Yay, got a piece! Let's keep going!",
+          "Nice! My pieces are working together!",
+          "Snip! Clearing some space on the board.",
+          "Ooh, a freebie! Thank you!"
+        ],
+        botCheck: [
+          "Check! Exciting position!",
+          "Watch out, check!",
+          "Peekaboo—check!",
+          "Check! Where will your king go?"
+        ],
+        botNormal: [
+          "I love this position, so many fun ideas!",
+          "Let's bring all the pieces into the game!",
+          "Planning a sneaky little maneuver…",
+          "Chess is so fun when the board is dynamic!",
+          "Developing smoothly and eyeing the center!",
+          "Let's see what happens if I put my piece here!"
+        ],
+        humanWin: [
+          "Yay, congrats!! You played so well!",
+          "GG! That was super fun!",
+          "Amazing job! You totally earned that win!"
+        ],
+        botWin: [
+          "GG!! Thank you for playing with me!",
+          "Woohoo! What a fun game!",
+          "Good game! Let's play again sometime!"
+        ],
+        draw: [
+          "A draw! That was such a close game, GG!",
+          "Tie game! Both of us played super hard!"
+        ]
+      },
+      gotham: {
+        start: [
+          "Welcome to Guess the ELO—show me what you've got!",
+          "Remember: always look for checks, captures, and attacks!",
+          "Let's see if you play like a 600 or a Grandmaster!",
+          "Develop your pieces and don't hang anything on move 4!"
+        ],
+        humanBlunder: [
+          "OH NO! What is that move?! Danger levels!!",
+          "You just hung a piece in one move!",
+          "Stop the clock! Why did you put that there?!",
+          "That's going straight into the blunder compilation!"
+        ],
+        humanInaccuracy: [
+          "A little bit sus… you had a much cleaner move!",
+          "Not a blunder, but definitely giving me free tempo.",
+          "Your pieces are stepping on each other's toes!"
+        ],
+        humanBrilliant: [
+          "AND HE SACRIFICES… EVERYTHING!! Brilliant move!",
+          "Stop the video! That move is pure genius!",
+          "Okay, who gave you Stockfish?! What a shot!",
+          "OH! Look at the geometry on that move!!"
+        ],
+        humanGood: [
+          "Textbook! Clean, principled chess.",
+          "Very nice—following all the opening principles.",
+          "Okay, I respect that move. Solid.",
+          "Good move! No hanging pieces so far.",
+          "Developing with purpose—I like it!",
+          "Keeping the position together nicely."
+        ],
+        humanCastle: [
+          "Castled! King safety is paramount!",
+          "Finally getting the king out of the center—good job."
+        ],
+        humanCaptureQueen: [
+          "OH NO, MY QUEEN!! Anyway…",
+          "I totally sacrificed my queen for positional compensation.",
+          "Wait… my queen was trapped?! Unbelievable!"
+        ],
+        botCapture: [
+          "Takes, takes, and I'm just up material!",
+          "Free real estate! Thank you very much.",
+          "Danger levels! I'll take the bigger piece.",
+          "Simplifying straight into a winning endgame."
+        ],
+        botCheck: [
+          "CHECK! King safety is non-existent!",
+          "Danger levels! Your king is wide open!",
+          "CHECK! Always look for forcing moves!",
+          "BONGCLOUD ENERGY—check!!"
+        ],
+        botNormal: [
+          "Develop your pieces, castle early, dominate the center.",
+          "Look at that pawn structure—textbook!",
+          "Applying maximum pressure on the weak squares.",
+          "Every piece is coordinated like a symphony.",
+          "Controlling the center like a true Grandmaster.",
+          "Watch the diagonals—everything is opening up!"
+        ],
+        humanWin: [
+          "Incredible game! Definitely 2400 ELO energy!",
+          "GG! You played like a true tactician!",
+          "Take a bow—you dismantled my entire setup!"
+        ],
+        botWin: [
+          "GG! Subscribe for more tactical masterclasses!",
+          "And THAT is why you never neglect king safety!",
+          "Checkmate! Review the game and spot the tactics!"
+        ],
+        draw: [
+          "A draw?! Honestly, we both deserve credit for that fight.",
+          "Dead even! Not a single pawn left to push."
+        ]
+      },
+      hikaru: {
+        start: [
+          "Alright, let's play. Don't blunder anything early!",
+          "Let's go, let's go—keep up the pace!",
+          "Let's see what opening you're going for today.",
+          "Fast calculation, clean execution. Let's play!"
+        ],
+        humanBlunder: [
+          "Wait, what?! You just blundered! Easy game!",
+          "Takes, takes—I'm completely winning here!",
+          "Oh, you missed that! It's just over now.",
+          "Yeah, that loses on the spot. Thank you!"
+        ],
+        humanInaccuracy: [
+          "Hmm, not the most accurate. I'm slightly better now.",
+          "Okay, that gives me a nice edge on the dark squares.",
+          "A bit slow—I can take over the center now."
+        ],
+        humanBrilliant: [
+          "Okay, okay, nice find! Very tricky.",
+          "Actually, that's a really good move.",
+          "Wait—did you see that whole line? Pretty clean!",
+          "Alright, fair play, that was the best move."
+        ],
+        humanGood: [
+          "Yep, best move. Logical.",
+          "Solid, very solid. Keeping things tight.",
+          "Good move—no weaknesses yet.",
+          "Okay, very natural move.",
+          "Makes sense, keeping everything defended.",
+          "Clean move, let's keep going."
+        ],
+        humanCastle: [
+          "Castled, standard stuff. Now let's play real chess.",
+          "King tucked away—now watch the kingside."
+        ],
+        humanCaptureQueen: [
+          "Wait—I missed that! Okay, fine, still playable… maybe.",
+          "Chat, did you see that tactic?!",
+          "Ugh, I played way too fast there!"
+        ],
+        botCapture: [
+          "Takes, takes, takes—I'm just up a clean piece.",
+          "Simple chess, clean conversion.",
+          "Captures, captures, and my position plays itself.",
+          "Just trading down into an easy win."
+        ],
+        botCheck: [
+          "Check! You have zero counterplay.",
+          "Check—now your king has to run.",
+          "Check, check, and everything is collapsing.",
+          "Check! Notice how all your pieces are tied down."
+        ],
+        botNormal: [
+          "I don't even need to calculate, it's just winning.",
+          "Keep squeezing, no counterplay at all.",
+          "Everything is protected, zero weaknesses.",
+          "Just improving the position—takes, takes, easy.",
+          "Super comfortable position for me here.",
+          "No rush, just slowly taking over the board."
+        ],
+        humanWin: [
+          "Okay, you played really well. GG!",
+          "Respect—you didn't give me a single chance.",
+          "GGs! Very clean tactical game from you."
+        ],
+        botWin: [
+          "GGs! Too fast, too clean.",
+          "Completely winning from move 15. GGs!",
+          "Good game—just too much pressure in the end."
+        ],
+        draw: [
+          "Draw? Fine, I'll take the half point. GGs!",
+          "Nothing left on the board. Solid draw, GGs!"
+        ]
+      },
+      magnus: {
+        start: [
+          "Interesting setup. Let's see how long you can hold on.",
+          "Play whatever you like—I'll outplay you in the endgame.",
+          "Let's play. I'm always looking for a small edge.",
+          "Show me your preparation."
+        ],
+        humanBlunder: [
+          "That's a serious mistake. I won't let you off the hook.",
+          "You gave me an inch, and now the position is lost.",
+          "A fatal slip. From here, the technique is straightforward.",
+          "You can't afford inaccuracies like that against me."
+        ],
+        humanInaccuracy: [
+          "A slight concession. My endgame prospects just improved.",
+          "Subtle, but that gives me long-term pressure.",
+          "You're slowly drifting into a passive defense."
+        ],
+        humanBrilliant: [
+          "Not bad at all. You actually found the only move.",
+          "Impressive—that's engine-level precision.",
+          "Well spotted. Most players would have missed that resource.",
+          "Very sharp. You're making me work for this."
+        ],
+        humanGood: [
+          "Accurate. You're holding the balance well.",
+          "Good move. No easy breakthroughs for me yet.",
+          "Sound defense.",
+          "Logical continuation. Let's see your next idea.",
+          "Solid enough, keeping the position together.",
+          "Reasonable move. Now the real maneuvering starts."
+        ],
+        humanCastle: [
+          "Sensible. Now let's see how you handle the maneuvering.",
+          "King is safe, but the real test is still ahead."
+        ],
+        humanCaptureQueen: [
+          "Well… that makes things slightly more challenging.",
+          "A rare slip. Let's see if you can actually finish it.",
+          "Interesting. Now I have to play for tricks."
+        ],
+        botCapture: [
+          "Just a small advantage… which is all I need.",
+          "Every pawn counts in the endgame.",
+          "Removing your best defender.",
+          "Simplifying into a technically winning position."
+        ],
+        botCheck: [
+          "Check. Your coordination is falling apart.",
+          "Check—now every move is forced.",
+          "Check. There is no comfortable square left.",
+          "Check—the squeeze is complete."
+        ],
+        botNormal: [
+          "Slowly improving every piece. No rush.",
+          "You have no active plan left.",
+          "Patience is everything in positions like this.",
+          "Creating a second weakness on the other side of the board.",
+          "Tightening the grip square by square.",
+          "Let's see how you handle a long positional grind."
+        ],
+        humanWin: [
+          "Well played. You earned that win today.",
+          "Impressive game—you outcalculated me.",
+          "Congratulations. You played with real precision."
+        ],
+        botWin: [
+          "As expected. Good effort, though.",
+          "Once we reached the endgame, it was over.",
+          "Good game. Keep studying those rook endgames."
+        ],
+        draw: [
+          "A solid draw. You defended very well.",
+          "Neither of us broke through. Well played.",
+          "A fair result. Let's play another one."
+        ]
+      }
+    };
+
+    let lastCelebLine = '';
+    function updateCelebrityComment(eventKey) {
+      const bar = $('celeb-comment-bar'), tag = $('celeb-comment-tag'), txt = $('celeb-comment-text');
+      if (!bar || !tag || !txt) return;
+      const isCelebActive = state.mode === 'ai' && state.difficulty === 'custom' && state.customPersona && CELEBRITY_LINES[state.customPersona];
+      if (!isCelebActive) {
+        bar.classList.remove('visible');
+        return;
+      }
+      const persona = PERSONA_MAP[state.customPersona];
+      const pool = CELEBRITY_LINES[state.customPersona][eventKey] || CELEBRITY_LINES[state.customPersona].botNormal;
+      let line = pool[Math.floor(Math.random() * pool.length)];
+      if (pool.length > 1 && line === lastCelebLine) {
+        line = pool[(pool.indexOf(line) + 1) % pool.length];
+      }
+      lastCelebLine = line;
+      tag.textContent = `💬 ${persona.short}:`;
+      txt.textContent = `"${line}"`;
+      const wasHidden = !bar.classList.contains('visible');
+      bar.classList.add('visible');
+      if (wasHidden) resizeBoard(true);
     }
 
     function updateStatusUI() {
@@ -2904,6 +3113,14 @@
       $('btn-start-black-match').style.display = (state.waitingForBlackStart && !state.gameOver) ? 'inline-flex' : 'none';
 
       updateClocksUI();
+    }
+
+    function getDifficultyDisplayLabel() {
+      if (state.difficulty === 'easy') return 'Easy (300)';
+      if (state.difficulty === 'medium') return 'Intermediate (1200)';
+      if (state.difficulty === 'hard') return 'Hard (1800)';
+      const p = state.customPersona ? PERSONA_MAP[state.customPersona] : null;
+      return p ? `${p.name} (${state.customElo})` : `Custom (${state.customElo} ELO)`;
     }
 
     function handleGameOver(outcome) {
@@ -3008,6 +3225,12 @@
       els.modalPromo.classList.remove('open');
 
       updateAssistControlsVisibility();
+      if (state.mode === 'ai' && state.difficulty === 'custom' && state.customPersona) {
+        updateCelebrityComment('start');
+      } else {
+        $('celeb-comment-bar').classList.remove('visible');
+      }
+      resizeBoard(true);
       renderBoard();
       updateMoveHistoryUI();
       updateCapturedUI();
@@ -3018,13 +3241,10 @@
       }
     }
 
-    const SOUND_ICON_ON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
-    const SOUND_ICON_OFF = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" stroke="#94a3b8"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="#64748b" opacity="0.45"/><line x1="3" y1="3" x2="21" y2="21" stroke="#ef4444" stroke-width="2.5"/></svg>`;
-
     function toggleSound() {
       sfx.enabled = !sfx.enabled;
-      const iconHTML = sfx.enabled ? SOUND_ICON_ON : SOUND_ICON_OFF;
-      $('btn-sound-mobile').innerHTML = $('btn-sound-desktop').innerHTML = iconHTML;
+      const icon = sfx.enabled ? '🔊' : '🔇';
+      $('btn-sound-mobile').textContent = $('btn-sound-desktop').textContent = icon;
       showToast(sfx.enabled ? 'Sound enabled' : 'Sound muted');
     }
 
@@ -3035,9 +3255,6 @@
     $('btn-new-mobile').addEventListener('click', openConfig);
     $('btn-new-desktop').addEventListener('click', openConfig);
     $('btn-close-config').addEventListener('click', () => els.modalConfig.classList.remove('open'));
-    els.modalConfig.addEventListener('click', e => {
-      if (e.target === els.modalConfig) els.modalConfig.classList.remove('open');
-    });
 
     document.querySelectorAll('#mode-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; syncConfigModalUI(); }));
     document.querySelectorAll('#difficulty-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.difficulty = b.dataset.diff; syncConfigModalUI(); }));
