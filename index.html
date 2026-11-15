@@ -2194,17 +2194,20 @@
       if (dragState && dragState.active && !force) return;
       const isDesktop = window.innerWidth >= 900;
       const vw = document.documentElement.clientWidth || window.innerWidth;
-      const vh = Math.max(window.innerHeight, window.visualViewport ? window.visualViewport.height : 0);
+      const visualH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const vh = isDesktop ? Math.min(window.innerHeight, visualH || window.innerHeight) : Math.max(window.innerHeight, visualH || 0);
       const celebEl = $('celeb-comment-bar');
       const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
 
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const extraTopResign = isFriend ? 46 : 0;
-        const celebExtraH = hasCelebComment ? 46 : 0;
+        const extraTopResign = isFriend ? 50 : 0;
+        const celebExtraH = hasCelebComment ? 48 : 0;
+        const gapsH = (isFriend ? 5 : 3) * 8 + (hasCelebComment ? 8 : 0);
+        const verticalMargin = 36;
         const availW = vw - 340 - 26 - 72;
-        const availH = vh - 132 - extraTopResign - celebExtraH - 44;
+        const availH = vh - 44 - 44 - 42 - extraTopResign - celebExtraH - gapsH - verticalMargin;
         boardSize = Math.floor(Math.min(availW, availH, 640));
       } else {
         // Measure actual surrounding mobile chrome height so the board maximizes available screen real estate in both Safari and Standalone PWA mode
@@ -2242,10 +2245,12 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const celebExtraH = hasCelebComment ? 46 : 0;
-        const totalColumnHeight = boardSize + 44 + 44 + 42 + (isFriend ? 46 : 0) + celebExtraH + (isFriend ? 32 : 24);
-        $('desktop-sidebar').style.height = Math.min(totalColumnHeight, vh - 32) + 'px';
-        $('desktop-sidebar').style.maxHeight = (vh - 32) + 'px';
+        const celebExtraH = hasCelebComment ? 48 : 0;
+        const gapsH = (isFriend ? 5 : 3) * 8 + (hasCelebComment ? 8 : 0);
+        const totalColumnHeight = boardSize + 44 + 44 + 42 + (isFriend ? 50 : 0) + celebExtraH + gapsH;
+        const maxSidebarH = Math.max(320, vh - 36);
+        $('desktop-sidebar').style.height = Math.min(totalColumnHeight, maxSidebarH) + 'px';
+        $('desktop-sidebar').style.maxHeight = maxSidebarH + 'px';
 
         const barWidth = (boardSize + 8 + 18) + 'px';
         els.topBar.style.width = barWidth;
