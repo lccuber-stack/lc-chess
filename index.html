@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LC Chess" />
   <meta name="theme-color" content="#090d16" />
-  <!-- Crisp Staunton Knight App Icon on Full-Bleed Emerald Gradient -->
-  <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23065f46'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' fill='url(%23bg)'/%3E%3Cg transform='translate(52, 44) scale(9.05)'%3E%3Cpath d='M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18' fill='%23ffffff' stroke='%23090d16' stroke-width='2.0' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10' fill='%23ffffff' stroke='%23090d16' stroke-width='2.0' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 21.8,10.4 L 24.4,17.8 L 22.8,18.6 L 20.6,10.8 Z' fill='%23ffffff'/%3E%3Ccircle cx='9.2' cy='25.5' r='0.95' fill='%23090d16'/%3E%3Cellipse cx='14.6' cy='15.6' rx='1.0' ry='1.65' transform='rotate(28 14.6 15.6)' fill='%23090d16'/%3E%3Cpath d='M 12.5,39 L 38.5,39 L 38.5,42.5 L 12.5,42.5 Z' fill='%23a7f3d0' stroke='%23090d16' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E" />
+  <!-- Crisp Staunton Knight App Icon (No dark neck line, full emerald gradient) -->
+  <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23065f46'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23bg)'/%3E%3Cg transform='translate(68, 58) scale(8.4)'%3E%3Cpath d='M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z' fill='%23ffffff' stroke='%23090d16' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='9' cy='25.5' r='0.9' fill='%23090d16'/%3E%3Cellipse cx='14.5' cy='15.5' rx='0.95' ry='1.75' transform='rotate(28 14.5 15.5)' fill='%23090d16'/%3E%3Cpath d='M 12.5,39 L 38.5,39 L 38.5,42.5 L 12.5,42.5 Z' fill='%23a7f3d0' stroke='%23090d16' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E" />
   <link id="apple-touch-icon" rel="apple-touch-icon" sizes="512x512" href="" />
   <style>
     /* =========================================================================
@@ -59,6 +59,7 @@
 
     html, body {
       width: 100%;
+      height: 100%;
       height: 100dvh;
       overflow: hidden;
       overscroll-behavior: none;
@@ -95,29 +96,28 @@
     #app {
       display: flex;
       flex-direction: column;
-      align-items: center;
       width: 100%;
+      height: 100%;
       height: 100dvh;
       padding-top: max(12px, env(safe-area-inset-top, 0px));
-      padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
-      padding-left: max(12px, env(safe-area-inset-left, 0px));
-      padding-right: max(12px, env(safe-area-inset-right, 0px));
+      padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+      padding-left: env(safe-area-inset-left, 0px);
+      padding-right: env(safe-area-inset-right, 0px);
       overflow: hidden;
       overscroll-behavior: none;
       touch-action: none;
     }
 
+    /* Top bar placed inside board-column on mobile so it stays crisp below iOS status bar blur */
     #top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      max-width: 520px;
       height: 46px;
       min-height: 46px;
-      margin: 0 auto;
       padding: 0 10px;
-      background: var(--bg-surface);
+      background: #111827;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       gap: 8px;
@@ -128,7 +128,7 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
       font-weight: 700;
       font-size: 16px;
       letter-spacing: -0.02em;
@@ -140,7 +140,7 @@
       height: 30px;
       border-radius: 9px;
       background: linear-gradient(135deg, #10b981 0%, #065f46 100%);
-      border: 1px solid rgba(52, 211, 153, 0.35);
+      border: 1px solid rgba(52, 211, 153, 0.45);
       display: grid;
       place-items: center;
       box-shadow: 0 2px 10px var(--accent-emerald-glow);
@@ -150,7 +150,7 @@
 
     .brand-icon svg { width: 22px; height: 22px; display: block; }
 
-    .top-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .top-actions { display: flex; align-items: center; gap: 6px; }
 
     .icon-btn {
       display: inline-flex;
@@ -163,7 +163,7 @@
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       color: var(--text-primary);
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 600;
       transition: background 0.15s ease, transform 0.1s ease;
     }
@@ -171,8 +171,8 @@
     .icon-btn:active { transform: scale(0.96); }
 
     .sound-toggle-btn {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       padding: 0;
       flex-shrink: 0;
     }
@@ -182,6 +182,9 @@
       color: #042f2e;
       border-color: transparent;
       font-weight: 700;
+      height: 36px;
+      padding: 0 13px;
+      font-size: 13px;
     }
     .icon-btn.primary:hover { background: #34d399; }
 
@@ -192,9 +195,9 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 520px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 4px 0;
+      padding: 4px 12px;
       gap: 6px;
       overflow: hidden;
       min-height: 0;
@@ -206,6 +209,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
+      max-width: 540px;
       flex: 0 1 auto;
       min-height: 0;
       gap: 6px;
@@ -216,9 +220,9 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      height: 28px;
-      min-height: 28px;
-      padding: 0 10px;
+      height: 30px;
+      min-height: 30px;
+      padding: 0 12px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -234,13 +238,13 @@
       width: 100%;
       height: 40px;
       min-height: 40px;
-      padding: 0 10px;
+      padding: 0 12px;
       border-radius: var(--radius-md);
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       gap: 8px;
-      flex-shrink: 0;
       transition: transform 0.25s ease;
+      flex-shrink: 0;
     }
 
     .player-bar.rotated-180 { transform: rotate(180deg); }
@@ -248,15 +252,15 @@
     .player-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
       min-width: 0;
       flex: 1;
     }
 
     .player-avatar {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       display: grid;
@@ -265,8 +269,8 @@
       flex-shrink: 0;
     }
     .player-avatar svg {
-      width: 18px;
-      height: 18px;
+      width: 19px;
+      height: 19px;
       filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
 
@@ -306,7 +310,7 @@
       align-items: center;
       gap: 4px;
       height: 14px;
-      margin-top: 1px;
+      margin-top: 2px;
       font-size: 11px;
       color: var(--text-secondary);
       overflow: hidden;
@@ -341,7 +345,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 66px;
+      min-width: 68px;
       height: 28px;
       padding: 0 8px;
       border-radius: var(--radius-sm);
@@ -354,8 +358,8 @@
       letter-spacing: 0.03em;
       flex-shrink: 0;
     }
-    .clock-box.unlimited-time {
-      font-size: 22px;
+    .clock-box.infinity-mode {
+      font-size: 20px;
       line-height: 1;
       letter-spacing: 0;
     }
@@ -377,8 +381,8 @@
       justify-content: center;
       gap: 8px;
       width: 100%;
-      height: 38px;
-      min-height: 38px;
+      height: 40px;
+      min-height: 40px;
       padding: 0 12px;
       border-radius: var(--radius-md);
       background: rgba(239, 68, 68, 0.14);
@@ -390,29 +394,23 @@
       flex-shrink: 0;
       transition: background 0.15s ease, transform 0.2s ease;
     }
-    .top-resign-btn:hover:not(:disabled) {
-      background: rgba(239, 68, 68, 0.24);
-      border-color: rgba(239, 68, 68, 0.65);
-      color: #fecaca;
-    }
-    .top-resign-btn.rotated-180 {
-      transform: rotate(180deg);
-    }
-    /* Bot & Celebrity Personality Commentary Bar — fixed height prevents board vertical shift */
+    .top-resign-btn.rotated-180 { transform: rotate(180deg); }
+
+    /* Fixed-height Bot & Celebrity Personality Commentary Bar so board never shifts */
     .celeb-comment-bar {
       display: none;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       width: 100%;
       height: 40px;
       min-height: 40px;
       max-height: 40px;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: var(--radius-sm);
       background: rgba(16, 185, 129, 0.09);
       border: 1px solid rgba(16, 185, 129, 0.28);
-      font-size: 11.5px;
-      line-height: 1.28;
+      font-size: 12px;
+      line-height: 1.25;
       color: #e2e8f0;
       flex-shrink: 0;
       overflow: hidden;
@@ -429,11 +427,11 @@
     .celeb-comment-text {
       color: #f1f5f9;
       font-style: italic;
-      overflow-wrap: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
-      overflow: hidden;
     }
 
     #board-bottom-resign-wrap {
@@ -455,7 +453,6 @@
       justify-content: center;
       gap: 8px;
       flex: 0 0 auto;
-      width: 100%;
     }
 
     /* Live Evaluation Bar */
@@ -668,8 +665,7 @@
       flex-direction: column;
       align-items: stretch;
       width: 100%;
-      margin: 0 auto;
-      gap: 5px;
+      gap: 6px;
       flex-shrink: 0;
     }
 
@@ -678,8 +674,8 @@
       align-items: center;
       gap: 6px;
       width: 100%;
-      height: 28px;
-      padding: 0 10px;
+      height: 30px;
+      padding: 0 12px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -697,7 +693,7 @@
       justify-content: center;
       width: 100%;
       gap: 8px;
-      height: 38px;
+      height: 40px;
     }
 
     .action-btn {
@@ -724,8 +720,8 @@
 
     .resign-btn-lg {
       width: 100%;
-      height: 38px;
-      min-height: 38px;
+      height: 40px;
+      min-height: 40px;
       flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
@@ -831,7 +827,7 @@
       background: rgba(9, 13, 22, 0.45);
     }
     .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .footer-grid .action-btn { height: 42px; min-height: 42px; }
+    .footer-grid .action-btn { height: 38px; }
 
     .btn-full-primary {
       width: 100%;
@@ -856,13 +852,13 @@
         height: 100%;
         height: 100dvh;
         padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
         justify-content: center;
       }
       #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
       #main-workspace {
         flex: 0 1 auto;
         height: 100%;
-        max-width: 1280px;
         max-height: 100%;
         flex-direction: row;
         align-items: center;
@@ -870,11 +866,10 @@
         padding: 12px 24px;
         gap: 24px;
       }
-      #board-column { width: auto; height: auto; flex: 0 1 auto; justify-content: center; gap: 8px; }
-      #board-and-eval { flex: 0 0 auto; width: auto; }
+      #board-column { width: auto; max-width: none; flex: 0 1 auto; gap: 8px; }
       #desktop-sidebar { display: flex; }
       .player-bar { height: 44px; min-height: 44px; padding: 0 14px; }
-      .resign-btn-lg, .top-resign-btn { height: 42px; min-height: 42px; }
+      .top-resign-btn { height: 40px; min-height: 40px; }
     }
 
     .modal-backdrop {
@@ -912,7 +907,6 @@
     .close-modal-btn {
       width: 38px;
       height: 38px;
-      padding: 0;
       border-radius: 50%;
       background: var(--bg-elevated);
       border: 1px solid var(--border-strong);
@@ -920,9 +914,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 0;
       line-height: 1;
       flex-shrink: 0;
     }
+    .close-modal-btn svg { display: block; }
     .close-modal-btn:hover { background: var(--bg-hover); }
 
     .config-section { display: flex; flex-direction: column; gap: 8px; }
@@ -943,28 +939,35 @@
       background: var(--bg-elevated);
       border: 1.5px solid transparent;
       text-align: center;
-      gap: 2px;
+      gap: 3px;
     }
     .seg-btn:hover { background: var(--bg-hover); }
     .seg-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--accent-emerald); color: #ffffff; }
 
-    .seg-btn-main { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 700; }
+    .seg-btn-main { display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-size: 13px; font-weight: 700; }
+    .seg-btn-main svg { flex-shrink: 0; }
     .seg-btn-sub { font-size: 10px; color: var(--text-secondary); }
-    .seg-btn.active .seg-btn-sub { color: #6ee7b7; }
-    .seg-btn[data-time="0"] .seg-btn-sub {
-      font-size: 16px;
-      line-height: 1;
+    .seg-btn-sub.infinity-sub {
+      font-size: 18px;
+      line-height: 0.85;
       font-weight: 700;
+      margin-top: 1px;
     }
+    .seg-btn.active .seg-btn-sub { color: #6ee7b7; }
 
-    .persona-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr; gap: 8px; }
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 1fr;
+      gap: 8px;
+    }
     .persona-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
       min-height: 52px;
       height: 100%;
-      padding: 8px 11px;
+      padding: 9px 11px;
       border-radius: var(--radius-md);
       background: var(--bg-elevated);
       border: 1.5px solid transparent;
@@ -973,7 +976,10 @@
     }
     .persona-btn:hover { background: var(--bg-hover); }
     .persona-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--accent-emerald); }
-    .persona-name { font-size: 12.5px; font-weight: 700; line-height: 1.2; color: var(--text-primary); }
+    .persona-left { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+    .persona-icon { width: 22px; height: 22px; flex-shrink: 0; display: grid; place-items: center; }
+    .persona-icon svg { width: 22px; height: 22px; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.65)); }
+    .persona-name { font-size: 12.5px; font-weight: 700; color: var(--text-primary); line-height: 1.22; }
     .persona-elo { font-size: 11px; font-weight: 700; font-family: "SF Mono", Menlo, monospace; color: var(--text-secondary); background: rgba(9, 13, 22, 0.55); padding: 2px 6px; border-radius: 6px; flex-shrink: 0; }
     .persona-btn.active .persona-elo { color: #6ee7b7; background: rgba(16, 185, 129, 0.2); }
 
@@ -991,11 +997,8 @@
 
     .elo-stepper-controls { display: flex; align-items: center; gap: 8px; }
     .elo-step-btn {
-      width: 34px;
-      height: 34px;
-      min-width: 34px;
-      min-height: 34px;
-      padding: 0;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       background: #0b1120;
       border: 1px solid var(--border-strong);
@@ -1003,9 +1006,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 0;
       line-height: 1;
       flex-shrink: 0;
     }
+    .elo-step-btn svg { display: block; }
     .elo-step-btn:hover { background: var(--bg-hover); }
 
     .elo-range-input {
@@ -1117,11 +1122,9 @@
           <div class="brand">
             <div class="brand-icon" aria-hidden="true">
               <svg viewBox="0 0 45 45">
-                <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M 21.8,10.4 L 24.4,17.8 L 22.8,18.6 L 20.6,10.8 Z" fill="#ffffff"/>
-                <circle cx="9.2" cy="25.5" r="0.95" fill="#090d16"/>
-                <ellipse cx="14.6" cy="15.6" rx="1.0" ry="1.65" transform="rotate(28 14.6 15.6)" fill="#090d16"/>
+                <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="9" cy="25.5" r="0.7" fill="#090d16"/>
+                <ellipse cx="14.5" cy="15.5" rx="0.85" ry="1.6" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
                 <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
               </svg>
             </div>
@@ -1216,11 +1219,9 @@
             <div class="brand">
               <div class="brand-icon" aria-hidden="true">
                 <svg viewBox="0 0 45 45">
-                  <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M 21.8,10.4 L 24.4,17.8 L 22.8,18.6 L 20.6,10.8 Z" fill="#ffffff"/>
-                  <circle cx="9.2" cy="25.5" r="0.95" fill="#090d16"/>
-                  <ellipse cx="14.6" cy="15.6" rx="1.0" ry="1.65" transform="rotate(28 14.6 15.6)" fill="#090d16"/>
+                  <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="9" cy="25.5" r="0.7" fill="#090d16"/>
+                  <ellipse cx="14.5" cy="15.5" rx="0.85" ry="1.6" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
                   <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
                 </svg>
               </div>
@@ -1272,12 +1273,10 @@
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div class="brand-icon" style="width: 36px; height: 36px; border-radius: 10px;">
-            <svg viewBox="0 0 45 45" style="width: 26px; height: 26px;">
-              <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M 21.8,10.4 L 24.4,17.8 L 22.8,18.6 L 20.6,10.8 Z" fill="#ffffff"/>
-              <circle cx="9.2" cy="25.5" r="0.95" fill="#090d16"/>
-              <ellipse cx="14.6" cy="15.6" rx="1.0" ry="1.65" transform="rotate(28 14.6 15.6)" fill="#090d16"/>
+            <svg viewBox="0 0 45 45">
+              <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="25.5" r="0.7" fill="#090d16"/>
+              <ellipse cx="14.5" cy="15.5" rx="0.85" ry="1.6" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
               <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
             </svg>
           </div>
@@ -1287,10 +1286,7 @@
           </div>
         </div>
         <button id="btn-close-config" class="close-modal-btn" aria-label="Close">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
 
@@ -1298,14 +1294,14 @@
         <span class="config-label">Opponent</span>
         <div id="mode-selector" class="seg-grid-2">
           <button class="seg-btn active" data-mode="ai">
-            <span class="seg-btn-main" style="gap: 8px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
               <span>vs Computer</span>
             </span>
             <span class="seg-btn-sub">100 – 3000 ELO</span>
           </button>
           <button class="seg-btn" data-mode="friend">
-            <span class="seg-btn-main" style="gap: 8px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               <span>vs Friend</span>
             </span>
@@ -1318,28 +1314,28 @@
         <span class="config-label">Computer Strength</span>
         <div id="difficulty-selector" class="seg-grid-4">
           <button class="seg-btn" data-diff="easy">
-            <span class="seg-btn-main" style="gap: 7px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
               <span>Easy</span>
             </span>
             <span class="seg-btn-sub">300 ELO</span>
           </button>
           <button class="seg-btn active" data-diff="medium">
-            <span class="seg-btn-main" style="gap: 7px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
               <span>Intermediate</span>
             </span>
             <span class="seg-btn-sub">1200 ELO</span>
           </button>
           <button class="seg-btn" data-diff="hard">
-            <span class="seg-btn-main" style="gap: 7px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
               <span>Hard</span>
             </span>
             <span class="seg-btn-sub">1800 ELO</span>
           </button>
           <button class="seg-btn" data-diff="custom">
-            <span class="seg-btn-main" style="gap: 7px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
               <span>Custom</span>
             </span>
@@ -1357,16 +1353,11 @@
           </div>
           <div class="elo-stepper-controls">
             <button type="button" id="btn-elo-minus" class="elo-step-btn" aria-label="Decrease ELO">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
             <input type="range" id="custom-elo-slider" class="elo-range-input" min="100" max="3000" step="100" value="1500" aria-label="Custom ELO Rating" />
             <button type="button" id="btn-elo-plus" class="elo-step-btn" aria-label="Increase ELO">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
           </div>
         </div>
@@ -1374,44 +1365,44 @@
         <span class="config-label" style="margin-top: 4px;">Or Select Player Preset (Sorted by ELO)</span>
         <div id="persona-selector" class="persona-grid">
           <button class="persona-btn" data-persona="andrea" data-elo="1800">
-            <span class="persona-name" style="display: inline-flex; align-items: center; gap: 7px;">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="flex-shrink: 0; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 H 34 C 34,31.58 29.59,27.09 26.59,26.03 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z" fill="#ffffff" stroke="#273244" stroke-width="1.5" stroke-linecap="round"/></svg>
-              <span>Andrea Botez</span>
+            <span class="persona-left">
+              <span class="persona-icon"><svg viewBox="0 0 45 45"><path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 H 34 C 34,31.58 29.59,27.09 26.59,26.03 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z" fill="#ffffff" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+              <span class="persona-name">Andrea Botez</span>
             </span>
             <span class="persona-elo">1800</span>
           </button>
           <button class="persona-btn" data-persona="alexandra" data-elo="2050">
-            <span class="persona-name" style="display: inline-flex; align-items: center; gap: 7px;">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="flex-shrink: 0; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="#ffffff" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/><path d="M 34,14 L 31,17 L 14,17 L 11,14"/><path d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"/><path d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5"/></g></svg>
-              <span>Alexandra Botez</span>
+            <span class="persona-left">
+              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="#ffffff" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/><path d="M 34,14 L 31,17 L 14,17 L 11,14"/><path d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"/><path d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5"/></g></svg></span>
+              <span class="persona-name">Alexandra Botez</span>
             </span>
             <span class="persona-elo">2050</span>
           </button>
           <button class="persona-btn" data-persona="anna" data-elo="2100">
-            <span class="persona-name" style="display: inline-flex; align-items: center; gap: 7px;">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="flex-shrink: 0; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff"/><path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff"/><circle cx="14.5" cy="15.5" r="1.2" fill="#273244"/></g></svg>
-              <span>Anna Cramling</span>
+            <span class="persona-left">
+              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff"/><path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff"/></g></svg></span>
+              <span class="persona-name">Anna Cramling</span>
             </span>
             <span class="persona-elo">2100</span>
           </button>
           <button class="persona-btn" data-persona="gotham" data-elo="2350">
-            <span class="persona-name" style="display: inline-flex; align-items: center; gap: 7px;">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="flex-shrink: 0; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g fill="#ffffff" stroke-linecap="butt"><path d="M 9,36 C 12.39,35.03 19.11,36.43 22.5,34 C 25.89,36.43 32.61,35.03 36,36 C 36,36 37.65,36.54 39,38 C 38.32,38.97 37.35,38.99 36,38.5 C 32.61,37.53 25.89,38.96 22.5,37.5 C 19.11,38.96 12.39,37.53 9,38.5 C 7.646,38.99 6.677,38.97 6,38 C 7.354,36.06 9,36 9,36 z"/><path d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,30 30,30 C 30,27.5 27.5,26 27.5,26 C 33,24.5 33.5,14.5 22.5,10.5 C 11.5,14.5 12,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32 z"/><circle cx="22.5" cy="8" r="2.5"/></g><path d="M 17.5,26 L 27.5,26 M 15,30 L 30,30 M 22.5,15.5 L 22.5,20.5 M 20,18 L 25,18"/></g></svg>
-              <span>Gotham<br/>Chess</span>
+            <span class="persona-left">
+              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g fill="#ffffff" stroke-linecap="butt"><path d="M 9,36 C 12.39,35.03 19.11,36.43 22.5,34 C 25.89,36.43 32.61,35.03 36,36 C 36,36 37.65,36.54 39,38 C 38.32,38.97 37.35,38.99 36,38.5 C 32.61,37.53 25.89,38.96 22.5,37.5 C 19.11,38.96 12.39,37.53 9,38.5 C 7.646,38.99 6.677,38.97 6,38 C 7.354,36.06 9,36 9,36 z"/><path d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,30 30,30 C 30,27.5 27.5,26 27.5,26 C 33,24.5 33.5,14.5 22.5,10.5 C 11.5,14.5 12,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32 z"/><path d="M 25 8 A 2.5 2.5 0 1 1 20,8 A 2.5 2.5 0 1 1 25 8 z"/></g><path d="M 22.5,15.5 L 22.5,20.5 M 20,18 L 25,18" stroke-linejoin="miter"/></g></svg></span>
+              <span class="persona-name">Gotham<br/>Chess</span>
             </span>
             <span class="persona-elo">2350</span>
           </button>
           <button class="persona-btn" data-persona="hikaru" data-elo="2800">
-            <span class="persona-name" style="display: inline-flex; align-items: center; gap: 7px;">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="flex-shrink: 0; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="#ffffff" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2"/><circle cx="22.5" cy="7.5" r="2"/><circle cx="39" cy="12" r="2"/><circle cx="14" cy="8.5" r="2"/><circle cx="31" cy="9" r="2"/><path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38,14 L 31,25 L 31,11 L 25.5,24.5 L 22.5,9.5 L 19.5,24.5 L 14,10.5 L 14,25 L 7,14 L 9,26 z" stroke-linecap="butt"/><path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z" stroke-linecap="butt"/></g></svg>
-              <span>Hikaru Nakamura</span>
+            <span class="persona-left">
+              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="#ffffff" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38,14 L 31,25 L 31,11 L 25.5,24.5 L 22.5,9.5 L 19.5,24.5 L 14,10.5 L 14,25 L 7,14 L 9,26 z" stroke-linecap="butt"/><path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z" stroke-linecap="butt"/></g></svg></span>
+              <span class="persona-name">Hikaru Nakamura</span>
             </span>
             <span class="persona-elo">2800</span>
           </button>
           <button class="persona-btn" data-persona="magnus" data-elo="2850">
-            <span class="persona-name" style="display: inline-flex; align-items: center; gap: 7px;">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="flex-shrink: 0; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6"/><path d="M 20,8 L 25,8"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/><path d="M 11.5,30 C 17,27 27,27 32.5,30"/><path d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"/><path d="M 11.5,37 C 17,34 27,34 32.5,37"/></g></svg>
-              <span>Magnus Carlsen</span>
+            <span class="persona-left">
+              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/></g></svg></span>
+              <span class="persona-name">Magnus Carlsen</span>
             </span>
             <span class="persona-elo">2850</span>
           </button>
@@ -1421,7 +1412,7 @@
       <div class="config-section">
         <span class="config-label">Time Control</span>
         <div id="time-selector" class="seg-grid-5">
-          <button class="seg-btn" data-time="0"><span class="seg-btn-main">None</span><span class="seg-btn-sub">∞</span></button>
+          <button class="seg-btn" data-time="0"><span class="seg-btn-main">None</span><span class="seg-btn-sub infinity-sub">∞</span></button>
           <button class="seg-btn" data-time="300"><span class="seg-btn-main">5m</span><span class="seg-btn-sub">Blitz</span></button>
           <button class="seg-btn active" data-time="600"><span class="seg-btn-main">10m</span><span class="seg-btn-sub">Rapid</span></button>
           <button class="seg-btn" data-time="900"><span class="seg-btn-main">15m</span><span class="seg-btn-sub">Rapid</span></button>
@@ -1433,19 +1424,19 @@
         <span class="config-label">Play As</span>
         <div id="color-selector" class="seg-grid-3">
           <button class="seg-btn active" data-color="w">
-            <span class="seg-btn-main" style="gap: 7px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="22" height="22" viewBox="0 0 45 45" style="filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/><path d="M 11.5,30 C 17,27 27,27 32.5,30"/><path d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"/><path d="M 11.5,37 C 17,34 27,34 32.5,37"/></g></svg>
               <span>White</span>
             </span>
           </button>
           <button class="seg-btn" data-color="random">
-            <span class="seg-btn-main" style="gap: 7px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="8.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="12" cy="12" r="1.35" fill="#0f172a" stroke="none"/></svg>
               <span>Random</span>
             </span>
           </button>
           <button class="seg-btn" data-color="b">
-            <span class="seg-btn-main" style="gap: 7px; font-size: 13.5px;">
+            <span class="seg-btn-main">
               <svg width="22" height="22" viewBox="0 0 45 45" style="filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="none" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#18181b" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#18181b"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85" stroke="#cbd5e1" stroke-width="1"/><path d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37" stroke="#cbd5e1" stroke-width="1"/></g></svg>
               <span>Black</span>
             </span>
@@ -1512,10 +1503,10 @@
   <script>
     /**
      * =========================================================================
-     * LC CHESS — CLASSIC STAUNTON PIECES, SAFE-AREA TOP & DYNAMIC EVAL BAR
+     * LC CHESS — 3200-ELO TACTICAL ENGINE, CONSISTENT HINTS & RESPONSIVE UI
      * =========================================================================
      */
-    const PIECE_VALUES = { P: 100, N: 320, B: 330, R: 500, Q: 900, K: 20000 };
+    const PIECE_VALUES = { P: 100, N: 320, B: 335, R: 500, Q: 920, K: 20000 };
     const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
     // Complete, authentic classical Staunton chess piece SVG definitions
@@ -1533,9 +1524,6 @@
       bQ: `<svg viewBox="0 0 45 45"><g fill="#18181b" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g stroke="none"><circle cx="6" cy="12" r="2.75"/><circle cx="14" cy="9" r="2.75"/><circle cx="22.5" cy="8" r="2.75"/><circle cx="31" cy="9" r="2.75"/><circle cx="39" cy="12" r="2.75"/></g><path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38.5,13.5 L 31,25 L 30.7,10.9 L 25.5,24.5 L 22.5,10 L 19.5,24.5 L 14.3,10.9 L 14,25 L 6.5,13.5 L 9,26 z" stroke-linecap="butt"/><path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z" stroke-linecap="butt"/><path d="M 11,38.5 A 35,35 1 0 0 34,38.5" fill="none" stroke-linecap="butt"/><path d="M 11,29 A 35,35 1 0 1 34,29 M 12.5,31.5 L 32.5,31.5 M 11.5,34.5 A 35,35 1 0 0 33.5,34.5 M 10.5,37.5 A 35,35 1 0 0 34.5,37.5" fill="none" stroke="#cbd5e1" stroke-width="1"/></g></svg>`,
       bK: `<svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#18181b" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#18181b"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85" stroke="#cbd5e1" stroke-width="1"/><path d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37" stroke="#cbd5e1" stroke-width="1"/></g></svg>`
     };
-
-    const SOUND_ICON_ON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
-    const SOUND_ICON_OFF = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
 
     class SoundFX {
       constructor() { this.enabled = true; this.ctx = null; }
@@ -1900,49 +1888,187 @@
     }
 
     const PST = {
-      P: [0,0,0,0,0,0,0,0, 50,50,50,50,50,50,50,50, 10,10,20,30,30,20,10,10, 5,5,10,25,25,10,5,5, 0,0,0,20,20,0,0,0, 5,-5,-10,0,0,-10,-5,5, 5,10,10,-20,-20,10,10,5, 0,0,0,0,0,0,0,0],
-      N: [-50,-40,-30,-30,-30,-30,-40,-50, -40,-20,0,0,0,0,-20,-40, -30,0,10,15,15,10,0,-30, -30,5,15,20,20,15,5,-30, -30,0,15,20,20,15,0,-30, -30,5,10,15,15,10,5,-30, -40,-20,0,5,5,0,-20,-40, -50,-40,-30,-30,-30,-30,-40,-50],
-      B: [-20,-10,-10,-10,-10,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,5,10,10,5,0,-10, -10,5,5,10,10,5,5,-10, -10,0,10,10,10,10,0,-10, -10,10,10,10,10,10,10,-10, -10,5,0,0,0,0,5,-10, -20,-10,-10,-10,-10,-10,-10,-20],
-      R: [0,0,0,0,0,0,0,0, 5,10,10,10,10,10,10,5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, 0,0,0,5,5,0,0,0],
-      Q: [-20,-10,-10,-5,-5,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,5,5,5,5,0,-10, -5,0,5,5,5,5,0,-5, 0,0,5,5,5,5,0,-5, -10,5,5,5,5,5,0,-10, -10,0,5,0,0,0,0,-10, -20,-10,-10,-5,-5,-10,-10,-20],
-      K_MID: [-30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -20,-30,-30,-40,-40,-30,-30,-20, -10,-20,-20,-20,-20,-20,-20,-10, 20,20,0,0,0,0,20,20, 20,30,10,0,0,10,30,20],
-      K_END: [-50,-40,-30,-20,-20,-30,-40,-50, -30,-20,-10,0,0,-10,-20,-30, -30,-10,20,30,30,20,-10,-30, -30,-10,30,40,40,30,-10,-30, -30,-10,30,40,40,30,-10,-30, -30,-10,20,30,30,20,-10,-30, -30,-30,0,0,0,0,-30,-30, -50,-30,-30,-30,-30,-30,-30,-50]
+      P: [0,0,0,0,0,0,0,0, 55,55,55,55,55,55,55,55, 12,12,24,34,34,24,12,12, 6,6,12,28,28,12,6,6, 0,0,4,24,24,4,0,0, 5,-5,-10,2,2,-10,-5,5, 5,10,10,-22,-22,10,10,5, 0,0,0,0,0,0,0,0],
+      N: [-50,-40,-30,-30,-30,-30,-40,-50, -40,-20,0,0,0,0,-20,-40, -30,0,12,18,18,12,0,-30, -30,6,18,24,24,18,6,-30, -30,2,16,22,22,16,2,-30, -30,6,12,16,16,12,6,-30, -40,-20,0,5,5,0,-20,-40, -50,-40,-30,-30,-30,-30,-40,-50],
+      B: [-20,-10,-10,-10,-10,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,6,12,12,6,0,-10, -10,6,6,12,12,6,6,-10, -10,0,12,12,12,12,0,-10, -10,12,12,12,12,12,12,-10, -10,6,0,0,0,0,6,-10, -20,-10,-10,-10,-10,-10,-10,-20],
+      R: [0,0,0,0,0,0,0,0, 8,14,14,14,14,14,14,8, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, 0,0,0,6,6,0,0,0],
+      Q: [-20,-10,-10,-5,-5,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,6,6,6,6,0,-10, -5,0,6,6,6,6,0,-5, 0,0,6,6,6,6,0,-5, -10,6,6,6,6,6,0,-10, -10,0,6,0,0,0,0,-10, -20,-10,-10,-5,-5,-10,-10,-20],
+      K_MID: [-30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -20,-30,-30,-40,-40,-30,-30,-20, -10,-20,-20,-20,-20,-20,-20,-10, 20,20,0,0,0,0,20,20, 20,34,12,0,0,12,34,20],
+      K_END: [-50,-40,-30,-20,-20,-30,-40,-50, -30,-20,-10,0,0,-10,-20,-30, -30,-10,22,32,32,22,-10,-30, -30,-10,32,42,42,32,-10,-30, -30,-10,32,42,42,32,-10,-30, -30,-10,22,32,32,22,-10,-30, -30,-30,0,0,0,0,-30,-30, -50,-30,-30,-30,-30,-30,-30,-50]
     };
 
+    const OPENING_BOOK_LINES = [
+      ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7', 'Re1', 'b5', 'Bb3', 'd6'],
+      ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6', 'O-O', 'O-O'],
+      ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Be7', 'O-O', 'O-O'],
+      ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'],
+      ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'e5'],
+      ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e5', 'Nfd7'],
+      ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5', 'Ng3', 'Bg6'],
+      ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O'],
+      ['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'dxc4', 'a4', 'Bf5'],
+      ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O'],
+      ['d4', 'Nf6', 'c4', 'e6', 'Nf3', 'd5', 'Nc3', 'Be7', 'Bf4', 'O-O'],
+      ['c4', 'e5', 'Nc3', 'Nf6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nb6']
+    ];
+
     class ChessAI {
-      constructor() { this.nodes = 0; this.startTime = 0; this.timeBudget = 600; this.aborted = false; }
+      constructor() {
+        this.nodes = 0;
+        this.startTime = 0;
+        this.timeBudget = 1200;
+        this.aborted = false;
+        this.tt = new Map();
+        this.killers = Array.from({ length: 16 }, () => [null, null]);
+        this.historyTable = new Int32Array(64 * 64);
+      }
+
+      clearSearchTables() {
+        if (this.tt.size > 120000) this.tt.clear();
+        for (let i = 0; i < 16; i++) { this.killers[i][0] = null; this.killers[i][1] = null; }
+        this.historyTable.fill(0);
+      }
+
       evaluate(engine) {
         let whiteScore = 0, blackScore = 0, nonPawnMaterial = 0;
+        let wBishops = 0, bBishops = 0;
+        let wKingSq = -1, bKingSq = -1;
+        const wPawnFiles = new Uint8Array(8), bPawnFiles = new Uint8Array(8);
+        const wPawnRanks = new Array(8).fill(0), bPawnRanks = new Array(8).fill(7);
+
         for (let sq = 0; sq < 64; sq++) {
           const p = engine.board[sq];
           if (!p) continue;
           const color = p[0], type = p[1], val = PIECE_VALUES[type];
+          const r = Math.floor(sq / 8), f = sq % 8;
           if (type !== 'P' && type !== 'K') nonPawnMaterial += val;
-          const tableSq = color === 'w' ? sq : ((7 - Math.floor(sq / 8)) * 8 + (sq % 8));
+
+          if (type === 'P') {
+            if (color === 'w') {
+              wPawnFiles[f]++;
+              if (r < wPawnRanks[f] || wPawnRanks[f] === 0) wPawnRanks[f] = r;
+            } else {
+              bPawnFiles[f]++;
+              if (r > bPawnRanks[f] || bPawnRanks[f] === 7) bPawnRanks[f] = r;
+            }
+          } else if (type === 'B') {
+            if (color === 'w') wBishops++; else bBishops++;
+          } else if (type === 'K') {
+            if (color === 'w') wKingSq = sq; else bKingSq = sq;
+          }
+
+          const tableSq = color === 'w' ? sq : ((7 - r) * 8 + f);
           const pstVal = type === 'K' ? (nonPawnMaterial <= 2600 ? PST.K_END[tableSq] : PST.K_MID[tableSq]) : PST[type][tableSq];
           if (color === 'w') whiteScore += val + pstVal; else blackScore += val + pstVal;
         }
+
+        // Bishop pair bonus
+        if (wBishops >= 2) whiteScore += 42;
+        if (bBishops >= 2) blackScore += 42;
+
+        // Pawn structure: doubled pawns, isolated pawns & passed pawns
+        for (let f = 0; f < 8; f++) {
+          if (wPawnFiles[f] > 1) whiteScore -= (wPawnFiles[f] - 1) * 18;
+          if (bPawnFiles[f] > 1) blackScore -= (bPawnFiles[f] - 1) * 18;
+
+          const wAdj = (f > 0 ? wPawnFiles[f - 1] : 0) + (f < 7 ? wPawnFiles[f + 1] : 0);
+          const bAdj = (f > 0 ? bPawnFiles[f - 1] : 0) + (f < 7 ? bPawnFiles[f + 1] : 0);
+          if (wPawnFiles[f] > 0 && wAdj === 0) whiteScore -= 14;
+          if (bPawnFiles[f] > 0 && bAdj === 0) blackScore -= 14;
+
+          if (wPawnFiles[f] > 0) {
+            const r = wPawnRanks[f];
+            let blockedByEnemy = false;
+            for (let ef = Math.max(0, f - 1); ef <= Math.min(7, f + 1); ef++) {
+              if (bPawnFiles[ef] > 0 && bPawnRanks[ef] < r) { blockedByEnemy = true; break; }
+            }
+            if (!blockedByEnemy) whiteScore += (7 - r) * 14;
+          }
+          if (bPawnFiles[f] > 0) {
+            const r = bPawnRanks[f];
+            let blockedByEnemy = false;
+            for (let ef = Math.max(0, f - 1); ef <= Math.min(7, f + 1); ef++) {
+              if (wPawnFiles[ef] > 0 && wPawnRanks[ef] > r) { blockedByEnemy = true; break; }
+            }
+            if (!blockedByEnemy) blackScore += r * 14;
+          }
+        }
+
+        // Rook on open/semi-open file & 7th rank
+        for (let sq = 0; sq < 64; sq++) {
+          const p = engine.board[sq];
+          if (!p || p[1] !== 'R') continue;
+          const r = Math.floor(sq / 8), f = sq % 8;
+          if (p[0] === 'w') {
+            if (wPawnFiles[f] === 0) whiteScore += bPawnFiles[f] === 0 ? 22 : 11;
+            if (r === 1) whiteScore += 26;
+          } else {
+            if (bPawnFiles[f] === 0) blackScore += wPawnFiles[f] === 0 ? 22 : 11;
+            if (r === 6) blackScore += 26;
+          }
+        }
+
+        // Middlegame king pawn shield
+        if (nonPawnMaterial > 2600) {
+          if (wKingSq >= 56) {
+            const kf = wKingSq % 8;
+            for (let sf = Math.max(0, kf - 1); sf <= Math.min(7, kf + 1); sf++) {
+              if (engine.board[48 + sf] === 'wP') whiteScore += 14;
+              else if (engine.board[40 + sf] === 'wP') whiteScore += 7;
+              else whiteScore -= 12;
+            }
+          }
+          if (bKingSq >= 0 && bKingSq < 8) {
+            const kf = bKingSq % 8;
+            for (let sf = Math.max(0, kf - 1); sf <= Math.min(7, kf + 1); sf++) {
+              if (engine.board[8 + sf] === 'bP') blackScore += 14;
+              else if (engine.board[16 + sf] === 'bP') blackScore += 7;
+              else blackScore -= 12;
+            }
+          }
+        }
+
         return whiteScore - blackScore;
       }
-      orderMoves(engine, moves) {
-        return moves.sort((a, b) => {
-          let scoreA = 0, scoreB = 0;
-          if (a.capture) scoreA += 10 * PIECE_VALUES[a.capture[1]] - PIECE_VALUES[a.piece[1]];
-          if (b.capture) scoreB += 10 * PIECE_VALUES[b.capture[1]] - PIECE_VALUES[b.piece[1]];
-          if (a.promo) scoreA += PIECE_VALUES[a.promo];
-          if (b.promo) scoreB += PIECE_VALUES[b.promo];
-          if (a.isCastle) scoreA += 60;
-          if (b.isCastle) scoreB += 60;
-          return scoreB - scoreA;
-        });
+
+      isSameMove(a, b) {
+        return a && b && a.from === b.from && a.to === b.to && (a.promo || null) === (b.promo || null);
       }
-      quiescence(engine, alpha, beta, maximizing) {
+
+      scoreMove(m, ttMove, ply) {
+        if (ttMove && this.isSameMove(m, ttMove)) return 1000000;
+        let score = 0;
+        if (m.capture) {
+          score += 100000 + 12 * PIECE_VALUES[m.capture[1]] - PIECE_VALUES[m.piece[1]];
+        }
+        if (m.promo) {
+          score += 90000 + PIECE_VALUES[m.promo];
+        }
+        if (!m.capture && !m.promo) {
+          const k = this.killers[ply];
+          if (k) {
+            if (this.isSameMove(m, k[0])) score += 80000;
+            else if (this.isSameMove(m, k[1])) score += 70000;
+          }
+          score += this.historyTable[m.from * 64 + m.to];
+        }
+        if (m.isCastle) score += 45000;
+        return score;
+      }
+
+      orderMoves(moves, ttMove = null, ply = 0) {
+        return moves.sort((a, b) => this.scoreMove(b, ttMove, ply) - this.scoreMove(a, ttMove, ply));
+      }
+
+      quiescence(engine, alpha, beta, maximizing, qDepth = 0) {
         this.nodes++;
         if ((this.nodes & 1023) === 0 && performance.now() - this.startTime > this.timeBudget) {
           this.aborted = true;
           return this.evaluate(engine);
         }
         const standPat = this.evaluate(engine);
+        if (qDepth >= 6) return standPat;
+
         if (maximizing) {
           if (standPat >= beta) return beta;
           if (standPat > alpha) alpha = standPat;
@@ -1950,12 +2076,13 @@
           if (standPat <= alpha) return alpha;
           if (standPat < beta) beta = standPat;
         }
+
         const legal = engine.generateLegalMoves(engine.turn);
-        const tactical = this.orderMoves(engine, legal.filter(m => m.capture || m.promo));
+        const tactical = this.orderMoves(legal.filter(m => m.capture || m.promo));
         for (const m of tactical) {
           const snap = engine.cloneState();
           engine.applyMoveRaw(m);
-          const score = this.quiescence(engine, alpha, beta, !maximizing);
+          const score = this.quiescence(engine, alpha, beta, !maximizing, qDepth + 1);
           engine.restoreState(snap);
           if (this.aborted) return standPat;
           if (maximizing) {
@@ -1968,47 +2095,176 @@
         }
         return maximizing ? alpha : beta;
       }
-      minimax(engine, depth, alpha, beta, maximizing) {
+
+      minimax(engine, depth, alpha, beta, maximizing, ply = 0) {
         this.nodes++;
         if ((this.nodes & 1023) === 0 && performance.now() - this.startTime > this.timeBudget) {
           this.aborted = true;
           return this.evaluate(engine);
         }
+
+        const origAlpha = alpha, origBeta = beta;
+        const posKey = engine.getPositionKey();
+        const ttEntry = this.tt.get(posKey);
+        if (ttEntry && ttEntry.depth >= depth) {
+          if (ttEntry.flag === 0) return ttEntry.score;
+          if (ttEntry.flag === 1 && ttEntry.score > alpha) alpha = ttEntry.score;
+          if (ttEntry.flag === 2 && ttEntry.score < beta) beta = ttEntry.score;
+          if (alpha >= beta) return ttEntry.score;
+        }
+
+        const inCheck = engine.isInCheck(engine.turn);
+        const extDepth = (inCheck && ply < 10) ? depth + 1 : depth;
+
         const legal = engine.generateLegalMoves(engine.turn);
         if (legal.length === 0) {
-          if (engine.isInCheck(engine.turn)) return maximizing ? (-29000 - depth) : (29000 + depth);
+          if (inCheck) return maximizing ? (-29000 + ply) : (29000 - ply);
           return 0;
         }
-        if (depth === 0) return this.quiescence(engine, alpha, beta, maximizing);
-        this.orderMoves(engine, legal);
-        if (maximizing) {
-          let maxEval = -Infinity;
-          for (const m of legal) {
-            const snap = engine.cloneState();
-            engine.applyMoveRaw(m);
-            const ev = this.minimax(engine, depth - 1, alpha, beta, false);
-            engine.restoreState(snap);
-            if (this.aborted) return maxEval;
-            if (ev > maxEval) maxEval = ev;
+        if (extDepth <= 0) return this.quiescence(engine, alpha, beta, maximizing, 0);
+
+        const ttMove = ttEntry ? ttEntry.bestMove : null;
+        this.orderMoves(legal, ttMove, ply);
+
+        let bestMove = legal[0];
+        let bestScore = maximizing ? -Infinity : Infinity;
+
+        for (let i = 0; i < legal.length; i++) {
+          const m = legal[i];
+          const snap = engine.cloneState();
+          engine.applyMoveRaw(m);
+
+          let ev;
+          const canReduce = i >= 4 && extDepth >= 3 && !inCheck && !m.capture && !m.promo;
+          if (i === 0) {
+            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1);
+          } else if (canReduce) {
+            ev = this.minimax(engine, extDepth - 2, alpha, beta, !maximizing, ply + 1);
+            if (!this.aborted && ((maximizing && ev > alpha) || (!maximizing && ev < beta))) {
+              ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1);
+            }
+          } else {
+            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1);
+          }
+
+          engine.restoreState(snap);
+          if (this.aborted) return bestScore === -Infinity || bestScore === Infinity ? this.evaluate(engine) : bestScore;
+
+          if (maximizing) {
+            if (ev > bestScore) { bestScore = ev; bestMove = m; }
             if (ev > alpha) alpha = ev;
-            if (beta <= alpha) break;
+          } else {
+            if (ev < bestScore) { bestScore = ev; bestMove = m; }
+            if (ev < beta) beta = ev;
           }
-          return maxEval;
-        } else {
-          let minEval = Infinity;
-          for (const m of legal) {
+
+          if (beta <= alpha) {
+            if (!m.capture && !m.promo && ply < 16) {
+              if (!this.isSameMove(this.killers[ply][0], m)) {
+                this.killers[ply][1] = this.killers[ply][0];
+                this.killers[ply][0] = m;
+              }
+              this.historyTable[m.from * 64 + m.to] += extDepth * extDepth * 16;
+            }
+            break;
+          }
+        }
+
+        if (!this.aborted) {
+          let flag = 0;
+          if (bestScore <= origAlpha) flag = 2;
+          else if (bestScore >= origBeta) flag = 1;
+          this.tt.set(posKey, { depth: extDepth, score: bestScore, flag, bestMove });
+        }
+        return bestScore;
+      }
+
+      getBookMove(engine) {
+        const playedSans = engine.history.map(h => h.san.replace(/[+#]/g, ''));
+        if (playedSans.length >= 12) return null;
+        const legal = engine.generateLegalMoves(engine.turn);
+        const candidates = [];
+        for (const line of OPENING_BOOK_LINES) {
+          if (line.length > playedSans.length && playedSans.every((s, idx) => line[idx] === s)) {
+            const targetSan = line[playedSans.length];
+            const found = legal.find(m => engine.buildSAN(m, legal).replace(/[+#]/g, '') === targetSan);
+            if (found && !candidates.some(c => this.isSameMove(c, found))) {
+              candidates.push(found);
+            }
+          }
+        }
+        return candidates.length > 0 ? candidates[0] : null;
+      }
+
+      analyzePositionDeterministic(engine, maxDepth = 4, budgetMs = 1350) {
+        const moverColor = engine.turn;
+        const maximizing = moverColor === 'w';
+        const sign = maximizing ? 1 : -1;
+        const legal = engine.generateLegalMoves(moverColor);
+        if (legal.length === 0) return { bestMove: null, bestScore: 0, secondBestScore: 0, scoredMoves: [] };
+        if (legal.length === 1) return { bestMove: legal[0], bestScore: 0, secondBestScore: 0, scoredMoves: [{ move: legal[0], score: 0 }] };
+
+        this.clearSearchTables();
+        this.nodes = 0;
+        this.startTime = performance.now();
+        this.timeBudget = budgetMs;
+        this.aborted = false;
+
+        // Check grandmaster opening book first so opening moves are instant and canonical
+        const bookMove = this.getBookMove(engine);
+
+        let completedResults = null;
+
+        for (let depth = 1; depth <= maxDepth; depth++) {
+          const isGuaranteed = depth <= 3;
+          if (!isGuaranteed && performance.now() - this.startTime > budgetMs * 0.58) break;
+          if (isGuaranteed) this.timeBudget = Math.max(budgetMs, 3500);
+          else this.timeBudget = budgetMs;
+
+          const ordered = completedResults
+            ? completedResults.map(r => r.move)
+            : this.orderMoves(legal.slice(), bookMove, 0);
+
+          const iterResults = [];
+          let iterAborted = false;
+
+          for (const m of ordered) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const ev = this.minimax(engine, depth - 1, alpha, beta, true);
+            const rawEval = this.minimax(engine, depth - 1, -Infinity, Infinity, !maximizing, 1);
             engine.restoreState(snap);
-            if (this.aborted) return minEval;
-            if (ev < minEval) minEval = ev;
-            if (ev < beta) beta = ev;
-            if (beta <= alpha) break;
+
+            if (!isGuaranteed && this.aborted) {
+              iterAborted = true;
+              break;
+            }
+            const moverEval = Math.round(rawEval * sign);
+            iterResults.push({ move: m, score: moverEval });
           }
-          return minEval;
+
+          if (!iterAborted && iterResults.length === legal.length) {
+            iterResults.sort((a, b) => b.score - a.score);
+            // If we have a canonical opening book move within 15cp of top engine score, keep it #1 for deterministic consistency
+            if (bookMove) {
+              const bIdx = iterResults.findIndex(r => this.isSameMove(r.move, bookMove));
+              if (bIdx > 0 && iterResults[0].score - iterResults[bIdx].score <= 15) {
+                const [bm] = iterResults.splice(bIdx, 1);
+                bm.score = iterResults[0].score;
+                iterResults.unshift(bm);
+              }
+            }
+            completedResults = iterResults;
+          }
+          this.aborted = false;
         }
+
+        const finalList = completedResults || legal.map(m => ({ move: m, score: 0 }));
+        const bestMove = finalList[0].move;
+        const bestScore = finalList[0].score;
+        const secondBestScore = finalList.length > 1 ? finalList[1].score : bestScore;
+        return { bestMove, bestScore, secondBestScore, scoredMoves: finalList };
       }
+
       getCustomEloProfile(elo) {
         if (elo <= 200) return { maxDepth: 1, minGuaranteedDepth: 1, budget: 80, jitter: 280, topPool: 7, blunderRate: 0.45 };
         if (elo <= 300) return { maxDepth: 1, minGuaranteedDepth: 1, budget: 90, jitter: 210, topPool: 5, blunderRate: 0.30 };
@@ -2016,19 +2272,21 @@
         if (elo <= 700) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 260, jitter: 75, topPool: 3, blunderRate: 0.08 };
         if (elo <= 900) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 320, jitter: 45, topPool: 3, blunderRate: 0.03 };
         if (elo <= 1100) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 380, jitter: 22, topPool: 2, blunderRate: 0 };
-        if (elo <= 1300) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 450, jitter: 10, topPool: 2, blunderRate: 0 };
-        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 2, budget: 600, jitter: 5, topPool: 2, blunderRate: 0 };
-        if (elo <= 1900) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 780, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2200) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 950, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2500) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 1150, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1400, jitter: 0, topPool: 1, blunderRate: 0 };
-        return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1650, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 1300) return { maxDepth: 3, minGuaranteedDepth: 2, budget: 500, jitter: 10, topPool: 2, blunderRate: 0 };
+        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 700, jitter: 5, topPool: 2, blunderRate: 0 };
+        if (elo <= 1900) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 900, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2200) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 1150, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2500) return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1400, jitter: 0, topPool: 1, blunderRate: 0 };
+        if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1650, jitter: 0, topPool: 1, blunderRate: 0 };
+        return { maxDepth: 6, minGuaranteedDepth: 4, budget: 1950, jitter: 0, topPool: 1, blunderRate: 0 };
       }
+
       chooseBestMove(engine, difficulty = 'medium', customElo = 1500) {
         const legal = engine.generateLegalMoves(engine.turn);
         if (legal.length === 0) return null;
         if (legal.length === 1) return legal[0];
         const maximizing = engine.turn === 'w';
+        this.clearSearchTables();
         this.nodes = 0; this.startTime = performance.now(); this.aborted = false;
 
         if (difficulty === 'easy') {
@@ -2046,12 +2304,12 @@
         }
         if (difficulty === 'medium') {
           this.timeBudget = 450;
-          this.orderMoves(engine, legal);
+          this.orderMoves(legal);
           const scored = [];
           for (const m of legal) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const sc = this.minimax(engine, 1, -Infinity, Infinity, !maximizing);
+            const sc = this.minimax(engine, 1, -Infinity, Infinity, !maximizing, 1);
             engine.restoreState(snap);
             scored.push({ move: m, score: sc });
           }
@@ -2063,14 +2321,19 @@
 
         const profile = difficulty === 'custom'
           ? this.getCustomEloProfile(customElo)
-          : { maxDepth: 3, minGuaranteedDepth: 3, budget: 750, jitter: 0, topPool: 1, blunderRate: 0 };
+          : { maxDepth: 4, minGuaranteedDepth: 3, budget: 900, jitter: 0, topPool: 1, blunderRate: 0 };
 
         if (profile.blunderRate > 0 && Math.random() < profile.blunderRate) {
           return legal[Math.floor(Math.random() * legal.length)];
         }
 
+        if (profile.topPool === 1) {
+          const analysis = this.analyzePositionDeterministic(engine, profile.maxDepth, profile.budget);
+          if (analysis.bestMove) return analysis.bestMove;
+        }
+
         this.timeBudget = profile.budget;
-        this.orderMoves(engine, legal);
+        this.orderMoves(legal);
         let bestMove = legal[0], bestScoredList = [];
 
         for (let depth = 1; depth <= profile.maxDepth; depth++) {
@@ -2085,7 +2348,7 @@
           for (const m of legal) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing);
+            const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing, 1);
             engine.restoreState(snap);
             if (!isGuaranteed && this.aborted) break;
             const noisyScore = profile.jitter > 0 ? sc + (Math.random() - 0.5) * profile.jitter : sc;
@@ -2115,6 +2378,58 @@
 
     const engine = new ChessEngine();
     const ai = new ChessAI();
+    const positionAnalysisCache = new Map();
+
+    function getCachedPositionAnalysis() {
+      const key = `${engine.getPositionKey()}|${engine.history.length}`;
+      if (positionAnalysisCache.has(key)) {
+        return positionAnalysisCache.get(key);
+      }
+      const res = ai.analyzePositionDeterministic(engine, 5, 1450);
+      if (positionAnalysisCache.size > 400) positionAnalysisCache.clear();
+      positionAnalysisCache.set(key, res);
+      return res;
+    }
+
+    function classifyMoveQuality(moverColor, bestScoreForMover, playedScoreForMover, secondBestScoreForMover, isSacrifice, sanHistory, isExactBestMove) {
+      if (sanHistory.length <= 10 && OPENING_BOOK_LINES.some(line => sanHistory.every((m, idx) => line[idx] === m))) {
+        return { key: 'book', symbol: '📖', label: 'Book Move', css: 'badge-book', color: '#fbbf24' };
+      }
+      const cpLoss = Math.max(0, bestScoreForMover - playedScoreForMover);
+      const gapToSecond = bestScoreForMover - secondBestScoreForMover;
+
+      if (isExactBestMove || cpLoss === 0) {
+        if (isSacrifice && playedScoreForMover >= -40 && gapToSecond >= 75) return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
+        if (gapToSecond >= 135 && bestScoreForMover > -150) return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
+        return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+      }
+      if (cpLoss <= 55) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+      if (cpLoss <= 125) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+      if (cpLoss <= 250) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
+      return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
+    }
+
+    function evaluateMoveBeforeCommit(move) {
+      const moverColor = engine.turn;
+      const legal = engine.generateLegalMoves(moverColor);
+      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+
+      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
+      const analysis = getCachedPositionAnalysis();
+      const { bestMove, bestScore, secondBestScore, scoredMoves } = analysis;
+
+      const isExactBestMove = ai.isSameMove(move, bestMove);
+      const matched = scoredMoves.find(item => ai.isSameMove(item.move, move));
+      const playedScore = isExactBestMove ? bestScore : (matched ? matched.score : bestScore);
+
+      const snapCheck = engine.cloneState();
+      engine.applyMoveRaw(move);
+      const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
+      engine.restoreState(snapCheck);
+      const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
+      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
+      return classifyMoveQuality(moverColor, bestScore, playedScore, secondBestScore, isSacrifice, futureSan, isExactBestMove);
+    }
 
     const state = {
       mode: 'ai',
@@ -2147,8 +2462,6 @@
         const ctx = c.getContext('2d');
         const svgEl = document.querySelector('#top-bar .brand-icon svg');
         if (!ctx || !svgEl) return;
-
-        // Full-bleed emerald gradient background (no dark outer border so iOS squircle mask is clean)
         const grad = ctx.createLinearGradient(0, 0, 512, 512);
         grad.addColorStop(0, '#10b981');
         grad.addColorStop(1, '#065f46');
@@ -2158,12 +2471,7 @@
         const svgData = new XMLSerializer().serializeToString(svgEl);
         const img = new Image();
         img.onload = () => {
-          ctx.save();
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
-          ctx.shadowBlur = 18;
-          ctx.shadowOffsetY = 8;
-          ctx.drawImage(img, 66, 56, 380, 380);
-          ctx.restore();
+          ctx.drawImage(img, 76, 66, 360, 360);
           const touchLink = $('apple-touch-icon');
           if (touchLink) touchLink.href = c.toDataURL('image/png');
         };
@@ -2225,46 +2533,35 @@
       if (dragState && dragState.active && !force) return;
       const isDesktop = window.innerWidth >= 900;
       const vw = document.documentElement.clientWidth || window.innerWidth;
-      const visualH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      const vh = isDesktop ? Math.min(window.innerHeight, visualH || window.innerHeight) : Math.max(window.innerHeight, visualH || 0);
+      const vh = window.visualViewport
+        ? Math.min(window.innerHeight, window.visualViewport.height)
+        : window.innerHeight;
       const celebEl = $('celeb-comment-bar');
       const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
+      const celebExtraH = hasCelebComment ? 46 : 0;
 
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const extraTopResign = isFriend ? 50 : 0;
-        const celebExtraH = hasCelebComment ? 48 : 0;
-        const gapsH = (isFriend ? 5 : 3) * 8 + (hasCelebComment ? 8 : 0);
+        const barsH = 44 + 44 + 40;
+        const topResignH = isFriend ? 46 : 0;
+        const gapsH = isFriend ? 40 : 32;
         const verticalMargin = 36;
         const availW = vw - 340 - 26 - 72;
-        const availH = vh - 44 - 44 - 42 - extraTopResign - celebExtraH - gapsH - verticalMargin;
+        const availH = vh - barsH - topResignH - celebExtraH - gapsH - verticalMargin;
         boardSize = Math.floor(Math.min(availW, availH, 640));
       } else {
-        // Measure actual surrounding mobile chrome height so the board maximizes available screen real estate in both Safari and Standalone PWA mode
-        const appStyle = getComputedStyle($('app'));
-        const padTop = parseFloat(appStyle.paddingTop) || 12;
-        const padBot = parseFloat(appStyle.paddingBottom) || 6;
-        const padLeft = parseFloat(appStyle.paddingLeft) || 12;
-        const padRight = parseFloat(appStyle.paddingRight) || 12;
-
-        const topHeaderH = $('top-bar').offsetHeight || 46;
-        const statusH = $('mobile-status-strip').offsetHeight || 28;
         const isFriend = state.mode === 'friend';
-        const topResignH = isFriend ? (($('btn-resign-black-top').offsetHeight || 36) + 6) : 0;
-        const topPlayerH = els.topBar.offsetHeight || 40;
-        const commentH = hasCelebComment ? (40 + 6) : 0;
-        const botPlayerH = els.bottomBar.offsetHeight || 40;
-        const botResignH = $('board-bottom-resign-wrap').offsetHeight || 38;
-        const botStripH = $('mobile-bottom-strip').offsetHeight || 28;
-
-        const numGaps = 6;
-        const usedVertical = padTop + padBot + 8 + topHeaderH + statusH + topResignH + topPlayerH + commentH + botPlayerH + botResignH + botStripH + (numGaps * 6);
-        const availH = vh - usedVertical;
-        const containerW = Math.min(vw - padLeft - padRight, 520);
-        const availW = containerW - 18 - 8;
-
-        boardSize = Math.floor(Math.min(availW, availH));
+        const hasActions = $('mobile-action-row').style.display !== 'none';
+        const appStyles = getComputedStyle($('app'));
+        const padTop = parseFloat(appStyles.paddingTop) || 12;
+        const padBot = parseFloat(appStyles.paddingBottom) || 8;
+        const extraTopResign = isFriend ? 46 : 0;
+        const actionsH = hasActions ? 46 : 0;
+        const fixedChromeH = padTop + padBot + 46 + 30 + extraTopResign + 40 + celebExtraH + 40 + 40 + 30 + actionsH + 54;
+        const availH = vh - fixedChromeH;
+        const availW = vw - 24 - 8 - 18;
+        boardSize = Math.floor(Math.min(availW, availH, 514));
       }
 
       boardSize = Math.max(220, boardSize);
@@ -2276,13 +2573,9 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const celebExtraH = hasCelebComment ? 48 : 0;
-        const gapsH = (isFriend ? 5 : 3) * 8 + (hasCelebComment ? 8 : 0);
-        const totalColumnHeight = boardSize + 44 + 44 + 42 + (isFriend ? 50 : 0) + celebExtraH + gapsH;
-        const maxSidebarH = Math.max(320, vh - 36);
-        $('desktop-sidebar').style.height = Math.min(totalColumnHeight, maxSidebarH) + 'px';
-        $('desktop-sidebar').style.maxHeight = maxSidebarH + 'px';
-
+        const totalColumnHeight = boardSize + 44 + 44 + 40 + (isFriend ? 46 : 0) + celebExtraH + (isFriend ? 40 : 32);
+        $('desktop-sidebar').style.height = Math.min(totalColumnHeight, vh - 24) + 'px';
+        $('desktop-sidebar').style.maxHeight = (vh - 24) + 'px';
         const barWidth = (boardSize + 8 + 18) + 'px';
         els.topBar.style.width = barWidth;
         els.bottomBar.style.width = barWidth;
@@ -2290,7 +2583,6 @@
         $('btn-resign-black-top').style.width = barWidth;
         $('board-bottom-resign-wrap').style.width = barWidth;
       } else {
-        // On mobile, let UI bars span full container width (100% up to 520px) for clean edge-to-edge alignment
         $('top-bar').style.width = '100%';
         $('mobile-status-strip').style.width = '100%';
         els.topBar.style.width = '100%';
@@ -2351,8 +2643,7 @@
         sqEl.dataset.sq = sq;
         sqEl.innerHTML = '';
 
-        // Always render rank numbers (1-8) on the left-most column of the displayed board
-        if (i % 8 === 0) {
+        if (f === 0) {
           const rankLbl = document.createElement('span');
           rankLbl.className = 'coord-rank';
           rankLbl.textContent = 8 - r;
@@ -2393,87 +2684,6 @@
       updateEvaluationBar();
     }
 
-    const OPENING_BOOK_LINES = [
-      ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O'],
-      ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3'],
-      ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5']
-    ];
-
-    function classifyMoveQuality(moverColor, bestScoreForMover, playedScoreForMover, secondBestScoreForMover, isSacrifice, sanHistory) {
-      if (sanHistory.length <= 8 && OPENING_BOOK_LINES.some(line => sanHistory.every((m, idx) => line[idx] === m))) {
-        return { key: 'book', symbol: '📖', label: 'Book Move', css: 'badge-book', color: '#fbbf24' };
-      }
-      const cpLoss = Math.max(0, bestScoreForMover - playedScoreForMover);
-      const gapToSecond = bestScoreForMover - secondBestScoreForMover;
-      if (cpLoss <= 5) {
-        if (isSacrifice && playedScoreForMover >= -40 && gapToSecond >= 75) return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
-        if (gapToSecond >= 135 && bestScoreForMover > -150) return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
-        return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
-      }
-      if (cpLoss <= 55) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
-      if (cpLoss <= 125) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
-      if (cpLoss <= 250) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
-      return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
-    }
-
-    function analyzeAllLegalMoves() {
-      const moverColor = engine.turn, maximizing = moverColor === 'w', sign = maximizing ? 1 : -1;
-      const legal = engine.generateLegalMoves(moverColor);
-      if (legal.length === 0) return { bestMove: null, bestScore: 0, secondBestScore: 0, scoredMoves: [] };
-
-      ai.nodes = 0; ai.startTime = performance.now(); ai.timeBudget = 4000; ai.aborted = false;
-      ai.orderMoves(engine, legal);
-
-      const scoredMoves = [];
-      let bestScore = -Infinity, secondBestScore = -Infinity, bestMove = legal[0];
-
-      for (const m of legal) {
-        const snap = engine.cloneState();
-        engine.applyMoveRaw(m);
-        const rawEval = ai.minimax(engine, 2, -Infinity, Infinity, !maximizing);
-        engine.restoreState(snap);
-        const moverEval = rawEval * sign;
-        scoredMoves.push({ move: m, score: moverEval });
-
-        if (moverEval > bestScore) {
-          secondBestScore = bestScore;
-          bestScore = moverEval;
-          bestMove = m;
-        } else if (moverEval > secondBestScore) {
-          secondBestScore = moverEval;
-        }
-      }
-      return { bestMove, bestScore, secondBestScore, scoredMoves };
-    }
-
-    function evaluateMoveBeforeCommit(move) {
-      const moverColor = engine.turn;
-      const legal = engine.generateLegalMoves(moverColor);
-      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
-
-      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
-      const { bestScore, secondBestScore, scoredMoves } = analyzeAllLegalMoves();
-
-      const matched = scoredMoves.find(item =>
-        item.move.from === move.from &&
-        item.move.to === move.to &&
-        (item.move.promo || null) === (move.promo || null)
-      );
-      let playedScore = matched ? matched.score : bestScore;
-
-      if (state.hintMove && state.hintMove.from === move.from && state.hintMove.to === move.to && (state.hintMove.promo || null) === (move.promo || null)) {
-        playedScore = bestScore;
-      }
-
-      const snapCheck = engine.cloneState();
-      engine.applyMoveRaw(move);
-      const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
-      engine.restoreState(snapCheck);
-      const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
-      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
-      return classifyMoveQuality(moverColor, bestScore, playedScore, secondBestScore, isSacrifice, futureSan);
-    }
-
     function updateEvaluationBar() {
       const outcome = engine.getGameOutcome();
       let cp = 0;
@@ -2500,7 +2710,7 @@
       if (!state.allowHints || state.gameOver || state.aiThinking) return;
       if (state.mode === 'ai' && engine.turn !== state.humanColor) return;
 
-      const { bestMove } = analyzeAllLegalMoves();
+      const { bestMove } = getCachedPositionAnalysis();
       if (bestMove) {
         state.hintMove = bestMove;
         renderBoard();
@@ -2679,15 +2889,15 @@
 
     function updateClocksUI() {
       const flipped = isBoardFlipped();
-      const isUnlimited = state.timeControl === 0;
       const topSec = flipped ? state.whiteTime : state.blackTime;
       const botSec = flipped ? state.blackTime : state.whiteTime;
+      const isInf = state.timeControl === 0;
       els.topClock.textContent = formatTime(topSec);
       els.bottomClock.textContent = formatTime(botSec);
-      els.topClock.classList.toggle('unlimited-time', isUnlimited);
-      els.bottomClock.classList.toggle('unlimited-time', isUnlimited);
-      els.topClock.classList.toggle('low-time', !isUnlimited && topSec <= 30 && topSec > 0);
-      els.bottomClock.classList.toggle('low-time', !isUnlimited && botSec <= 30 && botSec > 0);
+      els.topClock.classList.toggle('infinity-mode', isInf);
+      els.bottomClock.classList.toggle('infinity-mode', isInf);
+      els.topClock.classList.toggle('low-time', state.timeControl > 0 && topSec <= 30 && topSec > 0);
+      els.bottomClock.classList.toggle('low-time', state.timeControl > 0 && botSec <= 30 && botSec > 0);
       els.topBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'w' : 'b'));
       els.bottomBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'b' : 'w'));
     }
@@ -2724,18 +2934,15 @@
         for (let k = 0; k < Math.max(0, startCounts[t] - currW[t]); k++) bCap += PIECE_SVGS['w' + t];
       }
       const flipped = isBoardFlipped();
-      const botIcons = flipped ? bCap : wCap;
-      const topIcons = flipped ? wCap : bCap;
-      els.bottomCaptured.innerHTML = botIcons;
-      els.topCaptured.innerHTML = topIcons;
+      const botCapHTML = flipped ? bCap : wCap;
+      const topCapHTML = flipped ? wCap : bCap;
+      els.bottomCaptured.innerHTML = botCapHTML;
+      els.topCaptured.innerHTML = topCapHTML;
       const diff = wMat - bMat, botDiff = flipped ? -diff : diff, topDiff = -botDiff;
-      const botDiffStr = botDiff > 0 ? `+${Math.round(botDiff / 100)}` : '';
-      const topDiffStr = topDiff > 0 ? `+${Math.round(topDiff / 100)}` : '';
-      els.bottomMatDiff.textContent = botDiffStr;
-      els.topMatDiff.textContent = topDiffStr;
-
-      els.bottomCapturedRow.classList.toggle('is-empty', !botIcons && !botDiffStr);
-      els.topCapturedRow.classList.toggle('is-empty', !topIcons && !topDiffStr);
+      els.bottomMatDiff.textContent = botDiff > 0 ? `+${Math.round(botDiff / 100)}` : '';
+      els.topMatDiff.textContent = topDiff > 0 ? `+${Math.round(topDiff / 100)}` : '';
+      els.bottomCapturedRow.classList.toggle('is-empty', !botCapHTML && botDiff <= 0);
+      els.topCapturedRow.classList.toggle('is-empty', !topCapHTML && topDiff <= 0);
     }
 
     function updateMoveHistoryUI() {
@@ -3501,7 +3708,7 @@
       els.mobileMoveCount.textContent = `Move ${moveNum}`;
       els.desktopMoveCount.textContent = `Move ${moveNum}`;
 
-      const dotColor = engine.isInCheck(engine.turn) ? 'var(--accent-rose)' : 'var(--accent-emerald)';
+      const dotColor = engine.isInCheck(engine.turn) ? '#ef4444' : 'var(--accent-emerald)';
       els.mobileStatusDot.style.background = dotColor;
       els.desktopStatusDot.style.background = dotColor;
 
@@ -3626,6 +3833,9 @@
       startClockLoop();
       scheduleAITurnIfNeeded();
     }
+
+    const SOUND_ICON_ON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+    const SOUND_ICON_OFF = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15" stroke="#f87171"/><line x1="17" y1="9" x2="23" y2="15" stroke="#f87171"/></svg>`;
 
     function toggleSound() {
       sfx.enabled = !sfx.enabled;
