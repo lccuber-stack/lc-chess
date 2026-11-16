@@ -12,9 +12,6 @@
   <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23065f46'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23bg)'/%3E%3Cg transform='translate(68, 58) scale(8.4)'%3E%3Cpath d='M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z' fill='%23ffffff' stroke='%23090d16' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='9' cy='25.5' r='0.9' fill='%23090d16'/%3E%3Cellipse cx='14.5' cy='15.5' rx='0.95' ry='1.75' transform='rotate(28 14.5 15.5)' fill='%23090d16'/%3E%3Cpath d='M 12.5,39 L 38.5,39 L 38.5,42.5 L 12.5,42.5 Z' fill='%23a7f3d0' stroke='%23090d16' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E" />
   <link id="apple-touch-icon" rel="apple-touch-icon" sizes="512x512" href="" />
   <style>
-    /* =========================================================================
-       1. DESIGN TOKENS & GLOBAL RESET
-       ========================================================================= */
     :root {
       --bg-canvas: #090d16;
       --bg-surface: #111827;
@@ -108,7 +105,6 @@
       touch-action: none;
     }
 
-    /* Extra top clearance in iPhone standalone/home-screen mode so top bar sits cleanly below iOS status blur */
     @media (display-mode: standalone) and (max-width: 899px) {
       #app {
         padding-top: calc(env(safe-area-inset-top, 47px) + 26px);
@@ -393,7 +389,6 @@
       transform: rotate(180deg);
     }
 
-    /* Bot & Celebrity Personality Commentary Bar — fixed height so board never shifts */
     .celeb-comment-bar {
       display: none;
       align-items: center;
@@ -452,7 +447,6 @@
       flex: 0 0 auto;
     }
 
-    /* Live Evaluation Bar */
     #eval-bar-wrap {
       position: relative;
       width: 18px;
@@ -541,16 +535,16 @@
 
     .move-badge {
       position: absolute;
-      top: 2px;
-      right: 2px;
-      width: 18px;
-      height: 18px;
+      top: 1px;
+      right: 1px;
+      width: 20px;
+      height: 20px;
       padding: 0;
+      margin: 0;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
+      display: grid;
+      place-items: center;
+      font-size: 9.5px;
       font-weight: 900;
       line-height: 1;
       color: #ffffff;
@@ -560,9 +554,10 @@
       pointer-events: none;
     }
     .move-badge svg {
-      width: 11px;
-      height: 11px;
+      width: 12px;
+      height: 12px;
       display: block;
+      margin: auto;
     }
     .move-badge.rotated-180 { transform: rotate(180deg); }
 
@@ -1967,7 +1962,7 @@
 
     const PST = {
       P: [0,0,0,0,0,0,0,0, 55,55,55,55,55,55,55,55, 12,12,24,34,34,24,12,12, 6,6,12,28,28,12,6,6, 0,0,4,24,24,4,0,0, 5,-5,-10,2,2,-10,-5,5, 5,10,10,-22,-22,10,10,5, 0,0,0,0,0,0,0,0],
-      N: [-50,-40,-30,-30,-30,-30,-40,-50, -40,-20,0,0,0,0,-20,-40, -30,0,12,18,18,12,0,-30, -30,6,18,24,24,18,6,-30, -30,2,16,22,22,16,2,-30, -30,6,12,16,16,12,6,-30, -40,-20,0,5,5,0,-20,-40, -50,-40,-30,-30,-30,-30,-40,-50],
+      N: [-55,-42,-32,-32,-32,-32,-42,-55, -42,-20,0,0,0,0,-20,-42, -36,0,14,20,20,14,0,-36, -34,6,18,24,24,18,6,-34, -34,2,16,22,22,16,2,-34, -36,8,14,18,18,14,8,-36, -42,-20,0,5,5,0,-20,-42, -55,-42,-32,-32,-32,-32,-42,-55],
       B: [-20,-10,-10,-10,-10,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,6,12,12,6,0,-10, -10,6,6,12,12,6,6,-10, -10,0,12,12,12,12,0,-10, -10,12,12,12,12,12,12,-10, -10,6,0,0,0,0,6,-10, -20,-10,-10,-10,-10,-10,-10,-20],
       R: [0,0,0,0,0,0,0,0, 8,14,14,14,14,14,14,8, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, 0,0,0,6,6,0,0,0],
       Q: [-20,-10,-10,-5,-5,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,6,6,6,6,0,-10, -5,0,6,6,6,6,0,-5, 0,0,6,6,6,6,0,-5, -10,6,6,6,6,6,0,-10, -10,0,6,0,0,0,0,-10, -20,-10,-10,-5,-5,-10,-10,-20],
@@ -1987,7 +1982,8 @@
       ['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'dxc4', 'a4', 'Bf5'],
       ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O'],
       ['d4', 'Nf6', 'c4', 'e6', 'Nf3', 'd5', 'Nc3', 'Be7', 'Bf4', 'O-O'],
-      ['c4', 'e5', 'Nc3', 'Nf6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nb6']
+      ['c4', 'e5', 'Nc3', 'Nf6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nb6'],
+      ['Nf3', 'd5', 'g3', 'Nf6', 'Bg2', 'c6', 'O-O', 'Bg4', 'd3', 'Nbd7']
     ];
 
     class ChessAI {
@@ -2002,7 +1998,7 @@
       }
 
       clearSearchTables() {
-        if (this.tt.size > 120000) this.tt.clear();
+        this.tt.clear();
         for (let i = 0; i < 16; i++) { this.killers[i][0] = null; this.killers[i][1] = null; }
         this.historyTable.fill(0);
       }
@@ -2040,63 +2036,66 @@
           if (color === 'w') whiteScore += val + pstVal; else blackScore += val + pstVal;
         }
 
+        if (engine.fullMoveNumber <= 8) {
+          if (engine.board[51] === 'wP' && engine.board[52] === 'wP') whiteScore -= 24;
+          if (engine.board[11] === 'bP' && engine.board[12] === 'bP') blackScore -= 24;
+          if (engine.board[50] === 'wP' && engine.board[42] === 'wN') whiteScore -= 16;
+          if (engine.board[10] === 'bP' && engine.board[18] === 'bN') blackScore -= 16;
+        }
+
         if (wBishops >= 2) whiteScore += 42;
         if (bBishops >= 2) blackScore += 42;
 
         for (let f = 0; f < 8; f++) {
-          if (wPawnFiles[f] > 1) whiteScore -= (wPawnFiles[f] - 1) * 18;
-          if (bPawnFiles[f] > 1) blackScore -= (bPawnFiles[f] - 1) * 18;
-
-          const wAdj = (f > 0 ? wPawnFiles[f - 1] : 0) + (f < 7 ? wPawnFiles[f + 1] : 0);
-          const bAdj = (f > 0 ? bPawnFiles[f - 1] : 0) + (f < 7 ? bPawnFiles[f + 1] : 0);
-          if (wPawnFiles[f] > 0 && wAdj === 0) whiteScore -= 14;
-          if (bPawnFiles[f] > 0 && bAdj === 0) blackScore -= 14;
+          if (wPawnFiles[f] > 1) whiteScore -= 16 * (wPawnFiles[f] - 1);
+          if (bPawnFiles[f] > 1) blackScore -= 16 * (bPawnFiles[f] - 1);
+          const wIso = wPawnFiles[f] > 0 && (f === 0 || wPawnFiles[f - 1] === 0) && (f === 7 || wPawnFiles[f + 1] === 0);
+          const bIso = bPawnFiles[f] > 0 && (f === 0 || bPawnFiles[f - 1] === 0) && (f === 7 || bPawnFiles[f + 1] === 0);
+          if (wIso) whiteScore -= 12;
+          if (bIso) blackScore -= 12;
 
           if (wPawnFiles[f] > 0) {
-            const wRank = wPawnRanks[f];
-            let blockedByBlack = false;
-            for (let df = -1; df <= 1; df++) {
-              const nf = f + df;
-              if (nf >= 0 && nf < 8 && bPawnFiles[nf] > 0 && bPawnRanks[nf] < wRank) {
-                blockedByBlack = true;
-                break;
-              }
+            let blocked = false;
+            for (let af = Math.max(0, f - 1); af <= Math.min(7, f + 1); af++) {
+              if (bPawnFiles[af] > 0 && bPawnRanks[af] < wPawnRanks[f]) { blocked = true; break; }
             }
-            if (!blockedByBlack) whiteScore += (7 - wRank) * 14;
+            if (!blocked) whiteScore += (7 - wPawnRanks[f]) * 12;
           }
-
           if (bPawnFiles[f] > 0) {
-            const bRank = bPawnRanks[f];
-            let blockedByWhite = false;
-            for (let df = -1; df <= 1; df++) {
-              const nf = f + df;
-              if (nf >= 0 && nf < 8 && wPawnFiles[nf] > 0 && wPawnRanks[nf] > bRank) {
-                blockedByWhite = true;
-                break;
-              }
+            let blocked = false;
+            for (let af = Math.max(0, f - 1); af <= Math.min(7, f + 1); af++) {
+              if (wPawnFiles[af] > 0 && wPawnRanks[af] > bPawnRanks[f]) { blocked = true; break; }
             }
-            if (!blockedByWhite) blackScore += bRank * 14;
+            if (!blocked) blackScore += bPawnRanks[f] * 12;
+          }
+        }
+
+        for (let sq = 0; sq < 64; sq++) {
+          const p = engine.board[sq];
+          if (!p || p[1] !== 'R') continue;
+          const color = p[0], r = Math.floor(sq / 8), f = sq % 8;
+          if (color === 'w') {
+            if (wPawnFiles[f] === 0) whiteScore += bPawnFiles[f] === 0 ? 22 : 11;
+            if (r === 1) whiteScore += 24;
+          } else {
+            if (bPawnFiles[f] === 0) blackScore += wPawnFiles[f] === 0 ? 22 : 11;
+            if (r === 6) blackScore += 24;
           }
         }
 
         if (nonPawnMaterial > 2600) {
-          if (wKingSq !== -1) {
-            const kf = wKingSq % 8, kr = Math.floor(wKingSq / 8);
-            if (kr >= 6 && (kf <= 2 || kf >= 5)) {
-              for (let df = -1; df <= 1; df++) {
-                const nf = kf + df;
-                if (nf >= 0 && nf < 8 && engine.board[(kr - 1) * 8 + nf] === 'wP') whiteScore += 14;
-              }
-            }
-          }
-          if (bKingSq !== -1) {
-            const kf = bKingSq % 8, kr = Math.floor(bKingSq / 8);
-            if (kr <= 1 && (kf <= 2 || kf >= 5)) {
-              for (let df = -1; df <= 1; df++) {
-                const nf = kf + df;
-                if (nf >= 0 && nf < 8 && engine.board[(kr + 1) * 8 + nf] === 'bP') blackScore += 14;
-              }
-            }
+          if (wKingSq === 62 || wKingSq === 61 || wKingSq === 58) whiteScore += 28;
+          if (bKingSq === 6 || bKingSq === 5 || bKingSq === 2) blackScore += 28;
+        } else if (Math.abs(whiteScore - blackScore) >= 250 && wKingSq !== -1 && bKingSq !== -1) {
+          const wr = Math.floor(wKingSq / 8), wf = wKingSq % 8;
+          const br = Math.floor(bKingSq / 8), bf = bKingSq % 8;
+          const kingDist = Math.abs(wr - br) + Math.abs(wf - bf);
+          if (whiteScore > blackScore) {
+            const bCenterDist = Math.abs(br - 3.5) + Math.abs(bf - 3.5);
+            whiteScore += Math.round(bCenterDist * 14 + (14 - kingDist) * 6);
+          } else {
+            const wCenterDist = Math.abs(wr - 3.5) + Math.abs(wf - 3.5);
+            blackScore += Math.round(wCenterDist * 14 + (14 - kingDist) * 6);
           }
         }
 
@@ -2104,33 +2103,24 @@
       }
 
       isSameMove(a, b) {
-        return !!(a && b && a.from === b.from && a.to === b.to && (a.promo || null) === (b.promo || null));
+        return a && b && a.from === b.from && a.to === b.to && (a.promo || null) === (b.promo || null);
       }
 
-      scoreMove(engine, m, ttMove, ply) {
-        if (ttMove && this.isSameMove(m, ttMove)) return 2000000;
-        let score = 0;
+      scoreMove(engine, m, ttMove = null, ply = 0) {
+        if (ttMove && this.isSameMove(m, ttMove)) return 1000000;
+        let s = 0;
         if (m.capture) {
           const seeVal = engine.staticExchangeEval(m);
-          if (seeVal >= 0) {
-            score += 500000 + seeVal * 10 + 12 * PIECE_VALUES[m.capture[1]] - PIECE_VALUES[m.piece[1]];
-          } else {
-            score += -200000 + seeVal;
-          }
+          s += (seeVal >= 0 ? 500000 : -200000) + 10 * PIECE_VALUES[m.capture[1]] - PIECE_VALUES[m.piece[1]];
         }
-        if (m.promo) {
-          score += 450000 + PIECE_VALUES[m.promo];
+        if (m.promo) s += 400000 + PIECE_VALUES[m.promo];
+        if (!m.capture && !m.promo && ply < 16) {
+          if (this.isSameMove(m, this.killers[ply][0])) s += 300000;
+          else if (this.isSameMove(m, this.killers[ply][1])) s += 290000;
+          else s += this.historyTable[m.from * 64 + m.to];
         }
-        if (!m.capture && !m.promo) {
-          const k = this.killers[ply];
-          if (k) {
-            if (this.isSameMove(m, k[0])) score += 300000;
-            else if (this.isSameMove(m, k[1])) score += 250000;
-          }
-          score += this.historyTable[m.from * 64 + m.to];
-        }
-        if (m.isCastle) score += 120000;
-        return score;
+        if (m.isCastle) s += 12000;
+        return s;
       }
 
       orderMoves(engine, moves, ttMove = null, ply = 0) {
@@ -2176,9 +2166,9 @@
           }
           return maximizing ? alpha : beta;
         } else {
-          // Always resolve check evasions completely so checks never hide material loss
           const legal = engine.generateLegalMoves(engine.turn);
           if (legal.length === 0) return maximizing ? (-29000 + qDepth) : (29000 - qDepth);
+          if (qDepth >= 12) return this.evaluate(engine);
           this.orderMoves(engine, legal);
           let best = maximizing ? -Infinity : Infinity;
           for (const m of legal) {
@@ -2186,7 +2176,7 @@
             engine.applyMoveRaw(m);
             const score = this.quiescence(engine, alpha, beta, !maximizing, qDepth + 1);
             engine.restoreState(snap);
-            if (this.aborted) return this.evaluate(engine);
+            if (this.aborted) return best === -Infinity || best === Infinity ? this.evaluate(engine) : best;
             if (maximizing) {
               if (score > best) best = score;
               if (score > alpha) alpha = score;
@@ -2209,7 +2199,6 @@
 
         const posKey = engine.getPositionKey();
         if (ply > 0 && ((engine.positionCounts.get(posKey) || 0) >= 2 || (pathKeys && pathKeys.has(posKey)))) {
-          // Return draw/contempt before touching TT so repetition scores never pollute TT entries
           const staticScore = this.evaluate(engine);
           if (Math.abs(staticScore) > 40) {
             return staticScore > 0 ? -75 : 75;
@@ -2220,14 +2209,14 @@
         const inCheck = engine.isInCheck(engine.turn);
         const origAlpha = alpha, origBeta = beta;
         const ttEntry = this.tt.get(posKey);
-        if (ttEntry && ttEntry.depth >= depth && !inCheck) {
+        if (ttEntry && ttEntry.depth >= depth && !inCheck && ply >= 2) {
           if (ttEntry.flag === 0) return ttEntry.score;
           if (ttEntry.flag === 1 && ttEntry.score > alpha) alpha = ttEntry.score;
           if (ttEntry.flag === 2 && ttEntry.score < beta) beta = ttEntry.score;
           if (alpha >= beta) return ttEntry.score;
         }
 
-        const extDepth = (inCheck && ply <= 4) ? depth + 1 : depth;
+        const extDepth = (inCheck && ply <= 3) ? depth + 1 : depth;
 
         if (extDepth <= 0) return this.quiescence(engine, alpha, beta, maximizing, 0);
 
@@ -2235,31 +2224,6 @@
         if (legal.length === 0) {
           if (inCheck) return maximizing ? (-29000 + ply) : (29000 - ply);
           return 0;
-        }
-
-        // Only apply Null-Move Pruning when side to move has non-pawn pieces (avoids zugzwang bugs in pawn endgames)
-        let hasPieces = false;
-        for (let sq = 0; sq < 64; sq++) {
-          const p = engine.board[sq];
-          if (p && p[0] === engine.turn && p[1] !== 'P' && p[1] !== 'K') { hasPieces = true; break; }
-        }
-
-        if (allowNull && hasPieces && !inCheck && extDepth >= 3 && ply >= 2) {
-          const snapNull = engine.cloneState();
-          engine.turn = engine.turn === 'w' ? 'b' : 'w';
-          engine.enPassant = -1;
-          const R = 2;
-          let nullScore;
-          if (maximizing) {
-            nullScore = this.minimax(engine, extDepth - 1 - R, beta - 1, beta, false, ply + 1, false, pathKeys);
-            engine.restoreState(snapNull);
-            if (!this.aborted && nullScore >= beta) return beta;
-          } else {
-            nullScore = this.minimax(engine, extDepth - 1 - R, alpha, alpha + 1, true, ply + 1, false, pathKeys);
-            engine.restoreState(snapNull);
-            if (!this.aborted && nullScore <= alpha) return alpha;
-          }
-          if (this.aborted) return this.evaluate(engine);
         }
 
         const ttMove = ttEntry ? ttEntry.bestMove : null;
@@ -2276,18 +2240,7 @@
           const snap = engine.cloneState();
           engine.applyMoveRaw(m);
 
-          let ev;
-          const canReduce = i >= 5 && extDepth >= 4 && !inCheck && !m.capture && !m.promo;
-          if (i === 0) {
-            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
-          } else if (canReduce) {
-            ev = this.minimax(engine, extDepth - 2, alpha, beta, !maximizing, ply + 1, true, nextPath);
-            if (!this.aborted && ((maximizing && ev > alpha) || (!maximizing && ev < beta))) {
-              ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
-            }
-          } else {
-            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
-          }
+          const ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
 
           engine.restoreState(snap);
           if (this.aborted) return bestScore === -Infinity || bestScore === Infinity ? this.evaluate(engine) : bestScore;
@@ -2322,29 +2275,29 @@
       }
 
       getBookMove(engine) {
+        const ply = engine.history.length;
+        if (ply >= 14) return null;
         const playedSans = engine.history.map(h => h.san.replace(/[+#]/g, ''));
-        if (playedSans.length >= 12) return null;
+        const matchingLines = OPENING_BOOK_LINES.filter(line =>
+          line.length > ply && playedSans.every((s, i) => line[i] === s)
+        );
+        if (matchingLines.length === 0) return null;
         const legal = engine.generateLegalMoves(engine.turn);
         const candidates = [];
-        for (const line of OPENING_BOOK_LINES) {
-          if (line.length > playedSans.length && playedSans.every((s, idx) => line[idx] === s)) {
-            const targetSan = line[playedSans.length];
-            const found = legal.find(m => {
-              const snap = engine.cloneState();
-              engine.applyMoveRaw(m);
-              const sanClean = engine.buildSAN(m, legal).replace(/[+#]/g, '');
-              engine.restoreState(snap);
-              return sanClean === targetSan;
-            });
-            if (found && !candidates.some(c => this.isSameMove(c, found))) {
-              candidates.push(found);
-            }
-          }
+        for (const line of matchingLines) {
+          const targetSan = line[ply];
+          const found = legal.find(m => {
+            const snap = engine.cloneState();
+            engine.applyMoveRaw(m);
+            const sanClean = engine.buildSAN(m, legal).replace(/[+#]/g, '');
+            engine.restoreState(snap);
+            return sanClean === targetSan;
+          });
+          if (found && !candidates.some(c => this.isSameMove(c, found))) candidates.push(found);
         }
         if (candidates.length === 0) return null;
         const seed = (typeof state !== 'undefined' && typeof state.matchBookSeed === 'number') ? state.matchBookSeed : 0;
-        const idx = (seed + playedSans.length * 7) % candidates.length;
-        return candidates[idx];
+        return candidates[(seed + ply * 7) % candidates.length];
       }
 
       analyzePositionDeterministic(engine, maxDepth = 6, budgetMs = 1800, minGuaranteedDepth = 4) {
@@ -2355,19 +2308,19 @@
         if (legal.length === 0) return { bestMove: null, bestScore: 0, secondBestScore: 0, scoredMoves: [] };
         if (legal.length === 1) return { bestMove: legal[0], bestScore: 0, secondBestScore: 0, scoredMoves: [{ move: legal[0], score: 0 }] };
 
+        const bookMove = this.getBookMove(engine);
         this.clearSearchTables();
         this.nodes = 0;
         this.startTime = performance.now();
         this.aborted = false;
 
-        const bookMove = this.getBookMove(engine);
         let completedResults = null;
-
         for (let depth = 1; depth <= maxDepth; depth++) {
           const isGuaranteed = depth <= minGuaranteedDepth;
           const elapsed = performance.now() - this.startTime;
           if (!isGuaranteed && elapsed > budgetMs * 0.72) break;
           this.timeBudget = isGuaranteed ? Math.max(budgetMs, 6000) : budgetMs;
+          this.aborted = false;
 
           const ordered = completedResults
             ? completedResults.map(r => r.move)
@@ -2375,19 +2328,16 @@
 
           const iterResults = [];
           let iterAborted = false;
-
           for (const m of ordered) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
             const rawEval = this.minimax(engine, depth - 1, -Infinity, Infinity, !maximizing, 1, true);
             engine.restoreState(snap);
-
             if (this.aborted) {
               iterAborted = true;
               break;
             }
-            const moverEval = Math.round(rawEval * sign);
-            iterResults.push({ move: m, score: moverEval });
+            iterResults.push({ move: m, score: Math.round(rawEval * sign) });
           }
 
           if (!iterAborted && iterResults.length === legal.length) {
@@ -2400,9 +2350,9 @@
               }
             }
             completedResults = iterResults;
+          } else {
+            break;
           }
-          if (iterAborted) break;
-          this.aborted = false;
         }
 
         const finalList = completedResults || legal.map(m => ({ move: m, score: 0 }));
@@ -2413,40 +2363,33 @@
       }
 
       getCustomEloProfile(elo) {
-        const clamped = Math.max(100, Math.min(3000, Math.round(elo / 100) * 100));
-        const table = {
-          100:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 60,   jitter: 340, topPool: 8, blunderRate: 0.55 },
-          200:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 75,   jitter: 270, topPool: 6, blunderRate: 0.42 },
-          300:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 90,   jitter: 210, topPool: 5, blunderRate: 0.30 },
-          400:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 105,  jitter: 165, topPool: 4, blunderRate: 0.22 },
-          500:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 120,  jitter: 125, topPool: 4, blunderRate: 0.15 },
-          600:  { maxDepth: 2, minGuaranteedDepth: 1, budget: 180,  jitter: 95,  topPool: 3, blunderRate: 0.10 },
-          700:  { maxDepth: 2, minGuaranteedDepth: 2, budget: 240,  jitter: 70,  topPool: 3, blunderRate: 0.06 },
-          800:  { maxDepth: 2, minGuaranteedDepth: 2, budget: 280,  jitter: 55,  topPool: 3, blunderRate: 0.04 },
-          900:  { maxDepth: 2, minGuaranteedDepth: 2, budget: 320,  jitter: 42,  topPool: 2, blunderRate: 0.02 },
-          1000: { maxDepth: 2, minGuaranteedDepth: 2, budget: 360,  jitter: 30,  topPool: 2, blunderRate: 0.01 },
-          1100: { maxDepth: 2, minGuaranteedDepth: 2, budget: 400,  jitter: 20,  topPool: 2, blunderRate: 0 },
-          1200: { maxDepth: 3, minGuaranteedDepth: 2, budget: 460,  jitter: 14,  topPool: 2, blunderRate: 0 },
-          1300: { maxDepth: 3, minGuaranteedDepth: 2, budget: 540,  jitter: 9,   topPool: 2, blunderRate: 0 },
-          1400: { maxDepth: 3, minGuaranteedDepth: 3, budget: 640,  jitter: 5,   topPool: 2, blunderRate: 0 },
-          1500: { maxDepth: 3, minGuaranteedDepth: 3, budget: 740,  jitter: 0,   topPool: 1, blunderRate: 0 },
-          1600: { maxDepth: 4, minGuaranteedDepth: 3, budget: 860,  jitter: 0,   topPool: 1, blunderRate: 0 },
-          1700: { maxDepth: 4, minGuaranteedDepth: 3, budget: 980,  jitter: 0,   topPool: 1, blunderRate: 0 },
-          1800: { maxDepth: 4, minGuaranteedDepth: 4, budget: 1100, jitter: 0,   topPool: 1, blunderRate: 0 },
-          1900: { maxDepth: 4, minGuaranteedDepth: 4, budget: 1220, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2000: { maxDepth: 5, minGuaranteedDepth: 4, budget: 1340, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2100: { maxDepth: 5, minGuaranteedDepth: 4, budget: 1460, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2200: { maxDepth: 5, minGuaranteedDepth: 4, budget: 1580, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2300: { maxDepth: 6, minGuaranteedDepth: 4, budget: 1700, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2400: { maxDepth: 6, minGuaranteedDepth: 4, budget: 1820, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2500: { maxDepth: 6, minGuaranteedDepth: 5, budget: 1940, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2600: { maxDepth: 6, minGuaranteedDepth: 5, budget: 2050, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2700: { maxDepth: 6, minGuaranteedDepth: 5, budget: 2150, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2800: { maxDepth: 7, minGuaranteedDepth: 5, budget: 2250, jitter: 0,   topPool: 1, blunderRate: 0 },
-          2900: { maxDepth: 7, minGuaranteedDepth: 5, budget: 2350, jitter: 0,   topPool: 1, blunderRate: 0 },
-          3000: { maxDepth: 7, minGuaranteedDepth: 5, budget: 2500, jitter: 0,   topPool: 1, blunderRate: 0 }
-        };
-        return table[clamped] || table[1500];
+        if (elo <= 100)  return { maxDepth: 1, minGuaranteedDepth: 1, budget: 70,   jitter: 360, topPool: 9, blunderRate: 0.55 };
+        if (elo <= 200)  return { maxDepth: 1, minGuaranteedDepth: 1, budget: 75,   jitter: 300, topPool: 8, blunderRate: 0.45 };
+        if (elo <= 300)  return { maxDepth: 1, minGuaranteedDepth: 1, budget: 85,   jitter: 240, topPool: 6, blunderRate: 0.34 };
+        if (elo <= 400)  return { maxDepth: 1, minGuaranteedDepth: 1, budget: 95,   jitter: 190, topPool: 5, blunderRate: 0.25 };
+        if (elo <= 500)  return { maxDepth: 1, minGuaranteedDepth: 1, budget: 110,  jitter: 150, topPool: 4, blunderRate: 0.18 };
+        if (elo <= 600)  return { maxDepth: 2, minGuaranteedDepth: 2, budget: 180,  jitter: 120, topPool: 4, blunderRate: 0.13 };
+        if (elo <= 700)  return { maxDepth: 2, minGuaranteedDepth: 2, budget: 230,  jitter: 95,  topPool: 3, blunderRate: 0.09 };
+        if (elo <= 800)  return { maxDepth: 2, minGuaranteedDepth: 2, budget: 280,  jitter: 75,  topPool: 3, blunderRate: 0.06 };
+        if (elo <= 900)  return { maxDepth: 2, minGuaranteedDepth: 2, budget: 330,  jitter: 58,  topPool: 3, blunderRate: 0.04 };
+        if (elo <= 1000) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 380,  jitter: 44,  topPool: 2, blunderRate: 0.02 };
+        if (elo <= 1100) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 430,  jitter: 32,  topPool: 2, blunderRate: 0 };
+        if (elo <= 1200) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 480,  jitter: 24,  topPool: 2, blunderRate: 0 };
+        if (elo <= 1300) return { maxDepth: 3, minGuaranteedDepth: 2, budget: 540,  jitter: 18,  topPool: 2, blunderRate: 0 };
+        if (elo <= 1400) return { maxDepth: 3, minGuaranteedDepth: 2, budget: 600,  jitter: 13,  topPool: 2, blunderRate: 0 };
+        if (elo <= 1500) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 680,  jitter: 9,   topPool: 2, blunderRate: 0 };
+        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 760,  jitter: 5,   topPool: 1, blunderRate: 0 };
+        if (elo <= 1700) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 860,  jitter: 2,   topPool: 1, blunderRate: 0 };
+        if (elo <= 1800) return { maxDepth: 4, minGuaranteedDepth: 4, budget: 1000, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 1900) return { maxDepth: 4, minGuaranteedDepth: 4, budget: 1120, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 2000) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1240, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 2100) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1360, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 2200) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1480, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 2350) return { maxDepth: 6, minGuaranteedDepth: 4, budget: 1620, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 2500) return { maxDepth: 6, minGuaranteedDepth: 4, budget: 1760, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 2700) return { maxDepth: 6, minGuaranteedDepth: 5, budget: 1920, jitter: 0,   topPool: 1, blunderRate: 0 };
+        if (elo <= 2850) return { maxDepth: 7, minGuaranteedDepth: 5, budget: 2150, jitter: 0,   topPool: 1, blunderRate: 0 };
+        return             { maxDepth: 7, minGuaranteedDepth: 5, budget: 2400, jitter: 0,   topPool: 1, blunderRate: 0 };
       }
 
       chooseBestMove(engine, difficulty = 'medium', customElo = 1500) {
@@ -2454,7 +2397,6 @@
         if (legal.length === 0) return null;
         if (legal.length === 1) return legal[0];
         const maximizing = engine.turn === 'w';
-        this.clearSearchTables();
         this.nodes = 0; this.startTime = performance.now(); this.aborted = false;
 
         if (difficulty === 'easy') {
@@ -2477,7 +2419,7 @@
           for (const m of legal) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const sc = this.minimax(engine, 1, -Infinity, Infinity, !maximizing, 1, true);
+            const sc = this.minimax(engine, 1, -Infinity, Infinity, !maximizing);
             engine.restoreState(snap);
             scored.push({ move: m, score: sc });
           }
@@ -2489,15 +2431,15 @@
 
         const profile = difficulty === 'custom'
           ? this.getCustomEloProfile(customElo)
-          : { maxDepth: 4, minGuaranteedDepth: 4, budget: 1100, jitter: 0, topPool: 1, blunderRate: 0 };
+          : { maxDepth: 4, minGuaranteedDepth: 4, budget: 1000, jitter: 0, topPool: 1, blunderRate: 0 };
 
         if (profile.blunderRate > 0 && Math.random() < profile.blunderRate) {
           return legal[Math.floor(Math.random() * legal.length)];
         }
 
-        if (profile.topPool === 1) {
+        if (profile.jitter === 0 && profile.topPool === 1) {
           const analysis = this.analyzePositionDeterministic(engine, profile.maxDepth, profile.budget, profile.minGuaranteedDepth);
-          if (analysis.bestMove) return analysis.bestMove;
+          return analysis.bestMove || legal[0];
         }
 
         this.timeBudget = profile.budget;
@@ -2507,7 +2449,7 @@
         for (let depth = 1; depth <= profile.maxDepth; depth++) {
           const isGuaranteed = depth <= profile.minGuaranteedDepth;
           if (!isGuaranteed && performance.now() - this.startTime > this.timeBudget * 0.55) break;
-          if (isGuaranteed) this.timeBudget = Math.max(this.timeBudget, 2500);
+          if (isGuaranteed) this.timeBudget = Math.max(this.timeBudget, 3500);
 
           let currentBest = null, currentBestScore = maximizing ? -Infinity : Infinity;
           let alpha = -Infinity, beta = Infinity;
@@ -2516,7 +2458,7 @@
           for (const m of legal) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing, 1, true);
+            const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing);
             engine.restoreState(snap);
             if (this.aborted) break;
             const noisyScore = profile.jitter > 0 ? sc + (Math.random() - 0.5) * profile.jitter : sc;
@@ -2533,7 +2475,6 @@
             bestMove = currentBest;
             bestScoredList = iterScored;
           }
-          if (this.aborted) break;
           this.aborted = false;
         }
         if (profile.topPool > 1 && bestScoredList.length > 0) {
@@ -2547,72 +2488,6 @@
 
     const engine = new ChessEngine();
     const ai = new ChessAI();
-    const positionAnalysisCache = new Map();
-
-    function getCachedPositionAnalysis() {
-      const key = `${engine.getPositionKey()}|${engine.history.length}`;
-      if (positionAnalysisCache.has(key)) {
-        return positionAnalysisCache.get(key);
-      }
-      const res = ai.analyzePositionDeterministic(engine, 7, 2400, 5);
-      if (positionAnalysisCache.size > 400) positionAnalysisCache.clear();
-      positionAnalysisCache.set(key, res);
-      return res;
-    }
-
-    function classifyMoveQuality(moverColor, bestScoreForMover, playedScoreForMover, secondBestScoreForMover, isSacrifice, sanHistory, isExactBestMove) {
-      if (sanHistory.length <= 10 && OPENING_BOOK_LINES.some(line => sanHistory.every((m, idx) => line[idx] === m))) {
-        return { key: 'book', symbol: '📖', label: 'Book Move', css: 'badge-book', color: '#fbbf24' };
-      }
-      const cpLoss = Math.max(0, bestScoreForMover - playedScoreForMover);
-      const gapToSecond = bestScoreForMover - secondBestScoreForMover;
-
-      if (isExactBestMove || cpLoss === 0) {
-        if (isSacrifice && sanHistory.length > 10 && playedScoreForMover >= 90 && gapToSecond >= 110) return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
-        if (gapToSecond >= 135 && bestScoreForMover > -150) return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
-        return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
-      }
-      if (cpLoss <= 55) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
-      if (cpLoss <= 125) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
-      if (cpLoss <= 250) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
-      return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
-    }
-
-    function evaluateMoveBeforeCommit(move) {
-      const moverColor = engine.turn;
-      const legal = engine.generateLegalMoves(moverColor);
-      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
-
-      // Fast evaluation for AI's own moves so Hint cache stays dedicated to player turns
-      if (state.mode === 'ai' && moverColor !== state.humanColor) {
-        const snapAi = engine.cloneState();
-        const beforeAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
-        engine.applyMoveRaw(move);
-        const afterAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
-        engine.restoreState(snapAi);
-        const diff = Math.max(0, beforeAi - afterAi);
-        if (diff <= 45) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
-        if (diff <= 110) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
-        if (diff <= 220) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
-        return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
-      }
-
-      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
-      const analysis = getCachedPositionAnalysis();
-      const { bestMove, bestScore, secondBestScore, scoredMoves } = analysis;
-
-      const isExactBestMove = ai.isSameMove(move, bestMove);
-      const matched = scoredMoves.find(item => ai.isSameMove(item.move, move));
-      const playedScore = isExactBestMove ? bestScore : (matched ? matched.score : bestScore);
-
-      const snapCheck = engine.cloneState();
-      engine.applyMoveRaw(move);
-      const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
-      engine.restoreState(snapCheck);
-      const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
-      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
-      return classifyMoveQuality(moverColor, bestScore, playedScore, secondBestScore, isSacrifice, futureSan, isExactBestMove);
-    }
 
     const state = {
       mode: 'ai',
@@ -2625,7 +2500,7 @@
       tabletopMode: true,
       allowUndo: false,
       allowHints: false,
-      matchBookSeed: Math.floor(Math.random() * 1000),
+      matchBookSeed: Math.floor(Math.random() * 100000),
       selectedSq: null,
       legalMovesForSelected: [],
       hintMove: null,
@@ -2647,11 +2522,9 @@
         const svgEl = document.querySelector('#top-bar .brand-icon svg');
         if (!ctx || !svgEl) return;
         const grad = ctx.createLinearGradient(0, 0, 512, 512);
-        grad.addColorStop(0, '#10b981');
-        grad.addColorStop(1, '#065f46');
+        grad.addColorStop(0, '#10b981'); grad.addColorStop(1, '#065f46');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 512, 512);
-
         const svgData = new XMLSerializer().serializeToString(svgEl);
         const img = new Image();
         img.onload = () => {
@@ -2717,9 +2590,7 @@
       if (dragState && dragState.active && !force) return;
       const isDesktop = window.innerWidth >= 900;
       const vw = document.documentElement.clientWidth || window.innerWidth;
-      const vh = window.visualViewport
-        ? Math.min(window.innerHeight, window.visualViewport.height)
-        : window.innerHeight;
+      const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
       const celebEl = $('celeb-comment-bar');
       const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
       const celebExtraH = hasCelebComment ? 46 : 0;
@@ -2727,25 +2598,20 @@
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const barsH = 44 + 44 + 40;
-        const topResignH = isFriend ? 46 : 0;
-        const gapsH = isFriend ? 40 : 32;
-        const verticalMargin = 36;
+        const extraTopResign = isFriend ? 48 : 0;
         const availW = vw - 340 - 26 - 72;
-        const availH = vh - barsH - topResignH - celebExtraH - gapsH - verticalMargin;
-        boardSize = Math.floor(Math.min(availW, availH, 640));
+        const availH = vh - 160 - extraTopResign - celebExtraH - 24;
+        boardSize = Math.floor(Math.min(availW, availH, 680));
       } else {
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
-        const appStyles = getComputedStyle($('app'));
-        const padTop = parseFloat(appStyles.paddingTop) || 16;
-        const padBot = parseFloat(appStyles.paddingBottom) || 8;
         const extraTopResign = isFriend ? 46 : 0;
-        const actionsH = hasActions ? 46 : 0;
-        const fixedChromeH = padTop + padBot + 46 + 30 + extraTopResign + 40 + celebExtraH + 40 + 40 + 30 + actionsH + 54;
-        const availH = vh - fixedChromeH;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const safeTopOffset = isStandalone ? 66 : 24;
+        const chromeH = safeTopOffset + 46 + 30 + extraTopResign + celebExtraH + 40 + 40 + 40 + 30 + (hasActions ? 40 : 0) + 46;
+        const availH = vh - chromeH;
         const availW = vw - 24 - 8 - 18;
-        boardSize = Math.floor(Math.min(availW, availH, 514));
+        boardSize = Math.floor(Math.min(availW, availH));
       }
 
       boardSize = Math.max(220, boardSize);
@@ -2757,26 +2623,22 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const totalColumnHeight = boardSize + 44 + 44 + 40 + (isFriend ? 46 : 0) + celebExtraH + (isFriend ? 40 : 32);
+        const totalColumnHeight = boardSize + 44 + 44 + 40 + (isFriend ? 48 : 0) + celebExtraH + (isFriend ? 32 : 24);
         $('desktop-sidebar').style.height = Math.min(totalColumnHeight, vh - 24) + 'px';
         $('desktop-sidebar').style.maxHeight = (vh - 24) + 'px';
-        const barWidth = (boardSize + 8 + 18) + 'px';
-        els.topBar.style.width = barWidth;
-        els.bottomBar.style.width = barWidth;
-        if (celebEl) celebEl.style.width = barWidth;
-        $('btn-resign-black-top').style.width = barWidth;
-        $('board-bottom-resign-wrap').style.width = barWidth;
-      } else {
-        $('top-bar').style.width = '100%';
-        $('mobile-status-strip').style.width = '100%';
-        els.topBar.style.width = '100%';
-        els.bottomBar.style.width = '100%';
-        if (celebEl) celebEl.style.width = '100%';
-        $('btn-resign-black-top').style.width = '100%';
-        $('board-bottom-resign-wrap').style.width = '100%';
-        $('mobile-bottom-strip').style.width = '100%';
       }
 
+      const barWidth = (boardSize + 8 + 18) + 'px';
+      els.topBar.style.width = barWidth;
+      els.bottomBar.style.width = barWidth;
+      if (celebEl) celebEl.style.width = barWidth;
+      $('btn-resign-black-top').style.width = barWidth;
+      $('board-bottom-resign-wrap').style.width = barWidth;
+      if (!isDesktop) {
+        $('top-bar').style.width = barWidth;
+        $('mobile-status-strip').style.width = barWidth;
+        $('mobile-bottom-strip').style.width = barWidth;
+      }
       els.dragGhost.style.width = Math.round(boardSize / 8 * 1.15) + 'px';
       els.dragGhost.style.height = Math.round(boardSize / 8 * 1.15) + 'px';
     }
@@ -2855,7 +2717,7 @@
           badge.className = `move-badge ${lastRecord.quality.css}`;
           if (state.mode === 'friend' && state.tabletopMode && lastRecord.moverColor === 'b') badge.classList.add('rotated-180');
           if (lastRecord.quality.key === 'best') {
-            badge.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.4l2.92 5.92 6.53.95-4.72 4.6 1.11 6.5L12 17.3l-5.84 3.07 1.11-6.5-4.72-4.6 6.53-.95L12 2.4z"/></svg>`;
+            badge.innerHTML = `<svg viewBox="0 0 20 20" fill="#ffffff" aria-hidden="true"><path d="M10 2.3l2.32 4.7 5.18.75-3.75 3.66.89 5.16L10 14.13l-4.64 2.44.89-5.16-3.75-3.66 5.18-.75L10 2.3z"/></svg>`;
           } else {
             badge.textContent = lastRecord.quality.symbol;
           }
@@ -2870,6 +2732,166 @@
         }
       }
       updateEvaluationBar();
+    }
+
+    const positionAnalysisCache = new Map();
+
+    function getCachedPositionAnalysis() {
+      const key = `${state.matchBookSeed || 0}|${engine.history.length}|${engine.getPositionKey()}`;
+      if (positionAnalysisCache.has(key)) {
+        return positionAnalysisCache.get(key);
+      }
+      const profile3000 = ai.getCustomEloProfile(3000);
+      const analysis = ai.analyzePositionDeterministic(engine, profile3000.maxDepth, profile3000.budget, profile3000.minGuaranteedDepth);
+      if (positionAnalysisCache.size > 300) positionAnalysisCache.clear();
+      positionAnalysisCache.set(key, analysis);
+      return analysis;
+    }
+
+    function classifyMoveQuality(moverColor, bestScoreForMover, playedScoreForMover, secondBestScoreForMover, isSacrifice, sanHistory, isBookMove) {
+      const cpLoss = Math.max(0, bestScoreForMover - playedScoreForMover);
+      if (isBookMove && cpLoss <= 25) {
+        return { key: 'book', symbol: '📖', label: 'Book Move', css: 'badge-book', color: '#fbbf24' };
+      }
+      const gapToSecond = bestScoreForMover - secondBestScoreForMover;
+      if (cpLoss === 0) {
+        if (isSacrifice && sanHistory.length > 6 && playedScoreForMover >= 90 && gapToSecond >= 110) {
+          return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
+        }
+        if (gapToSecond >= 135 && bestScoreForMover > -150) {
+          return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
+        }
+        return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+      }
+      if (cpLoss <= 45) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+      if (cpLoss <= 115) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+      if (cpLoss <= 230) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
+      return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
+    }
+
+    function evaluateMoveBeforeCommit(move) {
+      const moverColor = engine.turn;
+      const legal = engine.generateLegalMoves(moverColor);
+      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+
+      const wasHintedMove = Boolean(
+        state.hintMove &&
+        state.hintMove.from === move.from &&
+        state.hintMove.to === move.to &&
+        (state.hintMove.promo || null) === (move.promo || null)
+      );
+
+      if (state.mode === 'ai' && moverColor !== state.humanColor) {
+        const snapAi = engine.cloneState();
+        const beforeAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
+        engine.applyMoveRaw(move);
+        const afterAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
+        engine.restoreState(snapAi);
+        const diff = afterAi - beforeAi;
+        if (diff >= -35) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+        if (diff >= -90) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+        if (diff >= -170) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+        if (diff >= -290) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
+        return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
+      }
+
+      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
+      const analysis = getCachedPositionAnalysis();
+      const { bestMove, bestScore, secondBestScore, scoredMoves } = analysis;
+
+      const isExactBest = wasHintedMove || Boolean(
+        bestMove &&
+        bestMove.from === move.from &&
+        bestMove.to === move.to &&
+        (bestMove.promo || null) === (move.promo || null)
+      );
+
+      const matched = scoredMoves.find(item =>
+        item.move.from === move.from &&
+        item.move.to === move.to &&
+        (item.move.promo || null) === (move.promo || null)
+      );
+      const playedScore = isExactBest ? bestScore : (matched ? matched.score : bestScore - 10);
+      const safeSecondBest = wasHintedMove ? Math.min(secondBestScore, bestScore - 15) : secondBestScore;
+
+      const snapCheck = engine.cloneState();
+      engine.applyMoveRaw(move);
+      const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
+      engine.restoreState(snapCheck);
+      const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
+      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
+      const isBookMove = futureSan.length <= 12 && OPENING_BOOK_LINES.some(line => futureSan.every((m, idx) => line[idx] === m));
+      return classifyMoveQuality(moverColor, bestScore, playedScore, safeSecondBest, isSacrifice, futureSan, isBookMove);
+    }
+
+    function classifyMoveQuality(moverColor, bestScoreForMover, playedScoreForMover, secondBestScoreForMover, isSacrifice, sanHistory, isBookMove) {
+      if (isBookMove && playedScoreForMover >= bestScoreForMover - 15) {
+        return { key: 'book', symbol: '📖', label: 'Book Move', css: 'badge-book', color: '#fbbf24' };
+      }
+      const cpLoss = Math.max(0, bestScoreForMover - playedScoreForMover);
+      const gapToSecond = bestScoreForMover - secondBestScoreForMover;
+      if (cpLoss === 0) {
+        if (isSacrifice && sanHistory.length > 6 && playedScoreForMover >= 90 && gapToSecond >= 110) {
+          return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
+        }
+        if (gapToSecond >= 135 && bestScoreForMover > -150) {
+          return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
+        }
+        return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+      }
+      if (cpLoss <= 45) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+      if (cpLoss <= 115) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+      if (cpLoss <= 230) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
+      return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
+    }
+
+    function evaluateMoveBeforeCommit(move) {
+      const moverColor = engine.turn;
+      const legal = engine.generateLegalMoves(moverColor);
+      if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+
+      if (state.mode === 'ai' && moverColor !== state.humanColor) {
+        const snapAi = engine.cloneState();
+        const beforeAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
+        engine.applyMoveRaw(move);
+        const afterAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
+        engine.restoreState(snapAi);
+        const diff = afterAi - beforeAi;
+        if (diff >= -35) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+        if (diff >= -90) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+        if (diff >= -170) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+        if (diff >= -290) return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
+        return { key: 'blunder', symbol: '??', label: 'Blunder', css: 'badge-blunder', color: '#f87171' };
+      }
+
+      const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
+      const analysis = getCachedPositionAnalysis();
+      const { bestMove, bestScore, secondBestScore, scoredMoves } = analysis;
+
+      const isExactBest = (bestMove &&
+        bestMove.from === move.from &&
+        bestMove.to === move.to &&
+        (bestMove.promo || null) === (move.promo || null)) ||
+        (state.hintMove &&
+        state.hintMove.from === move.from &&
+        state.hintMove.to === move.to &&
+        (state.hintMove.promo || null) === (move.promo || null));
+
+      const matched = scoredMoves.find(item =>
+        item.move.from === move.from &&
+        item.move.to === move.to &&
+        (item.move.promo || null) === (move.promo || null)
+      );
+      const playedScore = isExactBest ? bestScore : (matched ? matched.score : bestScore - 10);
+
+      const snapCheck = engine.cloneState();
+      engine.applyMoveRaw(move);
+      const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
+      engine.restoreState(snapCheck);
+      const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
+      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
+      const isBookMove = futureSan.length <= 12 && OPENING_BOOK_LINES.some(line => futureSan.every((m, idx) => line[idx] === m));
+      return classifyMoveQuality(moverColor, bestScore, playedScore, secondBestScore, isSacrifice, futureSan, isBookMove);
     }
 
     function updateEvaluationBar() {
@@ -2939,22 +2961,27 @@
       updateStatusUI();
 
       if (state.mode === 'ai') {
+        const ctx = {
+          san: record.san,
+          dest: engine.sqToAlgebraic(move.to),
+          captured: move.capture ? ({ P: 'pawn', N: 'knight', B: 'bishop', R: 'rook', Q: 'queen' }[move.capture[1]] || 'piece') : null
+        };
         if (outcome.over) {
-          if (outcome.winner === 'Draw') updateBotComment('draw');
-          else if ((outcome.winner === 'White' && state.humanColor === 'w') || (outcome.winner === 'Black' && state.humanColor === 'b')) updateBotComment('humanWin');
-          else updateBotComment('botWin');
+          if (outcome.winner === 'Draw') updateBotComment('draw', ctx);
+          else if ((outcome.winner === 'White' && state.humanColor === 'w') || (outcome.winner === 'Black' && state.humanColor === 'b')) updateBotComment('humanWin', ctx);
+          else updateBotComment('botWin', ctx);
         } else if (moverColor === state.humanColor) {
-          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateBotComment('humanBlunder');
-          else if (quality && quality.key === 'inaccuracy') updateBotComment('humanInaccuracy');
-          else if (quality && (quality.key === 'brilliant' || quality.key === 'great')) updateBotComment('humanBrilliant');
-          else if (move.capture && move.capture[1] === 'Q') updateBotComment('humanCaptureQueen');
-          else if (move.isCastle) updateBotComment('humanCastle');
-          else updateBotComment('humanGood');
+          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateBotComment('humanBlunder', ctx);
+          else if (quality && quality.key === 'inaccuracy') updateBotComment('humanInaccuracy', ctx);
+          else if (quality && (quality.key === 'brilliant' || quality.key === 'great')) updateBotComment('humanBrilliant', ctx);
+          else if (move.capture && move.capture[1] === 'Q') updateBotComment('humanCaptureQueen', ctx);
+          else if (move.isCastle) updateBotComment('humanCastle', ctx);
+          else updateBotComment('humanGood', ctx);
         } else {
-          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateBotComment('botBlunder');
-          else if (outcome.inCheck) updateBotComment('botCheck');
-          else if (move.capture) updateBotComment('botCapture');
-          else updateBotComment('botNormal');
+          if (quality && (quality.key === 'blunder' || quality.key === 'mistake')) updateBotComment('botBlunder', ctx);
+          else if (outcome.inCheck) updateBotComment('botCheck', ctx);
+          else if (move.capture) updateBotComment('botCapture', ctx);
+          else updateBotComment('botNormal', ctx);
         }
       }
 
@@ -3079,11 +3106,11 @@
       const flipped = isBoardFlipped();
       const topSec = flipped ? state.whiteTime : state.blackTime;
       const botSec = flipped ? state.blackTime : state.whiteTime;
-      const isInf = state.timeControl === 0;
+      const isInfinity = state.timeControl === 0;
       els.topClock.textContent = formatTime(topSec);
       els.bottomClock.textContent = formatTime(botSec);
-      els.topClock.classList.toggle('infinity-mode', isInf);
-      els.bottomClock.classList.toggle('infinity-mode', isInf);
+      els.topClock.classList.toggle('infinity-mode', isInfinity);
+      els.bottomClock.classList.toggle('infinity-mode', isInfinity);
       els.topClock.classList.toggle('low-time', state.timeControl > 0 && topSec <= 30 && topSec > 0);
       els.bottomClock.classList.toggle('low-time', state.timeControl > 0 && botSec <= 30 && botSec > 0);
       els.topBar.classList.toggle('active-turn', !state.gameOver && engine.turn === (flipped ? 'w' : 'b'));
@@ -3122,15 +3149,15 @@
         for (let k = 0; k < Math.max(0, startCounts[t] - currW[t]); k++) bCap += PIECE_SVGS['w' + t];
       }
       const flipped = isBoardFlipped();
-      const botCapHTML = flipped ? bCap : wCap;
       const topCapHTML = flipped ? wCap : bCap;
+      const botCapHTML = flipped ? bCap : wCap;
       els.bottomCaptured.innerHTML = botCapHTML;
       els.topCaptured.innerHTML = topCapHTML;
       const diff = wMat - bMat, botDiff = flipped ? -diff : diff, topDiff = -botDiff;
       els.bottomMatDiff.textContent = botDiff > 0 ? `+${Math.round(botDiff / 100)}` : '';
       els.topMatDiff.textContent = topDiff > 0 ? `+${Math.round(topDiff / 100)}` : '';
-      els.bottomCapturedRow.classList.toggle('is-empty', !botCapHTML && botDiff <= 0);
-      els.topCapturedRow.classList.toggle('is-empty', !topCapHTML && topDiff <= 0);
+      if (els.topCapturedRow) els.topCapturedRow.classList.toggle('is-empty', !topCapHTML && topDiff <= 0);
+      if (els.bottomCapturedRow) els.bottomCapturedRow.classList.toggle('is-empty', !botCapHTML && botDiff <= 0);
     }
 
     function updateMoveHistoryUI() {
@@ -3159,9 +3186,9 @@
       andrea: { name: 'Andrea Botez', short: 'Andrea', elo: 1800 },
       alexandra: { name: 'Alexandra Botez', short: 'Alexandra', elo: 2050 },
       anna: { name: 'Anna Cramling', short: 'Anna', elo: 2100 },
-      gotham: { name: 'Gotham Chess', short: 'Gotham', elo: 2350 },
-      hikaru: { name: 'Hikaru Nakamura', short: 'Hikaru', elo: 2800 },
-      magnus: { name: 'Magnus Carlsen', short: 'Magnus', elo: 2850 }
+      gotham: { name: 'GothamChess', short: 'Gotham', elo: 2350 },
+      hikaru: { name: 'Hikaru', short: 'Hikaru', elo: 2800 },
+      magnus: { name: 'Magnus', short: 'Magnus', elo: 2850 }
     };
 
     const CELEBRITY_LINES = {
@@ -3170,145 +3197,132 @@
           "Full send! Attack mode activated!",
           "Let's go! No passive chess today!",
           "Hope you're ready for fireworks on the board!",
-          "Time to create absolute chaos from move one!",
-          "No draws allowed—we're playing for checkmate!",
-          "Let's see if your king survives the opening!"
+          "All gas, no brakes—let's make this wild!",
+          "I came here to attack, not to trade into an endgame!"
         ],
         humanBlunder: [
           "Ooh, free material! Botez Gambit reversed!",
           "Wait, did you just hang that?! I'll take it!",
           "Thank youuu! Adding that to my collection!",
-          "Did you slip on the board or was that a gift?!",
-          "Ooh, wide open! I'm pouncing on that immediately!",
-          "You left that completely undefended—let's go!"
+          "No way you just left that undefended—yoink!",
+          "Oof, that's a massive gift! Let's go!"
         ],
         humanInaccuracy: [
           "Hmm, are you sure about that square?",
           "Ooh, a tiny slip—let me see how I can punish that!",
           "Careful, you're giving me initiative!",
-          "That looks a little slow—time to crank up the attack!",
-          "Ooh, juicy target! Let me line up my pieces!"
+          "A little bit passive—now it's my turn to attack!"
         ],
         humanBrilliant: [
           "Whoa, okay! Respect for finding that!",
           "Wait—that's actually super nasty!",
           "Okay, I see you! What a tactical shot!",
-          "Hold on, where did THAT move come from?!",
-          "Insane find! You actually saw the whole tactic!"
+          "Hold on, did you calculate all of that?! Crazy move!"
         ],
         humanGood: [
           "Solid move! Keeping the tension high!",
           "Nice! You're not making this easy for me.",
           "Clean development! Let's see what happens next!",
-          "Okay, solid defense—now let's break it open!",
-          "Good tempo! This game is heating up!",
-          "Nice square! Both sides are ready to brawl!"
+          "Okay, solid defense—time for me to turn up the heat!",
+          "Good move! Now watch how fast the board opens up!"
         ],
         humanCastle: [
           "Castled to safety! Smart, because I was coming for your king!",
           "Tucking the king away—let's see if it stays safe!",
-          "Smart castle, now watch me launch my pawns over there!"
+          "Nice castle! Too bad my pieces are already aiming that way!"
         ],
         humanCaptureQueen: [
           "NOOO, my queen!! Classic Botez Gambit...",
           "I meant to sacrifice the queen! Totally planned!",
-          "Okay, my queen is gone—time for the ultimate comeback!"
+          "Okay, who needs a queen when you have pure vibes?!"
         ],
         botBlunder: [
           "Wait… ignore that move, it's a galaxy-brain trap!",
           "Botez Gambit activated! Who needs pieces anyway?!",
-          "Oops! Pretend that was a 3000-ELO positional sacrifice!"
+          "Totally meant to do that—pure psychological warfare!"
         ],
         botCapture: [
           "Snatched! Keep your pieces defended!",
           "Boom! One piece closer to victory.",
           "Yoink! I'll take that!",
-          "Off the board! Who's next?!",
-          "Clean capture—my attack is rolling!"
+          "Clearing the board—attack incoming!"
         ],
         botCheck: [
           "Check! Nowhere to hide!",
           "Watch your king! Feel the pressure!",
-          "Check! Running out of safe squares!",
-          "Incoming check! Defend if you can!"
+          "Check! Keep running!"
         ],
         botNormal: [
           "Let's open up the board!",
           "I'm coming straight for your king!",
           "Pushing forward—time to create some chaos!",
-          "All my pieces are aiming right at your position!",
-          "No retreat—full aggression every single move!",
-          "Let's see how you handle nonstop pressure!"
+          "No retreating—every piece goes forward!",
+          "Let's see how you handle full-board aggression!"
         ],
         humanWin: [
           "GG! You out-tacticked me today!",
           "Okay, rematch right now!",
-          "GG! That attack at the end was brutal!"
+          "Well played! You survived the storm and struck back!"
         ],
         botWin: [
           "Let's go!! Aggressive chess pays off!",
           "GG! That attack was unstoppable!",
-          "Boom! Checkmate—what a wild game!"
+          "Boom! Checkmate—what a game!"
         ],
         draw: [
           "A draw?! After all that chaos?! GG!",
-          "Somehow we both survived! GG!"
+          "Wait, we actually drew that?! Insane game!"
         ]
       },
       alexandra: {
         start: [
           "Let's keep the center tight. Good luck!",
           "Focus, structure, and clean tactics. Have fun!",
-          "Let's see who controls the key squares first.",
           "Solid opening principles win games—let's begin!",
-          "Ready for a sharp, disciplined battle. Your move!"
+          "Let's play a clean, strategic battle!"
         ],
         humanBlunder: [
           "That leaves a big hole in your position.",
           "Oof, that drops material right away.",
           "I have to punish that oversight!",
-          "You left a tactical vulnerability right in the center.",
-          "That loses a key defender—I'm taking full advantage."
+          "Always double-check your undefended pieces before moving!"
         ],
         humanInaccuracy: [
           "A bit passive—that lets me activate my pieces.",
           "That weakens your dark squares slightly.",
-          "Giving up tempo like that lets me seize the initiative.",
-          "Slightly imprecise—my coordination improves now."
+          "You gave me a free tempo to improve my structure."
         ],
         humanBrilliant: [
           "Very clean calculation! Well played.",
           "Super sharp tactic—you spotted the weak point!",
-          "Impressive vision—that completely shifts the momentum.",
-          "That's a Grandmaster-level tactical resource!"
+          "Impressive vision—that completely shifts the momentum!"
         ],
         humanGood: [
           "Very solid! Good positional awareness.",
           "Clean and principled chess.",
           "Good structure—hard to break through.",
-          "Nice prophylaxis—covering the entry squares.",
-          "Disciplined move. Keeping everything harmonious."
+          "Nice prophylaxis—keeping everything under control.",
+          "Disciplined move. Let's see how the middlegame develops."
         ],
         humanCastle: [
           "King is safe—now the real middlegame battle begins.",
           "Good timing on castling.",
-          "King safety secured—now let's fight for the center."
+          "Smart castling—now connect your rooks."
         ],
         humanCaptureQueen: [
           "Ugh, walked right into that tactic!",
           "Well, playing without a queen builds character…",
-          "Brutal pin—my queen had nowhere to go."
+          "I completely missed that tactical motif—nice catch!"
         ],
         botBlunder: [
           "Not my cleanest move—let's see if you find the refutation.",
           "A slight miscalculation on my part!",
-          "I overlooked a nuance there—show me your technique."
+          "Hmm, I got a bit too ambitious there."
         ],
         botCapture: [
           "I'll gladly simplify into a winning endgame.",
           "Clean trade—up material now.",
-          "Eliminating your most active piece.",
-          "Taking control of the material balance."
+          "Removing a key defender from your camp."
         ],
         botCheck: [
           "Check! Let's see how you defend this.",
@@ -3319,155 +3333,152 @@
           "Control the open files, control the game.",
           "Solid positional squeeze.",
           "Improving my worst-placed piece.",
-          "Tightening my grip on the central outposts.",
-          "Building pressure step by step without rushing.",
-          "Every piece is coordinated and ready to strike."
+          "Building pressure slowly without creating weaknesses.",
+          "Patience and structure will decide this position."
         ],
         humanWin: [
           "Well played! You converted that cleanly.",
           "GG! Your tactics were on point.",
-          "Great endgame conversion—well deserved!"
+          "Great game—you punished every mistake!"
         ],
         botWin: [
           "GG! Positional pressure wins again.",
           "Thanks for the game! Solid effort.",
-          "Clean conversion from start to finish. GG!"
+          "Clean endgame conversion—good game!"
         ],
         draw: [
           "A hard-fought draw! Well played.",
-          "Neither side gave an inch—fair draw!"
+          "Neither side gave an inch—fair result!"
         ]
       },
       anna: {
         start: [
           "Hiii! Good luck and have fun!",
           "Yay, chess time! Let's see what you play!",
-          "So excited for this game—let's make cool moves!",
-          "Ready whenever you are! Have a great game!"
+          "So excited for this game—let's have a fun one!",
+          "Ready! Let's see what kind of position we get!"
         ],
         humanBlunder: [
           "Oh no! I think you missed a threat there!",
           "Eek, thank you for the free piece!",
           "Oopsie! Don't worry, keep fighting!",
-          "Uh oh, that square wasn't protected!",
-          "I spotted that right away—gotta grab it!"
+          "Wait—was that square defended?! Let me check… nope!"
         ],
         humanInaccuracy: [
           "Ooh, interesting idea! A tiny bit risky though.",
           "Hmm, let me see if I can sneak in now!",
-          "Ooh, that gives my pieces a super fun diagonal!"
+          "A little bit sneaky, but I think I can counter this!"
         ],
         humanBrilliant: [
           "Whaaat?! That move is so cool!",
           "Ooh, super sneaky! Amazing find!",
           "No way!! You found the best tactic on the board!",
-          "OMG, I did NOT see that coming at all!"
+          "Okay, that was actually genius—I didn't see that at all!"
         ],
         humanGood: [
           "Ooh, really nice move!",
           "Super solid! You're playing great!",
           "Great coordination with your pieces!",
-          "Ooh, clever! Keeping everything super safe!",
-          "Love that move—this is turning into a great game!"
+          "Nice one! You're defending everything so well!",
+          "Ooh, I like that idea—very tricky!"
         ],
         humanCastle: [
           "Cozy king! Safety first!",
           "Nice castle! Now your rook can join the game!",
-          "Tucked safely away—smart move!"
+          "King is tucked away—super smart!"
         ],
         humanCaptureQueen: [
           "Nooo, my queen! You got me!",
           "Bye-bye queen… time for a miracle comeback!",
-          "Eek, walked straight into your trap!"
+          "Aaaah, I didn't see that attack on my queen!"
         ],
         botBlunder: [
           "Oopsie! Did I just leave that square open?!",
           "Hehe, pretend you didn't see that!",
-          "Whoops, maybe I moved a tiny bit too fast!"
+          "Wait… why did I put my piece there?!"
         ],
         botCapture: [
           "Yay, got a piece! Let's keep going!",
           "Snip! Clearing some space on the board.",
-          "Gotcha! One step closer!"
+          "Ooh, I'll take that! Every pawn helps!"
         ],
         botCheck: [
           "Check! Exciting position!",
           "Peekaboo—check!",
-          "Check! Watch out for my pieces!"
+          "Check! Where is your king going?"
         ],
         botNormal: [
           "I love this position, so many fun ideas!",
           "Let's bring all the pieces into the game!",
           "Developing smoothly and eyeing the center!",
-          "Ooh, I have a sneaky little plan brewing!",
-          "Connecting my pieces and keeping things super active!"
+          "Let's see if we can create a fun attack!",
+          "Everything is coming together nicely!"
         ],
         humanWin: [
           "Yay, congrats!! You played so well!",
           "GG! That was super fun!",
-          "You totally earned that win—GG!"
+          "Well deserved win! Your tactics were awesome!"
         ],
         botWin: [
           "GG!! Thank you for playing with me!",
           "Woohoo! What a fun game!",
-          "GG! Let's play again anytime!"
+          "GG! That ending was so exciting!"
         ],
         draw: [
           "A draw! That was such a close game, GG!",
-          "Tie game! Super fun battle!"
+          "Tie game! Neither of us wanted to lose!"
         ]
       },
       gotham: {
         start: [
           "Welcome to Guess the ELO—show me what you've got!",
           "Remember: always look for checks, captures, and attacks!",
-          "Let's see if you play like a 600 or a 2600 today!",
-          "Opening theory engaged—don't hang your pieces!"
+          "Let's see if you play like a 2400 or a 400 today!",
+          "Control the center, develop your knights, and don't blunder!"
         ],
         humanBlunder: [
           "OH NO! What is that move?! Danger levels!!",
           "You just hung a piece in one move!",
           "That's going straight into the blunder compilation!",
-          "Are we playing chess or giving away charity?!",
-          "STOP THE PRESSES—that loses on the spot!"
+          "Why?! You had five good moves and you picked THAT?!"
         ],
         humanInaccuracy: [
           "A little bit sus… you had a much cleaner move!",
           "Not a blunder, but definitely giving me free tempo.",
-          "Slightly questionable—the eval bar just twitched!"
+          "Passive! You're letting me take over the whole board!"
         ],
         humanBrilliant: [
           "AND HE SACRIFICES… EVERYTHING!! Brilliant move!",
           "Stop the video! That move is pure genius!",
           "Okay, who gave you Stockfish?! What a shot!",
-          "THE ROOOOK—or whatever piece that was, what a tactic!"
+          "THE ROOK!! Wait—what an insane tactical calculation!"
         ],
         humanGood: [
           "Textbook! Clean, principled chess.",
           "Very nice—following all the opening principles.",
           "Developing with purpose—I like it!",
-          "Solid move—keeping the eval bar dead even.",
-          "Good awareness—covering all the danger levels."
+          "Solid! You're actually looking at my threats!",
+          "Clean move—keeping the tension right where it belongs."
         ],
         humanCastle: [
           "Castled! King safety is paramount!",
           "Finally getting the king out of the center—good job.",
-          "Castled before move 10—you actually watch my videos!"
+          "Castled and ready for the middlegame—respect!"
         ],
         humanCaptureQueen: [
           "OH NO, MY QUEEN!! Anyway…",
           "I totally sacrificed my queen for positional compensation.",
-          "Well, that's awkward… time to swindle a stalemate!"
+          "Okay, I walked straight into that pin—100 ELO moment!"
         ],
         botBlunder: [
           "Wait… why did I play that?! Danger levels!!",
           "I'm sacrificing for content, obviously!",
-          "Okay, ignore the eval bar—this is pure psychological warfare!"
+          "Okay, pretend that was a deep positional gambit!"
         ],
         botCapture: [
           "Takes, takes, and I'm just up material!",
           "Free real estate! Thank you very much.",
-          "Snatched off the board—clean calculation!"
+          "Simple math—I count more pieces on my side!"
         ],
         botCheck: [
           "CHECK! King safety is non-existent!",
@@ -3478,172 +3489,169 @@
           "Develop your pieces, castle early, dominate the center.",
           "Look at that pawn structure—textbook!",
           "Applying maximum pressure on the weak squares.",
-          "Checks, captures, attacks—calculating every forcing line.",
-          "Controlling the dark squares and suffocating your counterplay."
+          "Checks, captures, attacks—let's turn up the heat!",
+          "Taking space and suffocating your position!"
         ],
         humanWin: [
           "Incredible game! Definitely 2400 ELO energy!",
           "GG! You played like a true tactician!",
-          "Take a bow—that was a Guess the ELO masterpiece!"
+          "Okay, submit this game to Guess the ELO right now—GG!"
         ],
         botWin: [
           "GG! Subscribe for more tactical masterclasses!",
           "And THAT is why you never neglect king safety!",
-          "Checkmate! Put that one in the hall of fame!"
+          "GG! Textbook conversion from start to finish!"
         ],
         draw: [
           "A draw?! Honestly, we both deserve credit for that fight.",
-          "Dead draw—neither of us fell for the traps!"
+          "Dead even! Nobody blinked—GG!"
         ]
       },
       hikaru: {
         start: [
           "Alright, let's play. Don't blunder anything early!",
           "Fast calculation, clean execution. Let's play!",
-          "Let's see what opening you go for here.",
-          "Alright, focus up—let's get a good game going."
+          "Okay, let's see what opening you go for.",
+          "Keep it sharp—I'm already calculating five moves deep."
         ],
         humanBlunder: [
           "Wait, what?! You just blundered! Easy game!",
           "Takes, takes—I'm completely winning here!",
           "Yeah, that loses on the spot. Thank you!",
-          "Whoa, you missed that tactic completely—it's over!",
-          "Free piece, no compensation whatsoever."
+          "Oh, that's just a clean piece. Game over basically."
         ],
         humanInaccuracy: [
           "Hmm, not the most accurate. I'm slightly better now.",
           "A bit slow—I can take over the center now.",
-          "Yeah, that gives me a really comfortable edge."
+          "Yeah, that gives me a very comfortable edge."
         ],
         humanBrilliant: [
           "Okay, okay, nice find! Very tricky.",
           "Wait—did you see that whole line? Pretty clean!",
           "Alright, fair play, that was the best move.",
-          "Oh, that's actually super accurate—nice!"
+          "Huh, interesting—you actually found the engine move!"
         ],
         humanGood: [
           "Yep, best move. Logical.",
           "Solid, very solid. Keeping things tight.",
           "Makes sense, keeping everything defended.",
-          "Standard theory, completely fine for both sides.",
-          "Good move, maintaining the tension."
+          "Yeah, standard theory—nothing wrong with that.",
+          "Okay, good move. Let's see what happens after this."
         ],
         humanCastle: [
           "Castled, standard stuff. Now let's play real chess.",
           "King tucked away—now watch the kingside.",
-          "Logical castling, keeping things solid."
+          "Yeah, castling makes total sense here."
         ],
         humanCaptureQueen: [
           "Wait—I missed that! Okay, fine, still playable… maybe.",
           "Chat, did you see that tactic?!",
-          "Alright, down a queen, time to go full speed mode!"
+          "Ugh, I premoved too fast—alright, let's see you convert it."
         ],
         botBlunder: [
           "Wait—I premoved that! Okay, still fine.",
           "Chat, ignore that—totally fine!",
-          "Whoops, played way too fast there."
+          "Whatever, still plenty of counterplay."
         ],
         botCapture: [
           "Takes, takes, takes—I'm just up a clean piece.",
           "Simple chess, clean conversion.",
-          "Just grabbing the material and simplifying."
+          "Takes, and now your structure is completely ruined."
         ],
         botCheck: [
           "Check! You have zero counterplay.",
           "Check, check, and everything is collapsing.",
-          "Check—your king is completely stuck."
+          "Check—your king is stuck in the center."
         ],
         botNormal: [
           "I don't even need to calculate, it's just winning.",
           "Keep squeezing, no counterplay at all.",
           "Just improving the position—takes, takes, easy.",
-          "Everything is protected, slowly rolling forward.",
-          "Zero weaknesses on my side, just pure pressure."
+          "Controlling all the key squares—very simple.",
+          "Push, trade, convert—just clean technique."
         ],
         humanWin: [
           "Okay, you played really well. GG!",
           "Respect—you didn't give me a single chance.",
-          "Very clean game by you. GGs!"
+          "Yeah, completely outplayed me there. GGs!"
         ],
         botWin: [
           "GGs! Too fast, too clean.",
           "Completely winning from move 15. GGs!",
-          "Smooth conversion. GGs!"
+          "Clean game, no mistakes. GGs!"
         ],
         draw: [
           "Draw? Fine, I'll take the half point. GGs!",
-          "Nothing left on the board—GGs!"
+          "Yeah, nothing left on the board—GGs!"
         ]
       },
       magnus: {
         start: [
           "Interesting setup. Let's see how long you can hold on.",
           "Play whatever you like—I'll outplay you in the endgame.",
-          "Let's see if you can handle a long positional grind.",
-          "A fresh board. Show me your understanding of the game."
+          "Let's see if you can handle long-term positional pressure.",
+          "Make your move. The real game starts after move 20."
         ],
         humanBlunder: [
           "That's a serious mistake. I won't let you off the hook.",
           "A fatal slip. From here, the technique is straightforward.",
           "You can't afford inaccuracies like that against me.",
-          "A decisive tactical oversight. Now watch the conversion.",
-          "That weakens your structure beyond repair."
+          "That's all the advantage I need to close this out."
         ],
         humanInaccuracy: [
           "A slight concession. My endgame prospects just improved.",
           "Subtle, but that gives me long-term pressure.",
-          "You surrendered control of a key square."
+          "Small weaknesses tend to become decisive later on."
         ],
         humanBrilliant: [
           "Not bad at all. You actually found the only move.",
           "Impressive—that's engine-level precision.",
           "Well spotted. Most players would have missed that resource.",
-          "Accurate calculation. You found the sharpest continuation."
+          "Very sharp. You kept yourself in the game with that."
         ],
         humanGood: [
           "Accurate. You're holding the balance well.",
           "Sound defense.",
           "Logical continuation. Let's see your next idea.",
-          "Principled play. No obvious weaknesses yet.",
-          "Good prophylaxis—you anticipated my plan."
+          "Solid enough, though the position remains complex.",
+          "Good awareness—you neutralized my immediate threat."
         ],
         humanCastle: [
           "Sensible. Now let's see how you handle the maneuvering.",
           "King is safe, but the real test is still ahead.",
-          "Standard development. Now the real game starts."
+          "Proper development. Now the strategic phase begins."
         ],
         humanCaptureQueen: [
           "Well… that makes things slightly more challenging.",
           "A rare slip. Let's see if you can actually finish it.",
-          "Unexpected, I'll admit—now show me you can convert."
+          "Credit where it's due—I underestimated that tactic."
         ],
         botBlunder: [
           "Hmm, uncharacteristic. Let's see if you can convert it.",
           "Interesting—I've given you a chance.",
-          "A rare lapse in concentration."
+          "Even the best can misjudge a nuance."
         ],
         botCapture: [
           "Just a small advantage… which is all I need.",
           "Every pawn counts in the endgame.",
-          "Simplifying into a cleaner, winning structure."
+          "Simplifying into a structure where I hold all the trumps."
         ],
         botCheck: [
           "Check. Your coordination is falling apart.",
           "Check—now every move is forced.",
-          "Check. Nowhere left to consolidate."
+          "Check. Nowhere left to hide."
         ],
         botNormal: [
           "Slowly improving every piece. No rush.",
           "Patience is everything in positions like this.",
           "Tightening the grip square by square.",
-          "Creating subtle weaknesses across both flanks.",
-          "Prophylaxis first, then inexorable pressure.",
-          "Even a tiny edge becomes decisive with enough patience."
+          "Restricting your options until something gives way.",
+          "When you have the better structure, time is on your side."
         ],
         humanWin: [
           "Well played. You earned that win today.",
           "Congratulations. You played with real precision.",
-          "You outplayed me today. Well deserved."
+          "Impressive game—you stayed accurate until the very end."
         ],
         botWin: [
           "As expected. Good effort, though.",
@@ -3652,309 +3660,82 @@
         ],
         draw: [
           "A solid draw. You defended very well.",
-          "Accurate defense throughout—a fair result."
+          "Respectable defense—you earned the draw."
         ]
       }
     };
 
     const ELO_BOT_LINES = {
       rookie: {
-        start: [
-          "Hi! I just learned how the knight moves! Let's play!",
-          "Watch out—I'm gonna push all my pawns right away!",
-          "My strategy today: move pieces randomly and hope for checkmate!",
-          "Ready! By the way, is the king allowed to jump over pawns?"
-        ],
-        humanBlunder: [
-          "Ooh, a free piece! I actually saw that one!",
-          "Wait… is that piece really free?! Yoink!",
-          "Haha, even I noticed that was undefended!",
-          "Yay! My pieces are finally capturing things!"
-        ],
-        humanInaccuracy: [
-          "Hmm, that looks super scary… what are you planning?",
-          "Ooh, fancy move! I have no idea what it means though!",
-          "Wait, am I in trouble? Everything looks fine to me!"
-        ],
-        humanBrilliant: [
-          "Whoa!! Are you secretly a Grandmaster?!",
-          "I didn't see ANY of that coming!",
-          "Wait—how did your pieces do that?!",
-          "Okay, that move looked way too smart for me!"
-        ],
-        humanGood: [
-          "Nice move! I'm just gonna move this guy over here.",
-          "Ooh, good one! Now watch my brilliant counter-plan…",
-          "You're developing so fast! Meanwhile my rooks are still sleeping.",
-          "Solid! I think I'm winning though… wait, am I?",
-          "Hmm, interesting! Let me push another pawn!"
-        ],
-        humanCastle: [
-          "Whoa, two pieces moved at once! Is that legal?!",
-          "Nice castle! My king prefers standing right in the middle!"
-        ],
-        humanCaptureQueen: [
-          "Hey!! That was my favorite piece!!",
-          "Oh no, my queen! Good thing I still have… lots of pawns!",
-          "Totally meant to sacrifice her! Mastermind strategy!"
-        ],
-        botBlunder: [
-          "Hehe, look at my piece right in front of yours—pure genius!",
-          "I'm a tactical mastermind! Nobody can touch that square!",
-          "Watch this! Moving my queen straight into the action!",
-          "Grandmaster level move right there—unstoppable!",
-          "Totally calculated five moves ahead… maybe half a move."
-        ],
-        botCapture: [
-          "Got one!! I'm practically a chess prodigy!",
-          "Boom! Captured! I'm totally winning now!",
-          "Look at me go! Taking pieces left and right!"
-        ],
-        botCheck: [
-          "CHECK!! Did I just win?!",
-          "Check! Wait… why didn't the game end?!",
-          "Surprise check! Look at my piece!"
-        ],
-        botNormal: [
-          "I have a super secret plan… even I don't know what it is yet!",
-          "Moving this piece because it looked lonely!",
-          "Watch out, I'm building a giant pawn wall!",
-          "I feel like Magnus Carlsen right now!",
-          "Everything is going according to my master plan!"
-        ],
-        humanWin: [
-          "GG! Wait—how did I lose?! I was sure I was winning!",
-          "You're way too good! Teach me that opening!",
-          "Rematch! Next time I'll keep my queen on the board!"
-        ],
-        botWin: [
-          "WAIT WHAT?! I ACTUALLY WON?!",
-          "GG!! Put me in the Candidates Tournament right now!",
-          "Unbelievable! My random pawn pushes worked!"
-        ],
-        draw: [
-          "A tie?! That means I'm basically half a Grandmaster!",
-          "GG! Neither of us got checkmated—victory!"
-        ]
+        start: ["Hi! I just learned how the knight moves! Let's play!", "Watch out—I'm gonna push all my pawns right away!", "My strategy today: move pieces randomly and hope for checkmate!"],
+        humanBlunder: ["Ooh, a free piece! I actually saw that one!", "Wait… is that piece really free?! Yoink!", "Haha, even I noticed that was undefended!"],
+        humanInaccuracy: ["Hmm, that looks super scary… what are you planning?", "Ooh, fancy move! I have no idea what it means though!"],
+        humanBrilliant: ["Whoa!! Are you secretly a Grandmaster?!", "I didn't see ANY of that coming!"],
+        humanGood: ["Nice move! I'm just gonna move this guy over here.", "Ooh, good one! Now watch my brilliant counter-plan…", "You're developing so fast! Meanwhile my rooks are still sleeping."],
+        humanCastle: ["Whoa, two pieces moved at once! Is that legal?!", "Nice castle! My king prefers standing right in the middle!"],
+        humanCaptureQueen: ["Hey!! That was my favorite piece!!", "Oh no, my queen! Good thing I still have… lots of pawns!"],
+        botBlunder: ["Hehe, look at my piece right in front of yours—pure genius!", "I'm a tactical mastermind! Nobody can touch that square!"],
+        botCapture: ["Got one!! I'm practically a chess prodigy!", "Boom! Captured! I'm totally winning now!"],
+        botCheck: ["CHECK!! Did I just win?!", "Check! Wait… why didn't the game end?!"],
+        botNormal: ["I have a super secret plan… even I don't know what it is yet!", "Moving this piece because it looked lonely!", "Watch out, I'm building a giant pawn wall!"],
+        humanWin: ["GG! Wait—how did I lose?! I was sure I was winning!", "You're way too good! Teach me that opening!"],
+        botWin: ["WAIT WHAT?! I ACTUALLY WON?!", "GG!! Put me in the Candidates Tournament right now!"],
+        draw: ["A tie?! That means I'm basically half a Grandmaster!", "GG! Neither of us got checkmated—victory!"]
       },
       club: {
-        start: [
-          "Good luck! Let's see a clean battle for the center.",
-          "Control the center, develop knights before bishops—let's go!",
-          "Ready for a solid rapid game. Have fun!",
-          "Let's see who spots the tactics first!"
-        ],
-        humanBlunder: [
-          "Oof, that leaves a piece hanging!",
-          "I think you overlooked a tactic there—thank you!",
-          "That drops material! Always double-check before releasing!",
-          "Nice gift—I'll gladly take the extra material."
-        ],
-        humanInaccuracy: [
-          "A bit slow—that lets me grab the initiative.",
-          "Hmm, now my pieces get much better squares.",
-          "Slightly passive, I'll take the space advantage."
-        ],
-        humanBrilliant: [
-          "Whoa, sharp tactic! I completely missed that resource!",
-          "Great find—that turns the tables immediately!",
-          "Clean calculation! Respect for spotting that shot."
-        ],
-        humanGood: [
-          "Solid move—keeping everything protected.",
-          "Good developing move, staying true to opening principles.",
-          "Nice and steady. Let's see how the middlegame unfolds.",
-          "Accurate response—no weak squares yet.",
-          "Good defense, holding the center together."
-        ],
-        humanCastle: [
-          "King is safe—time to connect the rooks!",
-          "Smart castling before opening up the center."
-        ],
-        humanCaptureQueen: [
-          "Ugh, walked right into a pin! My queen is gone!",
-          "Completely missed that discovered attack on my queen!"
-        ],
-        botBlunder: [
-          "Wait… did I just leave that undefended?! Good catch if you see it!",
-          "Hmm, I think I miscalculated that exchange."
-        ],
-        botCapture: [
-          "Clean trade—simplifying while ahead.",
-          "Snatched a pawn! Every little advantage counts.",
-          "Taking control of the material balance."
-        ],
-        botCheck: [
-          "Check! Your king is feeling the heat.",
-          "Check—let's see how you untangle your pieces."
-        ],
-        botNormal: [
-          "Putting my rook on the open file—classic club strategy.",
-          "Looking for forks, pins, and skewers…",
-          "Improving my pieces step by step.",
-          "Maintaining tension in the center.",
-          "Let's see if you spot what my bishop is eyeing."
-        ],
-        humanWin: [
-          "Well played! Your tactics were sharper than mine today.",
-          "GG! Clean conversion in the endgame."
-        ],
-        botWin: [
-          "GG! Tactics win games!",
-          "Good game—controlling the open files paid off!"
-        ],
-        draw: [
-          "A fair draw! Both sides played solid chess.",
-          "Dead even in the endgame—good game!"
-        ]
+        start: ["Good luck! Let's see a clean battle for the center.", "Control the center, develop knights before bishops—let's go!"],
+        humanBlunder: ["Oof, that leaves a piece hanging!", "I think you overlooked a tactic there—thank you!"],
+        humanInaccuracy: ["A bit slow—that lets me grab the initiative.", "Hmm, now my pieces get much better squares."],
+        humanBrilliant: ["Whoa, sharp tactic! I completely missed that resource!", "Great find—that turns the tables immediately!"],
+        humanGood: ["Solid move—keeping everything protected.", "Good developing move, staying true to opening principles."],
+        humanCastle: ["King is safe—time to connect the rooks!", "Smart castling before opening up the center."],
+        humanCaptureQueen: ["Ugh, walked right into a pin! My queen is gone!", "Completely missed that discovered attack on my queen!"],
+        botBlunder: ["Wait… did I just leave that undefended?! Good catch if you see it!", "Hmm, I think I miscalculated that exchange."],
+        botCapture: ["Clean trade—simplifying while ahead.", "Snatched a pawn! Every little advantage counts."],
+        botCheck: ["Check! Your king is feeling the heat.", "Check—let's see how you untangle your pieces."],
+        botNormal: ["Putting my rook on the open file—classic club strategy.", "Looking for forks, pins, and skewers…", "Improving my pieces step by step."],
+        humanWin: ["Well played! Your tactics were sharper than mine today.", "GG! Clean conversion in the endgame."],
+        botWin: ["GG! Tactics win games!", "Good game—controlling the open files paid off!"],
+        draw: ["A fair draw! Both sides played solid chess.", "Dead even in the endgame—good game!"]
       },
       tactical: {
-        start: [
-          "Sharp calculation required. Let's begin.",
-          "I'll punish every loose piece and weak square. Good luck.",
-          "Let's test your opening preparation and endgame technique.",
-          "Focus on initiative and king safety. Your move."
-        ],
-        humanBlunder: [
-          "Fatal oversight. That loses material immediately.",
-          "You left a tactical weakness—and now it collapses.",
-          "At this rating, a blunder like that decides the game.",
-          "Punished immediately. Always check your opponent's forcing moves."
-        ],
-        humanInaccuracy: [
-          "A subtle inaccuracy—my piece coordination is superior now.",
-          "You conceded key dark squares. I'll press that advantage.",
-          "Too slow. I'm taking over the initiative."
-        ],
-        humanBrilliant: [
-          "Impressive calculation. You found the sharpest continuation.",
-          "Strong tactical vision—I have to respect that threat.",
-          "Precise move. You're keeping the tension alive."
-        ],
-        humanGood: [
-          "Principled and accurate.",
-          "Solid prophylaxis—preventing my break.",
-          "Good positional sense. The balance holds.",
-          "Clean move, maintaining harmony between your pieces.",
-          "Sound defense. Let's see your next plan."
-        ],
-        humanCastle: [
-          "King tucked away—now the real middlegame maneuvering starts.",
-          "Proper timing on castling."
-        ],
-        humanCaptureQueen: [
-          "Unacceptable oversight on my part. Well spotted.",
-          "A rare tactical blind spot—now I must fight for a fortress."
-        ],
-        botBlunder: [
-          "A rare miscalculation—let's see if your technique is sharp enough.",
-          "You have an opening now; make the most of it."
-        ],
-        botCapture: [
-          "Eliminating your active defender.",
-          "Converting structural pressure into material.",
-          "Clinical simplification into a winning endgame."
-        ],
-        botCheck: [
-          "Check. Your king is caught in the crossfire.",
-          "Check—every tempo works in my favor now."
-        ],
-        botNormal: [
-          "Targeting the backward pawn and controlling the key outposts.",
-          "Restricting your counterplay before launching the breakthrough.",
-          "Harmonizing rooks and minor pieces on active diagonals.",
-          "Increasing pressure on your kingside structure.",
-          "Precision is everything in closed maneuvers."
-        ],
-        humanWin: [
-          "Strong performance. You outcalculated me in the critical phase.",
-          "Well earned victory. Clean tactical execution."
-        ],
-        botWin: [
-          "GG. Superior piece activity decided the game.",
-          "Good game—once the initiative was mine, there was no escape."
-        ],
-        draw: [
-          "Accurate defense on both sides. A well-earned draw.",
-          "Neither side cracked under pressure. Good game."
-        ]
+        start: ["Sharp calculation required. Let's begin.", "I'll punish every loose piece and weak square. Good luck."],
+        humanBlunder: ["Fatal oversight. That loses material immediately.", "You left a tactical weakness—and now it collapses."],
+        humanInaccuracy: ["A subtle inaccuracy—my piece coordination is superior now.", "You conceded key dark squares. I'll press that advantage."],
+        humanBrilliant: ["Impressive calculation. You found the sharpest continuation.", "Strong tactical vision—I have to respect that threat."],
+        humanGood: ["Principled and accurate.", "Solid prophylaxis—preventing my break."],
+        humanCastle: ["King tucked away—now the real middlegame maneuvering starts.", "Proper timing on castling."],
+        humanCaptureQueen: ["Unacceptable oversight on my part. Well spotted.", "A rare tactical blind spot—now I must fight for a fortress."],
+        botBlunder: ["A rare miscalculation—let's see if your technique is sharp enough.", "You have an opening now; make the most of it."],
+        botCapture: ["Eliminating your active defender.", "Converting structural pressure into material."],
+        botCheck: ["Check. Your king is caught in the crossfire.", "Check—every tempo works in my favor now."],
+        botNormal: ["Targeting the backward pawn and controlling the key outposts.", "Restricting your counterplay before launching the breakthrough."],
+        humanWin: ["Strong performance. You outcalculated me in the critical phase.", "Well earned victory. Clean tactical execution."],
+        botWin: ["GG. Superior piece activity decided the game.", "Good game—once the initiative was mine, there was no escape."],
+        draw: ["Accurate defense on both sides. A well-earned draw.", "Neither side cracked under pressure. Good game."]
       },
       grandmaster: {
-        start: [
-          "Maximum precision required. Show me your best chess.",
-          "Every tempo and square matters from move one. Let's begin.",
-          "I will convert even the smallest positional edge. Good luck.",
-          "Deep calculation engaged. Make your move."
-        ],
-        humanBlunder: [
-          "Decisive error. The evaluation is completely winning now.",
-          "A critical tactical slip—from here the conversion is ruthless.",
-          "You cannot leave a single loose pawn at this level.",
-          "Game-deciding inaccuracy. Watch the technique."
-        ],
-        humanInaccuracy: [
-          "A microscopic concession—enough to build a winning squeeze.",
-          "Subtle, yet permanent structural damage.",
-          "My long-term endgame advantage just became decisive."
-        ],
-        humanBrilliant: [
-          "Engine-level precision. You found the sole drawing or winning resource.",
-          "Remarkable calculation—that refutes my entire idea.",
-          "Deep tactical sight. Truly Grandmaster-caliber."
-        ],
-        humanGood: [
-          "Top engine choice. The equilibrium holds.",
-          "Accurate prophylaxis. You anticipated my threat.",
-          "Clean, principled, and resilient.",
-          "Exact defense—no entry squares conceded.",
-          "Strong positional understanding. Let's continue."
-        ],
-        humanCastle: [
-          "Sound king safety. Now the deep strategic battle begins.",
-          "Textbook development and king shelter."
-        ],
-        humanCaptureQueen: [
-          "An extraordinary tactical sequence—well calculated.",
-          "Even against full strength, that combination was lethal."
-        ],
-        botBlunder: [
-          "An unexpected tactical twist—show me your endgame precision.",
-          "Interesting complication—prove the advantage."
-        ],
-        botCapture: [
-          "Cashing in positional dominance for concrete material.",
-          "Removing the key defender and entering a winning endgame.",
-          "Clinical conversion."
-        ],
-        botCheck: [
-          "Check. Every escape square is covered.",
-          "Check—the mating net is closing."
-        ],
-        botNormal: [
-          "Prophylaxis first, then inexorable expansion.",
-          "Dominating the central files and restricting all counterplay.",
-          "Improving my worst piece while binding your position.",
-          "Creating dual weaknesses across both flanks.",
-          "Endgame technique starts in the middlegame."
-        ],
-        humanWin: [
-          "Extraordinary game. You defeated 3000-level calculation cleanly.",
-          "Flawless execution. Truly impressive chess."
-        ],
-        botWin: [
-          "GG. Precision from opening to endgame.",
-          "Good effort—every small advantage accumulated into checkmate."
-        ],
-        draw: [
-          "A masterclass in resilience. Holding a draw here is no small feat.",
-          "Perfect balance from start to finish. Well played."
-        ]
+        start: ["Maximum precision required. Show me your best chess.", "Every tempo and square matters from move one. Let's begin."],
+        humanBlunder: ["Decisive error. The evaluation is completely winning now.", "A critical tactical slip—from here the conversion is ruthless."],
+        humanInaccuracy: ["A microscopic concession—enough to build a winning squeeze.", "Subtle, yet permanent structural damage."],
+        humanBrilliant: ["Engine-level precision. You found the sole drawing or winning resource.", "Remarkable calculation—that refutes my entire idea."],
+        humanGood: ["Top engine choice. The equilibrium holds.", "Accurate prophylaxis. You anticipated my threat."],
+        humanCastle: ["Sound king safety. Now the deep strategic battle begins.", "Textbook development and king shelter."],
+        humanCaptureQueen: ["An extraordinary tactical sequence—well calculated.", "Even against full strength, that combination was lethal."],
+        botBlunder: ["An unexpected tactical twist—show me your endgame precision.", "Interesting complication—prove the advantage."],
+        botCapture: ["Cashing in positional dominance for concrete material.", "Removing the key defender and entering a winning endgame."],
+        botCheck: ["Check. Every escape square is covered.", "Check—the mating net is closing."],
+        botNormal: ["Prophylaxis first, then inexorable expansion.", "Dominating the central files and restricting all counterplay."],
+        humanWin: ["Extraordinary game. You defeated 3000-level calculation cleanly.", "Flawless execution. Truly impressive chess."],
+        botWin: ["GG. Precision from opening to endgame.", "Good effort—every small advantage accumulated into checkmate."],
+        draw: ["A masterclass in resilience. Holding a draw here is no small feat.", "Perfect balance from start to finish. Well played."]
       }
     };
 
     function getActiveBotProfileForComments() {
       if (state.difficulty === 'custom' && state.customPersona && CELEBRITY_LINES[state.customPersona]) {
         return {
+          key: `celeb_${state.customPersona}`,
           shortName: PERSONA_MAP[state.customPersona].short,
           lines: CELEBRITY_LINES[state.customPersona]
         };
@@ -3965,69 +3746,68 @@
         : state.customElo;
 
       if (effElo <= 600) {
-        return { shortName: `Rookie (${effElo})`, lines: ELO_BOT_LINES.rookie };
+        return { key: 'elo_rookie', shortName: `Rookie (${effElo})`, lines: ELO_BOT_LINES.rookie };
       }
       if (effElo <= 1500) {
-        return { shortName: `Club Bot (${effElo})`, lines: ELO_BOT_LINES.club };
+        return { key: 'elo_club', shortName: `Club Bot (${effElo})`, lines: ELO_BOT_LINES.club };
       }
       if (effElo <= 2200) {
-        return { shortName: `Tactician (${effElo})`, lines: ELO_BOT_LINES.tactical };
+        return { key: 'elo_tactical', shortName: `Tactician (${effElo})`, lines: ELO_BOT_LINES.tactical };
       }
-      return { shortName: `Grandmaster (${effElo})`, lines: ELO_BOT_LINES.grandmaster };
+      return { key: 'elo_gm', shortName: `Grandmaster (${effElo})`, lines: ELO_BOT_LINES.grandmaster };
     }
 
-    let lastBotLine = '';
+    function buildContextualBotLine(personaKey, eventKey, ctx) {
+      if (!ctx || !ctx.san) return null;
+      const { san, dest, captured } = ctx;
+      const dynamicByPersona = {
+        andrea: {
+          humanGood: [`${san}?! Okay, bold choice—let's see what you've got!`, `Playing ${san} right into the heat—I respect it!`],
+          humanBlunder: [`Did you really just play ${san}?! Free ${captured || 'material'} on ${dest}!`],
+          botCapture: [`Boom! Snatched that ${captured || 'piece'} on ${dest} with ${san}!`],
+          botNormal: [`${san}! Turning up the pressure on ${dest}!`]
+        },
+        alexandra: {
+          humanGood: [`${san} keeps your structure compact and solid.`, `Interesting choice with ${san}—controlling ${dest}.`],
+          humanBlunder: [`${san} leaves ${dest} dangerously exposed.`],
+          botCapture: [`${san}—cleanly capturing the ${captured || 'piece'} on ${dest}.`],
+          botNormal: [`${san} strengthens my control over ${dest}.`]
+        },
+        anna: {
+          humanGood: [`Ooh, ${san}! That looks super clever!`, `Nice ${san}! You're eyeing ${dest} already!`],
+          humanBlunder: [`Eek, ${san} left ${dest} wide open!`],
+          botCapture: [`Yay, ${san}! Got the ${captured || 'piece'} on ${dest}!`],
+          botNormal: [`Let's try ${san} and bring more energy to ${dest}!`]
+        },
+        gotham: {
+          humanGood: [`${san}! Solid, principled chess.`, `Look at ${san}—taking control of ${dest}!`],
+          humanBlunder: [`${san}?! DANGER LEVELS!! You just hung ${dest}!`],
+          botCapture: [`${san}—takes on ${dest} and I'm up material!`],
+          botNormal: [`${san}! Putting maximum pressure on ${dest}!`]
+        },
+        hikaru: {
+          humanGood: [`${san}, yeah, totally logical.`, `Okay, ${san} makes sense—keeps ${dest} covered.`],
+          humanBlunder: [`${san}?! Wait—that just loses immediately on ${dest}!`],
+          botCapture: [`${san}, takes on ${dest}, completely clean.`],
+          botNormal: [`${san}—just squeezing ${dest}, zero counterplay.`]
+        },
+        magnus: {
+          humanGood: [`${san} is sensible—maintaining tension around ${dest}.`, `A solid choice with ${san}.`],
+          humanBlunder: [`${san} is a serious concession on ${dest}.`],
+          botCapture: [`${san}—converting the pressure on ${dest}.`],
+          botNormal: [`${san}. Slowly tightening my grip on ${dest}.`]
+        }
+      };
+      const personaSet = dynamicByPersona[personaKey];
+      if (!personaSet || !personaSet[eventKey]) return null;
+      const options = personaSet[eventKey];
+      return options[Math.floor(Math.random() * options.length)];
+    }
+
     const usedBotLinesByKey = new Map();
+    let lastBotLine = '';
 
-    const PIECE_FULL_NAMES = { P: 'pawn', N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
-
-    function buildContextualMoveComment(personaKey, eventKey, moveRecord) {
-      if (!moveRecord || !moveRecord.move) return null;
-      const m = moveRecord.move;
-      const dest = engine.sqToAlgebraic(m.to);
-      const san = moveRecord.san;
-      const pieceName = PIECE_FULL_NAMES[m.piece[1]] || 'piece';
-      const capName = m.capture ? (PIECE_FULL_NAMES[m.capture[1]] || 'piece') : null;
-
-      if (eventKey === 'botCapture' && capName) {
-        const capTemplates = {
-          andrea: [`Goodbye ${capName} on ${dest}! Full attack!`, `Snatched your ${capName} on ${dest}—let's go!`],
-          alexandra: [`Capturing the ${capName} on ${dest} cleans up the structure.`, `Trading off your ${capName} on ${dest}—solid advantage.`],
-          anna: [`Ooh, got your ${capName} on ${dest}! Yay!`, `Snip! Goodbye ${capName} on ${dest}!`],
-          gotham: [`Takes on ${dest}! Your ${capName} is off the board!`, `Free ${capName} on ${dest}—thank you very much!`],
-          hikaru: [`Takes the ${capName} on ${dest}, super clean.`, `Just grabbing that ${capName} on ${dest}, easy.`],
-          magnus: [`Removing your ${capName} on ${dest} simplifies everything.`, `Taking on ${dest}—one step closer to the endgame.`]
-        };
-        if (capTemplates[personaKey]) return capTemplates[personaKey];
-      }
-
-      if (eventKey === 'humanBlunder' && m.piece) {
-        const blunderTemplates = {
-          andrea: [`Wait—${san}?! Did you just leave that wide open?!`, `Ooh, ${san} looks super risky—let's punish it!`],
-          alexandra: [`${san} leaves a major tactical weakness on ${dest}.`, `Careful—${san} weakens your whole position.`],
-          anna: [`Eek, ${san} looks a little scary for you!`, `Ooh, after ${san} I see a fun tactic!`],
-          gotham: [`${san}?! DANGER LEVELS! What is happening?!`, `Stop everything—${san} just dropped the eval bar!`],
-          hikaru: [`Wait, ${san}?! Yeah, that just loses immediately.`, `Huh, ${san} allows a huge tactic—thank you!`],
-          magnus: [`${san} is a serious concession. Watch closely.`, `After ${san}, your position is already collapsing.`]
-        };
-        if (blunderTemplates[personaKey]) return blunderTemplates[personaKey];
-      }
-
-      if (eventKey === 'humanBrilliant' || eventKey === 'humanGood') {
-        const moveTemplates = {
-          andrea: [`${san}?! Okay, spicy move! Let's see!`, `Ooh, ${san} brings the ${pieceName} into the fight!`],
-          alexandra: [`${san} is very principled—good control of ${dest}.`, `Nice ${pieceName} placement with ${san}.`],
-          anna: [`Ooh, ${san}! Love putting the ${pieceName} on ${dest}!`, `Super neat move with ${san}!`],
-          gotham: [`${san}—clean ${pieceName} development on ${dest}!`, `Look at ${san}, textbook chess!`],
-          hikaru: [`${san}, yeah, completely logical move.`, `Okay, ${san} keeps everything defended.`],
-          magnus: [`${san} is sensible. Let's see your follow-up.`, `Solid choice with ${san}, holding ${dest}.`]
-        };
-        if (moveTemplates[personaKey] && Math.random() < 0.45) return moveTemplates[personaKey];
-      }
-      return null;
-    }
-
-    function updateBotComment(eventKey) {
+    function updateBotComment(eventKey, ctx = null) {
       const bar = $('celeb-comment-bar'), tag = $('celeb-comment-tag'), txt = $('celeb-comment-text');
       if (!bar || !tag || !txt) return;
       if (state.mode !== 'ai') {
@@ -4035,26 +3815,27 @@
         return;
       }
       const profile = getActiveBotProfileForComments();
-      const basePool = profile.lines[eventKey] || profile.lines.botNormal;
-      const lastRecord = engine.history[engine.history.length - 1] || null;
-      const personaKey = (state.difficulty === 'custom' && state.customPersona) ? state.customPersona : null;
-      const dynamicPool = personaKey ? buildContextualMoveComment(personaKey, eventKey, lastRecord) : null;
-      const combinedPool = dynamicPool ? [...basePool, ...dynamicPool] : basePool;
+      const basePool = profile.lines[eventKey] || profile.lines.botNormal || [];
+      const personaShortKey = state.difficulty === 'custom' ? state.customPersona : null;
+      const dynamicLine = personaShortKey ? buildContextualBotLine(personaShortKey, eventKey, ctx) : null;
+      const pool = (dynamicLine && Math.random() < 0.35) ? [dynamicLine, ...basePool] : basePool;
 
-      const cacheKey = `${profile.shortName}:${eventKey}`;
-      let usedSet = usedBotLinesByKey.get(cacheKey);
-      if (!usedSet || usedSet.size >= combinedPool.length) {
+      const historyKey = `${profile.key}|${eventKey}`;
+      let usedSet = usedBotLinesByKey.get(historyKey);
+      if (!usedSet) {
         usedSet = new Set();
-        usedBotLinesByKey.set(cacheKey, usedSet);
+        usedBotLinesByKey.set(historyKey, usedSet);
       }
-
-      const freshCandidates = combinedPool.filter(l => !usedSet.has(l) && l !== lastBotLine);
-      const pickFrom = freshCandidates.length > 0 ? freshCandidates : combinedPool.filter(l => l !== lastBotLine);
-      const finalPool = pickFrom.length > 0 ? pickFrom : combinedPool;
-      const line = finalPool[Math.floor(Math.random() * finalPool.length)];
-
+      let available = pool.filter(l => !usedSet.has(l) && l !== lastBotLine);
+      if (available.length === 0) {
+        usedSet.clear();
+        available = pool.filter(l => l !== lastBotLine);
+        if (available.length === 0) available = pool;
+      }
+      const line = available[Math.floor(Math.random() * available.length)];
       usedSet.add(line);
       lastBotLine = line;
+
       tag.textContent = `💬 ${profile.shortName}:`;
       txt.textContent = `"${line}"`;
       const wasHidden = !bar.classList.contains('visible');
@@ -4163,7 +3944,7 @@
       clearInterval(state.timerInterval);
       engine.reset();
       positionAnalysisCache.clear();
-      state.matchBookSeed = Math.floor(Math.random() * 1000);
+      state.matchBookSeed = Math.floor(Math.random() * 100000);
       if (state.mode === 'ai') {
         state.humanColor = state.colorPref === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : state.colorPref;
       } else {
@@ -4210,13 +3991,11 @@
       scheduleAITurnIfNeeded();
     }
 
-    const SOUND_ICON_ON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
-    const SOUND_ICON_OFF = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15" stroke="#f87171"/><line x1="17" y1="9" x2="23" y2="15" stroke="#f87171"/></svg>`;
-
     function toggleSound() {
       sfx.enabled = !sfx.enabled;
-      const iconHTML = sfx.enabled ? SOUND_ICON_ON : SOUND_ICON_OFF;
-      $('btn-sound-mobile').innerHTML = $('btn-sound-desktop').innerHTML = iconHTML;
+      const svgOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+      const svgOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+      $('btn-sound-mobile').innerHTML = $('btn-sound-desktop').innerHTML = sfx.enabled ? svgOn : svgOff;
       showToast(sfx.enabled ? 'Sound enabled' : 'Sound muted');
     }
 
