@@ -1982,8 +1982,13 @@
       ['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'dxc4', 'a4', 'Bf5'],
       ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O'],
       ['d4', 'Nf6', 'c4', 'e6', 'Nf3', 'd5', 'Nc3', 'Be7', 'Bf4', 'O-O'],
+      ['d4', 'Nf6', 'Nf3', 'e6', 'e3', 'd5', 'Bd3', 'c5', 'O-O', 'Nc6'],
+      ['d4', 'Nf6', 'Nf3', 'd5', 'Bf4', 'c5', 'e3', 'Nc6', 'c3', 'e6'],
       ['c4', 'e5', 'Nc3', 'Nf6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nb6'],
-      ['Nf3', 'd5', 'g3', 'Nf6', 'Bg2', 'c6', 'O-O', 'Bg4', 'd3', 'Nbd7']
+      ['c4', 'c5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'g3', 'g6', 'Bg2', 'Bg7'],
+      ['Nf3', 'd5', 'g3', 'Nf6', 'Bg2', 'c6', 'O-O', 'Bg4', 'd3', 'Nbd7'],
+      ['Nf3', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'd4', 'O-O'],
+      ['Nf3', 'Nf6', 'e3', 'Nc6', 'd4', 'e6', 'Bd3', 'd5', 'O-O', 'Bd6']
     ];
 
     class ChessAI {
@@ -2856,6 +2861,18 @@
       const legal = engine.generateLegalMoves(moverColor);
       if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
 
+      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
+      const isBookMove = futureSan.length <= 12 && OPENING_BOOK_LINES.some(line => futureSan.every((m, idx) => line[idx] === m));
+      if (isBookMove) {
+        return { key: 'book', symbol: '📖', label: 'Book Move', css: 'badge-book', color: '#fbbf24' };
+      }
+
+      const snapMate = engine.cloneState();
+      engine.applyMoveRaw(move);
+      const deliversMate = engine.isInCheck(engine.turn) && engine.generateLegalMoves(engine.turn).length === 0;
+      engine.restoreState(snapMate);
+      if (deliversMate) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+
       const wasHintedMove = Boolean(
         state.hintMove &&
         state.hintMove.from === move.from &&
@@ -2901,8 +2918,6 @@
       const destinationAttacked = engine.isSquareAttacked(move.to, moverColor === 'w' ? 'b' : 'w');
       engine.restoreState(snapCheck);
       const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
-      const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
-      const isBookMove = futureSan.length <= 12 && OPENING_BOOK_LINES.some(line => futureSan.every((m, idx) => line[idx] === m));
       return classifyMoveQuality(moverColor, bestScore, playedScore, safeSecondBest, isSacrifice, futureSan, isBookMove);
     }
 
