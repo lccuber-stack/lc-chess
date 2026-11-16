@@ -2278,7 +2278,7 @@
         const inCheck = engine.isInCheck(engine.turn);
         const origAlpha = alpha, origBeta = beta;
         const ttEntry = this.tt.get(posKey);
-        if (ttEntry && ttEntry.depth >= depth && !inCheck && ply >= 3) {
+        if (ttEntry && ttEntry.depth >= depth && !inCheck && ply >= 2) {
           if (ttEntry.flag === 0) return ttEntry.score;
           if (ttEntry.flag === 1 && ttEntry.score > alpha) alpha = ttEntry.score;
           if (ttEntry.flag === 2 && ttEntry.score < beta) beta = ttEntry.score;
