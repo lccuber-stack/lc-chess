@@ -2094,6 +2094,61 @@
         if (nonPawnMaterial > 2600) {
           if (wKingSq === 62 || wKingSq === 61 || wKingSq === 58) whiteScore += 28;
           if (bKingSq === 6 || bKingSq === 5 || bKingSq === 2) blackScore += 28;
+
+          // King shield & enemy attackers near king zone
+          if (wKingSq !== -1) {
+            const wkr = Math.floor(wKingSq / 8), wkf = wKingSq % 8;
+            if (wkr >= 6) {
+              for (let df = -1; df <= 1; df++) {
+                const sf = wkf + df;
+                if (sf >= 0 && sf < 8) {
+                  if (engine.board[48 + sf] === 'wP') whiteScore += 14;
+                  else if (engine.board[40 + sf] === 'wP') whiteScore += 7;
+                  else whiteScore -= 16;
+                }
+              }
+            }
+            let wDanger = 0;
+            for (let dr = -2; dr <= 1; dr++) {
+              for (let df = -2; df <= 2; df++) {
+                const nr = wkr + dr, nf = wkf + df;
+                if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
+                  const p = engine.board[nr * 8 + nf];
+                  if (p && p[0] === 'b' && p[1] !== 'K') {
+                    wDanger += p[1] === 'Q' ? 28 : (p[1] === 'R' ? 16 : 11);
+                  }
+                }
+              }
+            }
+            whiteScore -= wDanger;
+          }
+
+          if (bKingSq !== -1) {
+            const bkr = Math.floor(bKingSq / 8), bkf = bKingSq % 8;
+            if (bkr <= 1) {
+              for (let df = -1; df <= 1; df++) {
+                const sf = bkf + df;
+                if (sf >= 0 && sf < 8) {
+                  if (engine.board[8 + sf] === 'bP') blackScore += 14;
+                  else if (engine.board[16 + sf] === 'bP') blackScore += 7;
+                  else blackScore -= 16;
+                }
+              }
+            }
+            let bDanger = 0;
+            for (let dr = -1; dr <= 2; dr++) {
+              for (let df = -2; df <= 2; df++) {
+                const nr = bkr + dr, nf = bkf + df;
+                if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
+                  const p = engine.board[nr * 8 + nf];
+                  if (p && p[0] === 'w' && p[1] !== 'K') {
+                    bDanger += p[1] === 'Q' ? 28 : (p[1] === 'R' ? 16 : 11);
+                  }
+                }
+              }
+            }
+            blackScore -= bDanger;
+          }
         } else if (Math.abs(whiteScore - blackScore) >= 250 && wKingSq !== -1 && bKingSq !== -1) {
           const wr = Math.floor(wKingSq / 8), wf = wKingSq % 8;
           const br = Math.floor(bKingSq / 8), bf = bKingSq % 8;
@@ -2249,7 +2304,20 @@
           const snap = engine.cloneState();
           engine.applyMoveRaw(m);
 
-          const ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
+          let ev;
+          if (i === 0) {
+            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
+          } else if (maximizing) {
+            ev = this.minimax(engine, extDepth - 1, alpha, alpha + 1, false, ply + 1, true, nextPath);
+            if (!this.aborted && ev > alpha && ev < beta) {
+              ev = this.minimax(engine, extDepth - 1, alpha, beta, false, ply + 1, true, nextPath);
+            }
+          } else {
+            ev = this.minimax(engine, extDepth - 1, beta - 1, beta, true, ply + 1, true, nextPath);
+            if (!this.aborted && ev < beta && ev > alpha) {
+              ev = this.minimax(engine, extDepth - 1, alpha, beta, true, ply + 1, true, nextPath);
+            }
+          }
 
           engine.restoreState(snap);
           if (this.aborted) return bestScore === -Infinity || bestScore === Infinity ? this.evaluate(engine) : bestScore;
@@ -2864,6 +2932,19 @@
       const legal = engine.generateLegalMoves(moverColor);
       if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
 
+      const snapMate = engine.cloneState();
+      engine.applyMoveRaw(move);
+      const deliversMate = engine.isInCheck(engine.turn) && engine.generateLegalMoves(engine.turn).length === 0;
+      engine.restoreState(snapMate);
+      if (deliversMate) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+
+      const wasHintedMove = Boolean(
+        state.hintMove &&
+        state.hintMove.from === move.from &&
+        state.hintMove.to === move.to &&
+        (state.hintMove.promo || null) === (move.promo || null)
+      );
+
       if (state.mode === 'ai' && moverColor !== state.humanColor) {
         const snapAi = engine.cloneState();
         const beforeAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
@@ -2882,14 +2963,12 @@
       const analysis = getCachedPositionAnalysis();
       const { bestMove, bestScore, secondBestScore, scoredMoves } = analysis;
 
-      const isExactBest = (bestMove &&
+      const isExactBest = wasHintedMove || Boolean(
+        bestMove &&
         bestMove.from === move.from &&
         bestMove.to === move.to &&
-        (bestMove.promo || null) === (move.promo || null)) ||
-        (state.hintMove &&
-        state.hintMove.from === move.from &&
-        state.hintMove.to === move.to &&
-        (state.hintMove.promo || null) === (move.promo || null));
+        (bestMove.promo || null) === (move.promo || null)
+      );
 
       const matched = scoredMoves.find(item =>
         item.move.from === move.from &&
@@ -2897,6 +2976,7 @@
         (item.move.promo || null) === (move.promo || null)
       );
       const playedScore = isExactBest ? bestScore : (matched ? matched.score : bestScore - 10);
+      const safeSecondBest = wasHintedMove ? Math.min(secondBestScore, bestScore - 15) : secondBestScore;
 
       const snapCheck = engine.cloneState();
       engine.applyMoveRaw(move);
@@ -2905,7 +2985,7 @@
       const isSacrifice = destinationAttacked && movedVal >= 320 && movedVal > capturedVal + 150;
       const futureSan = [...engine.history.map(h => h.san.replace(/[+#]/g, '')), engine.buildSAN(move, legal).replace(/[+#]/g, '')];
       const isBookMove = futureSan.length <= 12 && OPENING_BOOK_LINES.some(line => futureSan.every((m, idx) => line[idx] === m));
-      return classifyMoveQuality(moverColor, bestScore, playedScore, secondBestScore, isSacrifice, futureSan, isBookMove);
+      return classifyMoveQuality(moverColor, bestScore, playedScore, safeSecondBest, isSacrifice, futureSan, isBookMove);
     }
 
     function updateEvaluationBar() {
