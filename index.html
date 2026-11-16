@@ -99,7 +99,7 @@
       width: 100%;
       height: 100%;
       height: 100dvh;
-      padding-top: max(12px, env(safe-area-inset-top, 0px));
+      padding-top: max(16px, env(safe-area-inset-top, 0px));
       padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
       padding-left: env(safe-area-inset-left, 0px);
       padding-right: env(safe-area-inset-right, 0px);
@@ -108,7 +108,13 @@
       touch-action: none;
     }
 
-    /* Top bar placed inside board-column on mobile so it stays crisp below iOS status bar blur */
+    /* Extra top clearance in iPhone standalone/home-screen mode so top bar sits cleanly below iOS status blur */
+    @media (display-mode: standalone) and (max-width: 899px) {
+      #app {
+        padding-top: calc(env(safe-area-inset-top, 47px) + 26px);
+      }
+    }
+
     #top-bar {
       display: flex;
       align-items: center;
@@ -116,7 +122,7 @@
       width: 100%;
       height: 46px;
       min-height: 46px;
-      padding: 0 10px;
+      padding: 0 12px;
       background: #111827;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
@@ -140,7 +146,7 @@
       height: 30px;
       border-radius: 9px;
       background: linear-gradient(135deg, #10b981 0%, #065f46 100%);
-      border: 1px solid rgba(52, 211, 153, 0.45);
+      border: 1px solid rgba(52, 211, 153, 0.35);
       display: grid;
       place-items: center;
       box-shadow: 0 2px 10px var(--accent-emerald-glow);
@@ -148,7 +154,7 @@
       overflow: hidden;
     }
 
-    .brand-icon svg { width: 22px; height: 22px; display: block; }
+    .brand-icon svg { width: 22px; height: 22px; }
 
     .top-actions { display: flex; align-items: center; gap: 6px; }
 
@@ -163,28 +169,18 @@
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       color: var(--text-primary);
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       transition: background 0.15s ease, transform 0.1s ease;
     }
     .icon-btn:hover { background: var(--bg-hover); }
     .icon-btn:active { transform: scale(0.96); }
 
-    .sound-toggle-btn {
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      flex-shrink: 0;
-    }
-
     .icon-btn.primary {
       background: var(--accent-emerald);
       color: #042f2e;
       border-color: transparent;
       font-weight: 700;
-      height: 36px;
-      padding: 0 13px;
-      font-size: 13px;
     }
     .icon-btn.primary:hover { background: #34d399; }
 
@@ -222,7 +218,7 @@
       width: 100%;
       height: 30px;
       min-height: 30px;
-      padding: 0 12px;
+      padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -238,7 +234,7 @@
       width: 100%;
       height: 40px;
       min-height: 40px;
-      padding: 0 12px;
+      padding: 0 10px;
       border-radius: var(--radius-md);
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -252,15 +248,15 @@
     .player-meta {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       min-width: 0;
       flex: 1;
     }
 
     .player-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 7px;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       display: grid;
@@ -269,8 +265,8 @@
       flex-shrink: 0;
     }
     .player-avatar svg {
-      width: 19px;
-      height: 19px;
+      width: 18px;
+      height: 18px;
       filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
 
@@ -285,7 +281,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       line-height: 1.2;
       white-space: nowrap;
@@ -310,7 +306,6 @@
       align-items: center;
       gap: 4px;
       height: 14px;
-      margin-top: 2px;
       font-size: 11px;
       color: var(--text-secondary);
       overflow: hidden;
@@ -345,7 +340,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 68px;
+      min-width: 66px;
       height: 28px;
       padding: 0 8px;
       border-radius: var(--radius-sm);
@@ -361,7 +356,7 @@
     .clock-box.infinity-mode {
       font-size: 20px;
       line-height: 1;
-      letter-spacing: 0;
+      padding-bottom: 2px;
     }
     .player-bar.active-turn .clock-box {
       background: rgba(16, 185, 129, 0.14);
@@ -394,26 +389,28 @@
       flex-shrink: 0;
       transition: background 0.15s ease, transform 0.2s ease;
     }
-    .top-resign-btn.rotated-180 { transform: rotate(180deg); }
+    .top-resign-btn.rotated-180 {
+      transform: rotate(180deg);
+    }
 
-    /* Fixed-height Bot & Celebrity Personality Commentary Bar so board never shifts */
+    /* Bot & Celebrity Personality Commentary Bar — fixed height so board never shifts */
     .celeb-comment-bar {
       display: none;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       width: 100%;
       height: 40px;
       min-height: 40px;
       max-height: 40px;
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: var(--radius-sm);
       background: rgba(16, 185, 129, 0.09);
       border: 1px solid rgba(16, 185, 129, 0.28);
-      font-size: 12px;
+      font-size: 11.5px;
       line-height: 1.25;
       color: #e2e8f0;
-      flex-shrink: 0;
       overflow: hidden;
+      flex-shrink: 0;
     }
     .celeb-comment-bar.visible {
       display: flex;
@@ -555,7 +552,6 @@
       justify-content: center;
       font-size: 9px;
       font-weight: 900;
-      letter-spacing: 0;
       line-height: 1;
       color: #ffffff;
       border: 1.5px solid #ffffff;
@@ -564,9 +560,9 @@
       pointer-events: none;
     }
     .move-badge svg {
+      width: 11px;
+      height: 11px;
       display: block;
-      width: 10px;
-      height: 10px;
     }
     .move-badge.rotated-180 { transform: rotate(180deg); }
 
@@ -670,6 +666,7 @@
       flex-direction: column;
       align-items: stretch;
       width: 100%;
+      margin: 0 auto;
       gap: 6px;
       flex-shrink: 0;
     }
@@ -680,7 +677,7 @@
       gap: 6px;
       width: 100%;
       height: 30px;
-      padding: 0 12px;
+      padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -857,7 +854,6 @@
         height: 100%;
         height: 100dvh;
         padding-top: env(safe-area-inset-top, 0px);
-        padding-bottom: env(safe-area-inset-bottom, 0px);
         justify-content: center;
       }
       #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
@@ -920,10 +916,8 @@
       align-items: center;
       justify-content: center;
       padding: 0;
-      line-height: 1;
-      flex-shrink: 0;
+      line-height: 0;
     }
-    .close-modal-btn svg { display: block; }
     .close-modal-btn:hover { background: var(--bg-hover); }
 
     .config-section { display: flex; flex-direction: column; gap: 8px; }
@@ -944,28 +938,23 @@
       background: var(--bg-elevated);
       border: 1.5px solid transparent;
       text-align: center;
-      gap: 3px;
+      gap: 4px;
     }
     .seg-btn:hover { background: var(--bg-hover); }
     .seg-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--accent-emerald); color: #ffffff; }
 
-    .seg-btn-main { display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-size: 13px; font-weight: 700; }
-    .seg-btn-main svg { flex-shrink: 0; }
+    .seg-btn-main { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.5px; font-weight: 700; }
     .seg-btn-sub { font-size: 10px; color: var(--text-secondary); }
-    .seg-btn-sub.infinity-sub {
-      font-size: 18px;
-      line-height: 0.85;
-      font-weight: 700;
-      margin-top: 1px;
-    }
     .seg-btn.active .seg-btn-sub { color: #6ee7b7; }
+    .seg-btn-sub.inf-sub { font-size: 15px; line-height: 1; font-weight: 700; }
 
-    .persona-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 1fr;
-      gap: 8px;
+    .play-as-piece svg {
+      width: 22px;
+      height: 22px;
+      filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));
     }
+
+    .persona-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr; gap: 8px; }
     .persona-btn {
       display: flex;
       align-items: center;
@@ -981,10 +970,10 @@
     }
     .persona-btn:hover { background: var(--bg-hover); }
     .persona-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--accent-emerald); }
-    .persona-left { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
-    .persona-icon { width: 22px; height: 22px; flex-shrink: 0; display: grid; place-items: center; }
-    .persona-icon svg { width: 22px; height: 22px; filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.65)); }
-    .persona-name { font-size: 12.5px; font-weight: 700; color: var(--text-primary); line-height: 1.22; }
+    .persona-name-wrap { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+    .persona-piece { width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+    .persona-piece svg { width: 22px; height: 22px; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)); }
+    .persona-name { font-size: 12.5px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
     .persona-elo { font-size: 11px; font-weight: 700; font-family: "SF Mono", Menlo, monospace; color: var(--text-secondary); background: rgba(9, 13, 22, 0.55); padding: 2px 6px; border-radius: 6px; flex-shrink: 0; }
     .persona-btn.active .persona-elo { color: #6ee7b7; background: rgba(16, 185, 129, 0.2); }
 
@@ -1012,10 +1001,9 @@
       align-items: center;
       justify-content: center;
       padding: 0;
-      line-height: 1;
+      line-height: 0;
       flex-shrink: 0;
     }
-    .elo-step-btn svg { display: block; }
     .elo-step-btn:hover { background: var(--bg-hover); }
 
     .elo-range-input {
@@ -1128,15 +1116,15 @@
             <div class="brand-icon" aria-hidden="true">
               <svg viewBox="0 0 45 45">
                 <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="9" cy="25.5" r="0.7" fill="#090d16"/>
-                <ellipse cx="14.5" cy="15.5" rx="0.85" ry="1.6" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
+                <circle cx="9" cy="25.5" r="0.85" fill="#090d16"/>
+                <ellipse cx="14.5" cy="15.5" rx="0.9" ry="1.65" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
                 <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
               </svg>
             </div>
             <span>LC Chess</span>
           </div>
           <div class="top-actions">
-            <button id="btn-sound-mobile" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
+            <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
             </button>
             <button id="btn-new-mobile" class="icon-btn primary">New Game</button>
@@ -1225,8 +1213,8 @@
               <div class="brand-icon" aria-hidden="true">
                 <svg viewBox="0 0 45 45">
                   <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="9" cy="25.5" r="0.7" fill="#090d16"/>
-                  <ellipse cx="14.5" cy="15.5" rx="0.85" ry="1.6" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
+                  <circle cx="9" cy="25.5" r="0.85" fill="#090d16"/>
+                  <ellipse cx="14.5" cy="15.5" rx="0.9" ry="1.65" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
                   <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
                 </svg>
               </div>
@@ -1235,7 +1223,7 @@
                 <div id="desktop-mode-sub" style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">vs Computer • Intermediate (1200)</div>
               </div>
             </div>
-            <button id="btn-sound-desktop" class="icon-btn sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
+            <button id="btn-sound-desktop" class="icon-btn" title="Toggle Sound">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
             </button>
           </div>
@@ -1280,8 +1268,8 @@
           <div class="brand-icon" style="width: 36px; height: 36px; border-radius: 10px;">
             <svg viewBox="0 0 45 45">
               <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="9" cy="25.5" r="0.7" fill="#090d16"/>
-              <ellipse cx="14.5" cy="15.5" rx="0.85" ry="1.6" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
+              <circle cx="9" cy="25.5" r="0.85" fill="#090d16"/>
+              <ellipse cx="14.5" cy="15.5" rx="0.9" ry="1.65" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
               <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
             </svg>
           </div>
@@ -1291,7 +1279,7 @@
           </div>
         </div>
         <button id="btn-close-config" class="close-modal-btn" aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
 
@@ -1358,11 +1346,11 @@
           </div>
           <div class="elo-stepper-controls">
             <button type="button" id="btn-elo-minus" class="elo-step-btn" aria-label="Decrease ELO">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
             <input type="range" id="custom-elo-slider" class="elo-range-input" min="100" max="3000" step="100" value="1500" aria-label="Custom ELO Rating" />
             <button type="button" id="btn-elo-plus" class="elo-step-btn" aria-label="Increase ELO">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
           </div>
         </div>
@@ -1370,43 +1358,43 @@
         <span class="config-label" style="margin-top: 4px;">Or Select Player Preset (Sorted by ELO)</span>
         <div id="persona-selector" class="persona-grid">
           <button class="persona-btn" data-persona="andrea" data-elo="1800">
-            <span class="persona-left">
-              <span class="persona-icon"><svg viewBox="0 0 45 45"><path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 H 34 C 34,31.58 29.59,27.09 26.59,26.03 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z" fill="#ffffff" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="persona-name-wrap">
+              <span class="persona-piece"><svg viewBox="0 0 45 45"><path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 H 34 C 34,31.58 29.59,27.09 26.59,26.03 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z" fill="#ffffff" stroke="#273244" stroke-width="1.5" stroke-linecap="round"/></svg></span>
               <span class="persona-name">Andrea Botez</span>
             </span>
             <span class="persona-elo">1800</span>
           </button>
           <button class="persona-btn" data-persona="alexandra" data-elo="2050">
-            <span class="persona-left">
-              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="#ffffff" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/><path d="M 34,14 L 31,17 L 14,17 L 11,14"/><path d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"/><path d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5"/></g></svg></span>
+            <span class="persona-name-wrap">
+              <span class="persona-piece"><svg viewBox="0 0 45 45"><g fill="#ffffff" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/><path d="M 34,14 L 31,17 L 14,17 L 11,14"/><path d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"/><path d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5"/><path d="M 11,14 L 34,14" fill="none" stroke-linejoin="miter"/></g></svg></span>
               <span class="persona-name">Alexandra Botez</span>
             </span>
             <span class="persona-elo">2050</span>
           </button>
           <button class="persona-btn" data-persona="anna" data-elo="2100">
-            <span class="persona-left">
-              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff"/><path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff"/></g></svg></span>
+            <span class="persona-name-wrap">
+              <span class="persona-piece"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" fill="#ffffff"/><path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" fill="#ffffff"/><path d="M 9.5 25.5 A 0.5 0.5 0 1 1 8.5,25.5 A 0.5 0.5 0 1 1 9.5 25.5 z" fill="#273244"/><path d="M 15 15.5 A 0.5 1.5 0 1 1 14,15.5 A 0.5 1.5 0 1 1 15 15.5 z" transform="matrix(0.866,0.5,-0.5,0.866,9.693,-5.173)" fill="#273244"/></g></svg></span>
               <span class="persona-name">Anna Cramling</span>
             </span>
             <span class="persona-elo">2100</span>
           </button>
           <button class="persona-btn" data-persona="gotham" data-elo="2350">
-            <span class="persona-left">
-              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g fill="#ffffff" stroke-linecap="butt"><path d="M 9,36 C 12.39,35.03 19.11,36.43 22.5,34 C 25.89,36.43 32.61,35.03 36,36 C 36,36 37.65,36.54 39,38 C 38.32,38.97 37.35,38.99 36,38.5 C 32.61,37.53 25.89,38.96 22.5,37.5 C 19.11,38.96 12.39,37.53 9,38.5 C 7.646,38.99 6.677,38.97 6,38 C 7.354,36.06 9,36 9,36 z"/><path d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,30 30,30 C 30,27.5 27.5,26 27.5,26 C 33,24.5 33.5,14.5 22.5,10.5 C 11.5,14.5 12,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32 z"/><path d="M 25 8 A 2.5 2.5 0 1 1 20,8 A 2.5 2.5 0 1 1 25 8 z"/></g><path d="M 22.5,15.5 L 22.5,20.5 M 20,18 L 25,18" stroke-linejoin="miter"/></g></svg></span>
+            <span class="persona-name-wrap">
+              <span class="persona-piece"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g fill="#ffffff" stroke-linecap="butt"><path d="M 9,36 C 12.39,35.03 19.11,36.43 22.5,34 C 25.89,36.43 32.61,35.03 36,36 C 36,36 37.65,36.54 39,38 C 38.32,38.97 37.35,38.99 36,38.5 C 32.61,37.53 25.89,38.96 22.5,37.5 C 19.11,38.96 12.39,37.53 9,38.5 C 7.646,38.99 6.677,38.97 6,38 C 7.354,36.06 9,36 9,36 z"/><path d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,30 30,30 C 30,27.5 27.5,26 27.5,26 C 33,24.5 33.5,14.5 22.5,10.5 C 11.5,14.5 12,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32 z"/><path d="M 25 8 A 2.5 2.5 0 1 1 20,8 A 2.5 2.5 0 1 1 25 8 z"/></g><path d="M 17.5,26 L 27.5,26 M 15,30 L 30,30 M 22.5,15.5 L 22.5,20.5 M 20,18 L 25,18" stroke-linejoin="miter"/></g></svg></span>
               <span class="persona-name">Gotham<br/>Chess</span>
             </span>
             <span class="persona-elo">2350</span>
           </button>
           <button class="persona-btn" data-persona="hikaru" data-elo="2800">
-            <span class="persona-left">
-              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="#ffffff" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38,14 L 31,25 L 31,11 L 25.5,24.5 L 22.5,9.5 L 19.5,24.5 L 14,10.5 L 14,25 L 7,14 L 9,26 z" stroke-linecap="butt"/><path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z" stroke-linecap="butt"/></g></svg></span>
+            <span class="persona-name-wrap">
+              <span class="persona-piece"><svg viewBox="0 0 45 45"><g fill="#ffffff" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 8 12 A 2 2 0 1 1 4,12 A 2 2 0 1 1 8 12 z"/><path d="M 24.5 7.5 A 2 2 0 1 1 20.5,7.5 A 2 2 0 1 1 24.5 7.5 z"/><path d="M 41 12 A 2 2 0 1 1 37,12 A 2 2 0 1 1 41 12 z"/><path d="M 16 8.5 A 2 2 0 1 1 12,8.5 A 2 2 0 1 1 16 8.5 z"/><path d="M 33 9 A 2 2 0 1 1 29,9 A 2 2 0 1 1 33 9 z"/><path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38,14 L 31,25 L 31,11 L 25.5,24.5 L 22.5,9.5 L 19.5,24.5 L 14,10.5 L 14,25 L 7,14 L 9,26 z" stroke-linecap="butt"/><path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z" stroke-linecap="butt"/><path d="M 11.5,30 C 15,29 30,29 33.5,30" fill="none"/><path d="M 12,33.5 C 18,32.5 27,32.5 33,33.5" fill="none"/></g></svg></span>
               <span class="persona-name">Hikaru Nakamura</span>
             </span>
             <span class="persona-elo">2800</span>
           </button>
           <button class="persona-btn" data-persona="magnus" data-elo="2850">
-            <span class="persona-left">
-              <span class="persona-icon"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/></g></svg></span>
+            <span class="persona-name-wrap">
+              <span class="persona-piece"><svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/><path d="M 11.5,30 C 17,27 27,27 32.5,30"/><path d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"/><path d="M 11.5,37 C 17,34 27,34 32.5,37"/></g></svg></span>
               <span class="persona-name">Magnus Carlsen</span>
             </span>
             <span class="persona-elo">2850</span>
@@ -1417,7 +1405,7 @@
       <div class="config-section">
         <span class="config-label">Time Control</span>
         <div id="time-selector" class="seg-grid-5">
-          <button class="seg-btn" data-time="0"><span class="seg-btn-main">None</span><span class="seg-btn-sub infinity-sub">∞</span></button>
+          <button class="seg-btn" data-time="0"><span class="seg-btn-main">None</span><span class="seg-btn-sub inf-sub">∞</span></button>
           <button class="seg-btn" data-time="300"><span class="seg-btn-main">5m</span><span class="seg-btn-sub">Blitz</span></button>
           <button class="seg-btn active" data-time="600"><span class="seg-btn-main">10m</span><span class="seg-btn-sub">Rapid</span></button>
           <button class="seg-btn" data-time="900"><span class="seg-btn-main">15m</span><span class="seg-btn-sub">Rapid</span></button>
@@ -1429,20 +1417,20 @@
         <span class="config-label">Play As</span>
         <div id="color-selector" class="seg-grid-3">
           <button class="seg-btn active" data-color="w">
-            <span class="seg-btn-main">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/><path d="M 11.5,30 C 17,27 27,27 32.5,30"/><path d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"/><path d="M 11.5,37 C 17,34 27,34 32.5,37"/></g></svg>
+            <span class="seg-btn-main play-as-piece">
+              <svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#ffffff" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#ffffff"/><path d="M 11.5,30 C 17,27 27,27 32.5,30"/><path d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"/><path d="M 11.5,37 C 17,34 27,34 32.5,37"/></g></svg>
               <span>White</span>
             </span>
           </button>
           <button class="seg-btn" data-color="random">
-            <span class="seg-btn-main">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="8.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="12" cy="12" r="1.35" fill="#0f172a" stroke="none"/></svg>
+            <span class="seg-btn-main play-as-piece">
+              <svg viewBox="0 0 24 24" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="15.5" cy="8.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="8.5" cy="15.5" r="1.35" fill="#0f172a" stroke="none"/><circle cx="12" cy="12" r="1.35" fill="#0f172a" stroke="none"/></svg>
               <span>Random</span>
             </span>
           </button>
           <button class="seg-btn" data-color="b">
-            <span class="seg-btn-main">
-              <svg width="22" height="22" viewBox="0 0 45 45" style="filter: drop-shadow(0 0 1px rgba(248, 250, 252, 0.85));"><g fill="none" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#18181b" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#18181b"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85" stroke="#cbd5e1" stroke-width="1"/><path d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37" stroke="#cbd5e1" stroke-width="1"/></g></svg>
+            <span class="seg-btn-main play-as-piece">
+              <svg viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#090d16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22.5,11.63 L 22.5,6" stroke-linejoin="miter"/><path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" fill="#18181b" stroke-linecap="butt" stroke-linejoin="miter"/><path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z" fill="#18181b"/><path d="M 20,8 L 25,8" stroke-linejoin="miter"/><path d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85" stroke="#cbd5e1" stroke-width="1"/><path d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37" stroke="#cbd5e1" stroke-width="1"/></g></svg>
               <span>Black</span>
             </span>
           </button>
@@ -1508,13 +1496,12 @@
   <script>
     /**
      * =========================================================================
-     * LC CHESS — 3200-ELO TACTICAL ENGINE, CONSISTENT HINTS & RESPONSIVE UI
+     * LC CHESS — CLASSIC STAUNTON PIECES, 3200-ELO ENGINE & ADAPTIVE UI
      * =========================================================================
      */
-    const PIECE_VALUES = { P: 100, N: 320, B: 335, R: 500, Q: 920, K: 20000 };
+    const PIECE_VALUES = { P: 100, N: 320, B: 330, R: 500, Q: 900, K: 20000 };
     const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-    // Complete, authentic classical Staunton chess piece SVG definitions
     const PIECE_SVGS = {
       wP: `<svg viewBox="0 0 45 45"><path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 H 34 C 34,31.58 29.59,27.09 26.59,26.03 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z" fill="#ffffff" stroke="#273244" stroke-width="1.35" stroke-linecap="round"/></svg>`,
       wR: `<svg viewBox="0 0 45 45"><g fill="#ffffff" stroke="#273244" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z"/><path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z"/><path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/><path d="M 34,14 L 31,17 L 14,17 L 11,14"/><path d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"/><path d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5"/><path d="M 11,14 L 34,14" fill="none" stroke-linejoin="miter"/></g></svg>`,
@@ -1967,11 +1954,9 @@
           if (color === 'w') whiteScore += val + pstVal; else blackScore += val + pstVal;
         }
 
-        // Bishop pair bonus
         if (wBishops >= 2) whiteScore += 42;
         if (bBishops >= 2) blackScore += 42;
 
-        // Pawn structure: doubled pawns, isolated pawns & passed pawns
         for (let f = 0; f < 8; f++) {
           if (wPawnFiles[f] > 1) whiteScore -= (wPawnFiles[f] - 1) * 18;
           if (bPawnFiles[f] > 1) blackScore -= (bPawnFiles[f] - 1) * 18;
@@ -1999,7 +1984,6 @@
           }
         }
 
-        // Rook on open/semi-open file & 7th rank
         for (let sq = 0; sq < 64; sq++) {
           const p = engine.board[sq];
           if (!p || p[1] !== 'R') continue;
@@ -2013,7 +1997,6 @@
           }
         }
 
-        // Middlegame king pawn shield
         if (nonPawnMaterial > 2600) {
           if (wKingSq >= 56) {
             const kf = wKingSq % 8;
@@ -2215,9 +2198,7 @@
         this.timeBudget = budgetMs;
         this.aborted = false;
 
-        // Check grandmaster opening book first so opening moves are instant and canonical
         const bookMove = this.getBookMove(engine);
-
         let completedResults = null;
 
         for (let depth = 1; depth <= maxDepth; depth++) {
@@ -2249,7 +2230,6 @@
 
           if (!iterAborted && iterResults.length === legal.length) {
             iterResults.sort((a, b) => b.score - a.score);
-            // If we have a canonical opening book move within 15cp of top engine score, keep it #1 for deterministic consistency
             if (bookMove) {
               const bIdx = iterResults.findIndex(r => this.isSameMove(r.move, bookMove));
               if (bIdx > 0 && iterResults[0].score - iterResults[bIdx].score <= 15) {
@@ -2559,7 +2539,7 @@
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
         const appStyles = getComputedStyle($('app'));
-        const padTop = parseFloat(appStyles.paddingTop) || 12;
+        const padTop = parseFloat(appStyles.paddingTop) || 16;
         const padBot = parseFloat(appStyles.paddingBottom) || 8;
         const extraTopResign = isFriend ? 46 : 0;
         const actionsH = hasActions ? 46 : 0;
