@@ -1675,6 +1675,92 @@
         }
         return false;
       }
+      getLeastValuableAttacker(sq, byColor, occ) {
+        const r = Math.floor(sq / 8), f = sq % 8;
+        const pawnDir = byColor === 'w' ? 1 : -1;
+        const pr = r + pawnDir;
+        if (pr >= 0 && pr < 8) {
+          if (f > 0 && occ[pr * 8 + (f - 1)] === byColor + 'P') return { sq: pr * 8 + (f - 1), val: 100 };
+          if (f < 7 && occ[pr * 8 + (f + 1)] === byColor + 'P') return { sq: pr * 8 + (f + 1), val: 100 };
+        }
+        const knightDeltas = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
+        for (const [dr, df] of knightDeltas) {
+          const nr = r + dr, nf = f + df;
+          if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8 && occ[nr * 8 + nf] === byColor + 'N') return { sq: nr * 8 + nf, val: 320 };
+        }
+        const diagDirs = [[-1,-1],[-1,1],[1,-1],[1,1]];
+        for (const [dr, df] of diagDirs) {
+          let nr = r + dr, nf = f + df;
+          while (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
+            const p = occ[nr * 8 + nf];
+            if (p) {
+              if (p[0] === byColor && p[1] === 'B') return { sq: nr * 8 + nf, val: 330 };
+              break;
+            }
+            nr += dr; nf += df;
+          }
+        }
+        const orthoDirs = [[-1,0],[1,0],[0,-1],[0,1]];
+        for (const [dr, df] of orthoDirs) {
+          let nr = r + dr, nf = f + df;
+          while (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
+            const p = occ[nr * 8 + nf];
+            if (p) {
+              if (p[0] === byColor && p[1] === 'R') return { sq: nr * 8 + nf, val: 500 };
+              break;
+            }
+            nr += dr; nf += df;
+          }
+        }
+        for (const [dr, df] of [...diagDirs, ...orthoDirs]) {
+          let nr = r + dr, nf = f + df;
+          while (nr >= 0 && nr < 8 && nf >= 0 && nf < 8) {
+            const p = occ[nr * 8 + nf];
+            if (p) {
+              if (p[0] === byColor && p[1] === 'Q') return { sq: nr * 8 + nf, val: 900 };
+              break;
+            }
+            nr += dr; nf += df;
+          }
+        }
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let df = -1; df <= 1; df++) {
+            if (dr === 0 && df === 0) continue;
+            const nr = r + dr, nf = f + df;
+            if (nr >= 0 && nr < 8 && nf >= 0 && nf < 8 && occ[nr * 8 + nf] === byColor + 'K') return { sq: nr * 8 + nf, val: 20000 };
+          }
+        }
+        return null;
+      }
+      staticExchangeEval(move) {
+        if (!move.capture && !move.promo) return 0;
+        const occ = this.board.slice();
+        const gain = new Int32Array(32);
+        let d = 0;
+        let side = move.piece[0];
+        const targetSq = move.to;
+        gain[0] = move.capture ? PIECE_VALUES[move.capture[1]] : 0;
+        if (move.promo) gain[0] += PIECE_VALUES[move.promo] - 100;
+        let currentPieceVal = move.promo ? PIECE_VALUES[move.promo] : PIECE_VALUES[move.piece[1]];
+        occ[move.from] = null;
+        if (move.isEnPassant) occ[side === 'w' ? targetSq + 8 : targetSq - 8] = null;
+        side = side === 'w' ? 'b' : 'w';
+
+        while (d < 30) {
+          d++;
+          gain[d] = currentPieceVal - gain[d - 1];
+          if (Math.max(-gain[d - 1], gain[d]) < 0) break;
+          const att = this.getLeastValuableAttacker(targetSq, side, occ);
+          if (!att) break;
+          occ[att.sq] = null;
+          currentPieceVal = att.val;
+          side = side === 'w' ? 'b' : 'w';
+        }
+        while (--d > 0) {
+          gain[d - 1] = -Math.max(-gain[d - 1], gain[d]);
+        }
+        return gain[0];
+      }
       isInCheck(color) {
         const kSq = this.findKing(color);
         return kSq !== -1 && this.isSquareAttacked(kSq, color === 'w' ? 'b' : 'w');
@@ -1967,51 +2053,49 @@
           if (bPawnFiles[f] > 0 && bAdj === 0) blackScore -= 14;
 
           if (wPawnFiles[f] > 0) {
-            const r = wPawnRanks[f];
-            let blockedByEnemy = false;
-            for (let ef = Math.max(0, f - 1); ef <= Math.min(7, f + 1); ef++) {
-              if (bPawnFiles[ef] > 0 && bPawnRanks[ef] < r) { blockedByEnemy = true; break; }
+            const wRank = wPawnRanks[f];
+            let blockedByBlack = false;
+            for (let df = -1; df <= 1; df++) {
+              const nf = f + df;
+              if (nf >= 0 && nf < 8 && bPawnFiles[nf] > 0 && bPawnRanks[nf] < wRank) {
+                blockedByBlack = true;
+                break;
+              }
             }
-            if (!blockedByEnemy) whiteScore += (7 - r) * 14;
+            if (!blockedByBlack) whiteScore += (7 - wRank) * 14;
           }
-          if (bPawnFiles[f] > 0) {
-            const r = bPawnRanks[f];
-            let blockedByEnemy = false;
-            for (let ef = Math.max(0, f - 1); ef <= Math.min(7, f + 1); ef++) {
-              if (wPawnFiles[ef] > 0 && wPawnRanks[ef] > r) { blockedByEnemy = true; break; }
-            }
-            if (!blockedByEnemy) blackScore += r * 14;
-          }
-        }
 
-        for (let sq = 0; sq < 64; sq++) {
-          const p = engine.board[sq];
-          if (!p || p[1] !== 'R') continue;
-          const r = Math.floor(sq / 8), f = sq % 8;
-          if (p[0] === 'w') {
-            if (wPawnFiles[f] === 0) whiteScore += bPawnFiles[f] === 0 ? 22 : 11;
-            if (r === 1) whiteScore += 26;
-          } else {
-            if (bPawnFiles[f] === 0) blackScore += wPawnFiles[f] === 0 ? 22 : 11;
-            if (r === 6) blackScore += 26;
+          if (bPawnFiles[f] > 0) {
+            const bRank = bPawnRanks[f];
+            let blockedByWhite = false;
+            for (let df = -1; df <= 1; df++) {
+              const nf = f + df;
+              if (nf >= 0 && nf < 8 && wPawnFiles[nf] > 0 && wPawnRanks[nf] > bRank) {
+                blockedByWhite = true;
+                break;
+              }
+            }
+            if (!blockedByWhite) blackScore += bRank * 14;
           }
         }
 
         if (nonPawnMaterial > 2600) {
-          if (wKingSq >= 56) {
-            const kf = wKingSq % 8;
-            for (let sf = Math.max(0, kf - 1); sf <= Math.min(7, kf + 1); sf++) {
-              if (engine.board[48 + sf] === 'wP') whiteScore += 14;
-              else if (engine.board[40 + sf] === 'wP') whiteScore += 7;
-              else whiteScore -= 12;
+          if (wKingSq !== -1) {
+            const kf = wKingSq % 8, kr = Math.floor(wKingSq / 8);
+            if (kr >= 6 && (kf <= 2 || kf >= 5)) {
+              for (let df = -1; df <= 1; df++) {
+                const nf = kf + df;
+                if (nf >= 0 && nf < 8 && engine.board[(kr - 1) * 8 + nf] === 'wP') whiteScore += 14;
+              }
             }
           }
-          if (bKingSq >= 0 && bKingSq < 8) {
-            const kf = bKingSq % 8;
-            for (let sf = Math.max(0, kf - 1); sf <= Math.min(7, kf + 1); sf++) {
-              if (engine.board[8 + sf] === 'bP') blackScore += 14;
-              else if (engine.board[16 + sf] === 'bP') blackScore += 7;
-              else blackScore -= 12;
+          if (bKingSq !== -1) {
+            const kf = bKingSq % 8, kr = Math.floor(bKingSq / 8);
+            if (kr <= 1 && (kf <= 2 || kf >= 5)) {
+              for (let df = -1; df <= 1; df++) {
+                const nf = kf + df;
+                if (nf >= 0 && nf < 8 && engine.board[(kr + 1) * 8 + nf] === 'bP') blackScore += 14;
+              }
             }
           }
         }
@@ -2020,99 +2104,169 @@
       }
 
       isSameMove(a, b) {
-        return a && b && a.from === b.from && a.to === b.to && (a.promo || null) === (b.promo || null);
+        return !!(a && b && a.from === b.from && a.to === b.to && (a.promo || null) === (b.promo || null));
       }
 
-      scoreMove(m, ttMove, ply) {
-        if (ttMove && this.isSameMove(m, ttMove)) return 1000000;
+      scoreMove(engine, m, ttMove, ply) {
+        if (ttMove && this.isSameMove(m, ttMove)) return 2000000;
         let score = 0;
         if (m.capture) {
-          score += 100000 + 12 * PIECE_VALUES[m.capture[1]] - PIECE_VALUES[m.piece[1]];
+          const seeVal = engine.staticExchangeEval(m);
+          if (seeVal >= 0) {
+            score += 500000 + seeVal * 10 + 12 * PIECE_VALUES[m.capture[1]] - PIECE_VALUES[m.piece[1]];
+          } else {
+            score += -200000 + seeVal;
+          }
         }
         if (m.promo) {
-          score += 90000 + PIECE_VALUES[m.promo];
+          score += 450000 + PIECE_VALUES[m.promo];
         }
         if (!m.capture && !m.promo) {
           const k = this.killers[ply];
           if (k) {
-            if (this.isSameMove(m, k[0])) score += 80000;
-            else if (this.isSameMove(m, k[1])) score += 70000;
+            if (this.isSameMove(m, k[0])) score += 300000;
+            else if (this.isSameMove(m, k[1])) score += 250000;
           }
           score += this.historyTable[m.from * 64 + m.to];
         }
-        if (m.isCastle) score += 45000;
+        if (m.isCastle) score += 120000;
         return score;
       }
 
-      orderMoves(moves, ttMove = null, ply = 0) {
-        return moves.sort((a, b) => this.scoreMove(b, ttMove, ply) - this.scoreMove(a, ttMove, ply));
+      orderMoves(engine, moves, ttMove = null, ply = 0) {
+        return moves.sort((a, b) => this.scoreMove(engine, b, ttMove, ply) - this.scoreMove(engine, a, ttMove, ply));
       }
 
       quiescence(engine, alpha, beta, maximizing, qDepth = 0) {
         this.nodes++;
-        if ((this.nodes & 1023) === 0 && performance.now() - this.startTime > this.timeBudget) {
+        if ((this.nodes & 2047) === 0 && performance.now() - this.startTime > this.timeBudget) {
           this.aborted = true;
           return this.evaluate(engine);
         }
-        const standPat = this.evaluate(engine);
-        if (qDepth >= 6) return standPat;
-
-        if (maximizing) {
-          if (standPat >= beta) return beta;
-          if (standPat > alpha) alpha = standPat;
-        } else {
-          if (standPat <= alpha) return alpha;
-          if (standPat < beta) beta = standPat;
-        }
-
-        const legal = engine.generateLegalMoves(engine.turn);
-        const tactical = this.orderMoves(legal.filter(m => m.capture || m.promo));
-        for (const m of tactical) {
-          const snap = engine.cloneState();
-          engine.applyMoveRaw(m);
-          const score = this.quiescence(engine, alpha, beta, !maximizing, qDepth + 1);
-          engine.restoreState(snap);
-          if (this.aborted) return standPat;
+        const inCheck = engine.isInCheck(engine.turn);
+        if (!inCheck) {
+          const standPat = this.evaluate(engine);
+          if (qDepth >= 10) return standPat;
           if (maximizing) {
-            if (score >= beta) return beta;
-            if (score > alpha) alpha = score;
+            if (standPat >= beta) return beta;
+            if (standPat > alpha) alpha = standPat;
           } else {
-            if (score <= alpha) return alpha;
-            if (score < beta) beta = score;
+            if (standPat <= alpha) return alpha;
+            if (standPat < beta) beta = standPat;
           }
+          if (maximizing && standPat + 1050 < alpha) return alpha;
+          if (!maximizing && standPat - 1050 > beta) return beta;
+
+          const legal = engine.generateLegalMoves(engine.turn);
+          const tactical = legal.filter(m => (m.capture || m.promo) && engine.staticExchangeEval(m) >= 0);
+          this.orderMoves(engine, tactical);
+          for (const m of tactical) {
+            const snap = engine.cloneState();
+            engine.applyMoveRaw(m);
+            const score = this.quiescence(engine, alpha, beta, !maximizing, qDepth + 1);
+            engine.restoreState(snap);
+            if (this.aborted) return standPat;
+            if (maximizing) {
+              if (score >= beta) return beta;
+              if (score > alpha) alpha = score;
+            } else {
+              if (score <= alpha) return alpha;
+              if (score < beta) beta = score;
+            }
+          }
+          return maximizing ? alpha : beta;
+        } else {
+          // Always resolve check evasions completely so checks never hide material loss
+          const legal = engine.generateLegalMoves(engine.turn);
+          if (legal.length === 0) return maximizing ? (-29000 + qDepth) : (29000 - qDepth);
+          this.orderMoves(engine, legal);
+          let best = maximizing ? -Infinity : Infinity;
+          for (const m of legal) {
+            const snap = engine.cloneState();
+            engine.applyMoveRaw(m);
+            const score = this.quiescence(engine, alpha, beta, !maximizing, qDepth + 1);
+            engine.restoreState(snap);
+            if (this.aborted) return this.evaluate(engine);
+            if (maximizing) {
+              if (score > best) best = score;
+              if (score > alpha) alpha = score;
+            } else {
+              if (score < best) best = score;
+              if (score < beta) beta = score;
+            }
+            if (beta <= alpha) break;
+          }
+          return best;
         }
-        return maximizing ? alpha : beta;
       }
 
-      minimax(engine, depth, alpha, beta, maximizing, ply = 0) {
+      minimax(engine, depth, alpha, beta, maximizing, ply = 0, allowNull = true, pathKeys = null) {
         this.nodes++;
-        if ((this.nodes & 1023) === 0 && performance.now() - this.startTime > this.timeBudget) {
+        if ((this.nodes & 2047) === 0 && performance.now() - this.startTime > this.timeBudget) {
           this.aborted = true;
           return this.evaluate(engine);
         }
 
-        const origAlpha = alpha, origBeta = beta;
         const posKey = engine.getPositionKey();
+        if (ply > 0 && ((engine.positionCounts.get(posKey) || 0) >= 2 || (pathKeys && pathKeys.has(posKey)))) {
+          // Return draw/contempt before touching TT so repetition scores never pollute TT entries
+          const staticScore = this.evaluate(engine);
+          if (Math.abs(staticScore) > 40) {
+            return staticScore > 0 ? -75 : 75;
+          }
+          return 0;
+        }
+
+        const inCheck = engine.isInCheck(engine.turn);
+        const origAlpha = alpha, origBeta = beta;
         const ttEntry = this.tt.get(posKey);
-        if (ttEntry && ttEntry.depth >= depth) {
+        if (ttEntry && ttEntry.depth >= depth && !inCheck) {
           if (ttEntry.flag === 0) return ttEntry.score;
           if (ttEntry.flag === 1 && ttEntry.score > alpha) alpha = ttEntry.score;
           if (ttEntry.flag === 2 && ttEntry.score < beta) beta = ttEntry.score;
           if (alpha >= beta) return ttEntry.score;
         }
 
-        const inCheck = engine.isInCheck(engine.turn);
-        const extDepth = (inCheck && ply < 10) ? depth + 1 : depth;
+        const extDepth = (inCheck && ply <= 4) ? depth + 1 : depth;
+
+        if (extDepth <= 0) return this.quiescence(engine, alpha, beta, maximizing, 0);
 
         const legal = engine.generateLegalMoves(engine.turn);
         if (legal.length === 0) {
           if (inCheck) return maximizing ? (-29000 + ply) : (29000 - ply);
           return 0;
         }
-        if (extDepth <= 0) return this.quiescence(engine, alpha, beta, maximizing, 0);
+
+        // Only apply Null-Move Pruning when side to move has non-pawn pieces (avoids zugzwang bugs in pawn endgames)
+        let hasPieces = false;
+        for (let sq = 0; sq < 64; sq++) {
+          const p = engine.board[sq];
+          if (p && p[0] === engine.turn && p[1] !== 'P' && p[1] !== 'K') { hasPieces = true; break; }
+        }
+
+        if (allowNull && hasPieces && !inCheck && extDepth >= 3 && ply >= 2) {
+          const snapNull = engine.cloneState();
+          engine.turn = engine.turn === 'w' ? 'b' : 'w';
+          engine.enPassant = -1;
+          const R = 2;
+          let nullScore;
+          if (maximizing) {
+            nullScore = this.minimax(engine, extDepth - 1 - R, beta - 1, beta, false, ply + 1, false, pathKeys);
+            engine.restoreState(snapNull);
+            if (!this.aborted && nullScore >= beta) return beta;
+          } else {
+            nullScore = this.minimax(engine, extDepth - 1 - R, alpha, alpha + 1, true, ply + 1, false, pathKeys);
+            engine.restoreState(snapNull);
+            if (!this.aborted && nullScore <= alpha) return alpha;
+          }
+          if (this.aborted) return this.evaluate(engine);
+        }
 
         const ttMove = ttEntry ? ttEntry.bestMove : null;
-        this.orderMoves(legal, ttMove, ply);
+        this.orderMoves(engine, legal, ttMove, ply);
+
+        const nextPath = pathKeys ? new Set(pathKeys) : new Set();
+        nextPath.add(posKey);
 
         let bestMove = legal[0];
         let bestScore = maximizing ? -Infinity : Infinity;
@@ -2123,16 +2277,16 @@
           engine.applyMoveRaw(m);
 
           let ev;
-          const canReduce = i >= 4 && extDepth >= 3 && !inCheck && !m.capture && !m.promo;
+          const canReduce = i >= 5 && extDepth >= 4 && !inCheck && !m.capture && !m.promo;
           if (i === 0) {
-            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1);
+            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
           } else if (canReduce) {
-            ev = this.minimax(engine, extDepth - 2, alpha, beta, !maximizing, ply + 1);
+            ev = this.minimax(engine, extDepth - 2, alpha, beta, !maximizing, ply + 1, true, nextPath);
             if (!this.aborted && ((maximizing && ev > alpha) || (!maximizing && ev < beta))) {
-              ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1);
+              ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
             }
           } else {
-            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1);
+            ev = this.minimax(engine, extDepth - 1, alpha, beta, !maximizing, ply + 1, true, nextPath);
           }
 
           engine.restoreState(snap);
@@ -2162,7 +2316,7 @@
           let flag = 0;
           if (bestScore <= origAlpha) flag = 2;
           else if (bestScore >= origBeta) flag = 1;
-          this.tt.set(posKey, { depth: extDepth, score: bestScore, flag, bestMove });
+          this.tt.set(posKey, { depth, score: bestScore, flag, bestMove });
         }
         return bestScore;
       }
@@ -2175,16 +2329,25 @@
         for (const line of OPENING_BOOK_LINES) {
           if (line.length > playedSans.length && playedSans.every((s, idx) => line[idx] === s)) {
             const targetSan = line[playedSans.length];
-            const found = legal.find(m => engine.buildSAN(m, legal).replace(/[+#]/g, '') === targetSan);
+            const found = legal.find(m => {
+              const snap = engine.cloneState();
+              engine.applyMoveRaw(m);
+              const sanClean = engine.buildSAN(m, legal).replace(/[+#]/g, '');
+              engine.restoreState(snap);
+              return sanClean === targetSan;
+            });
             if (found && !candidates.some(c => this.isSameMove(c, found))) {
               candidates.push(found);
             }
           }
         }
-        return candidates.length > 0 ? candidates[0] : null;
+        if (candidates.length === 0) return null;
+        const seed = (typeof state !== 'undefined' && typeof state.matchBookSeed === 'number') ? state.matchBookSeed : 0;
+        const idx = (seed + playedSans.length * 7) % candidates.length;
+        return candidates[idx];
       }
 
-      analyzePositionDeterministic(engine, maxDepth = 4, budgetMs = 1350) {
+      analyzePositionDeterministic(engine, maxDepth = 6, budgetMs = 1800, minGuaranteedDepth = 4) {
         const moverColor = engine.turn;
         const maximizing = moverColor === 'w';
         const sign = maximizing ? 1 : -1;
@@ -2195,21 +2358,20 @@
         this.clearSearchTables();
         this.nodes = 0;
         this.startTime = performance.now();
-        this.timeBudget = budgetMs;
         this.aborted = false;
 
         const bookMove = this.getBookMove(engine);
         let completedResults = null;
 
         for (let depth = 1; depth <= maxDepth; depth++) {
-          const isGuaranteed = depth <= 3;
-          if (!isGuaranteed && performance.now() - this.startTime > budgetMs * 0.58) break;
-          if (isGuaranteed) this.timeBudget = Math.max(budgetMs, 3500);
-          else this.timeBudget = budgetMs;
+          const isGuaranteed = depth <= minGuaranteedDepth;
+          const elapsed = performance.now() - this.startTime;
+          if (!isGuaranteed && elapsed > budgetMs * 0.72) break;
+          this.timeBudget = isGuaranteed ? Math.max(budgetMs, 4500) : budgetMs;
 
           const ordered = completedResults
             ? completedResults.map(r => r.move)
-            : this.orderMoves(legal.slice(), bookMove, 0);
+            : this.orderMoves(engine, legal.slice(), bookMove, 0);
 
           const iterResults = [];
           let iterAborted = false;
@@ -2217,7 +2379,7 @@
           for (const m of ordered) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const rawEval = this.minimax(engine, depth - 1, -Infinity, Infinity, !maximizing, 1);
+            const rawEval = this.minimax(engine, depth - 1, -Infinity, Infinity, !maximizing, 1, true);
             engine.restoreState(snap);
 
             if (!isGuaranteed && this.aborted) {
@@ -2232,9 +2394,8 @@
             iterResults.sort((a, b) => b.score - a.score);
             if (bookMove) {
               const bIdx = iterResults.findIndex(r => this.isSameMove(r.move, bookMove));
-              if (bIdx > 0 && iterResults[0].score - iterResults[bIdx].score <= 15) {
+              if (bIdx > 0 && iterResults[bIdx].score >= iterResults[0].score) {
                 const [bm] = iterResults.splice(bIdx, 1);
-                bm.score = iterResults[0].score;
                 iterResults.unshift(bm);
               }
             }
@@ -2251,19 +2412,40 @@
       }
 
       getCustomEloProfile(elo) {
-        if (elo <= 200) return { maxDepth: 1, minGuaranteedDepth: 1, budget: 80, jitter: 280, topPool: 7, blunderRate: 0.45 };
-        if (elo <= 300) return { maxDepth: 1, minGuaranteedDepth: 1, budget: 90, jitter: 210, topPool: 5, blunderRate: 0.30 };
-        if (elo <= 500) return { maxDepth: 1, minGuaranteedDepth: 1, budget: 110, jitter: 130, topPool: 4, blunderRate: 0.16 };
-        if (elo <= 700) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 260, jitter: 75, topPool: 3, blunderRate: 0.08 };
-        if (elo <= 900) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 320, jitter: 45, topPool: 3, blunderRate: 0.03 };
-        if (elo <= 1100) return { maxDepth: 2, minGuaranteedDepth: 2, budget: 380, jitter: 22, topPool: 2, blunderRate: 0 };
-        if (elo <= 1300) return { maxDepth: 3, minGuaranteedDepth: 2, budget: 500, jitter: 10, topPool: 2, blunderRate: 0 };
-        if (elo <= 1600) return { maxDepth: 3, minGuaranteedDepth: 3, budget: 700, jitter: 5, topPool: 2, blunderRate: 0 };
-        if (elo <= 1900) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 900, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2200) return { maxDepth: 4, minGuaranteedDepth: 3, budget: 1150, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2500) return { maxDepth: 5, minGuaranteedDepth: 3, budget: 1400, jitter: 0, topPool: 1, blunderRate: 0 };
-        if (elo <= 2850) return { maxDepth: 5, minGuaranteedDepth: 4, budget: 1650, jitter: 0, topPool: 1, blunderRate: 0 };
-        return { maxDepth: 6, minGuaranteedDepth: 4, budget: 1950, jitter: 0, topPool: 1, blunderRate: 0 };
+        const clamped = Math.max(100, Math.min(3000, Math.round(elo / 100) * 100));
+        const table = {
+          100:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 60,   jitter: 340, topPool: 8, blunderRate: 0.55 },
+          200:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 75,   jitter: 270, topPool: 6, blunderRate: 0.42 },
+          300:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 90,   jitter: 210, topPool: 5, blunderRate: 0.30 },
+          400:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 105,  jitter: 165, topPool: 4, blunderRate: 0.22 },
+          500:  { maxDepth: 1, minGuaranteedDepth: 1, budget: 120,  jitter: 125, topPool: 4, blunderRate: 0.15 },
+          600:  { maxDepth: 2, minGuaranteedDepth: 1, budget: 180,  jitter: 95,  topPool: 3, blunderRate: 0.10 },
+          700:  { maxDepth: 2, minGuaranteedDepth: 2, budget: 240,  jitter: 70,  topPool: 3, blunderRate: 0.06 },
+          800:  { maxDepth: 2, minGuaranteedDepth: 2, budget: 280,  jitter: 55,  topPool: 3, blunderRate: 0.04 },
+          900:  { maxDepth: 2, minGuaranteedDepth: 2, budget: 320,  jitter: 42,  topPool: 2, blunderRate: 0.02 },
+          1000: { maxDepth: 2, minGuaranteedDepth: 2, budget: 360,  jitter: 30,  topPool: 2, blunderRate: 0.01 },
+          1100: { maxDepth: 2, minGuaranteedDepth: 2, budget: 400,  jitter: 20,  topPool: 2, blunderRate: 0 },
+          1200: { maxDepth: 3, minGuaranteedDepth: 2, budget: 460,  jitter: 14,  topPool: 2, blunderRate: 0 },
+          1300: { maxDepth: 3, minGuaranteedDepth: 2, budget: 540,  jitter: 9,   topPool: 2, blunderRate: 0 },
+          1400: { maxDepth: 3, minGuaranteedDepth: 3, budget: 640,  jitter: 5,   topPool: 2, blunderRate: 0 },
+          1500: { maxDepth: 3, minGuaranteedDepth: 3, budget: 740,  jitter: 0,   topPool: 1, blunderRate: 0 },
+          1600: { maxDepth: 4, minGuaranteedDepth: 3, budget: 860,  jitter: 0,   topPool: 1, blunderRate: 0 },
+          1700: { maxDepth: 4, minGuaranteedDepth: 3, budget: 980,  jitter: 0,   topPool: 1, blunderRate: 0 },
+          1800: { maxDepth: 4, minGuaranteedDepth: 4, budget: 1100, jitter: 0,   topPool: 1, blunderRate: 0 },
+          1900: { maxDepth: 4, minGuaranteedDepth: 4, budget: 1220, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2000: { maxDepth: 5, minGuaranteedDepth: 4, budget: 1340, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2100: { maxDepth: 5, minGuaranteedDepth: 4, budget: 1460, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2200: { maxDepth: 5, minGuaranteedDepth: 4, budget: 1580, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2300: { maxDepth: 6, minGuaranteedDepth: 4, budget: 1700, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2400: { maxDepth: 6, minGuaranteedDepth: 4, budget: 1820, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2500: { maxDepth: 6, minGuaranteedDepth: 5, budget: 1940, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2600: { maxDepth: 6, minGuaranteedDepth: 5, budget: 2050, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2700: { maxDepth: 6, minGuaranteedDepth: 5, budget: 2150, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2800: { maxDepth: 7, minGuaranteedDepth: 5, budget: 2250, jitter: 0,   topPool: 1, blunderRate: 0 },
+          2900: { maxDepth: 7, minGuaranteedDepth: 5, budget: 2350, jitter: 0,   topPool: 1, blunderRate: 0 },
+          3000: { maxDepth: 7, minGuaranteedDepth: 5, budget: 2500, jitter: 0,   topPool: 1, blunderRate: 0 }
+        };
+        return table[clamped] || table[1500];
       }
 
       chooseBestMove(engine, difficulty = 'medium', customElo = 1500) {
@@ -2289,12 +2471,12 @@
         }
         if (difficulty === 'medium') {
           this.timeBudget = 450;
-          this.orderMoves(legal);
+          this.orderMoves(engine, legal);
           const scored = [];
           for (const m of legal) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const sc = this.minimax(engine, 1, -Infinity, Infinity, !maximizing, 1);
+            const sc = this.minimax(engine, 1, -Infinity, Infinity, !maximizing, 1, true);
             engine.restoreState(snap);
             scored.push({ move: m, score: sc });
           }
@@ -2306,19 +2488,19 @@
 
         const profile = difficulty === 'custom'
           ? this.getCustomEloProfile(customElo)
-          : { maxDepth: 4, minGuaranteedDepth: 3, budget: 900, jitter: 0, topPool: 1, blunderRate: 0 };
+          : { maxDepth: 4, minGuaranteedDepth: 4, budget: 1100, jitter: 0, topPool: 1, blunderRate: 0 };
 
         if (profile.blunderRate > 0 && Math.random() < profile.blunderRate) {
           return legal[Math.floor(Math.random() * legal.length)];
         }
 
         if (profile.topPool === 1) {
-          const analysis = this.analyzePositionDeterministic(engine, profile.maxDepth, profile.budget);
+          const analysis = this.analyzePositionDeterministic(engine, profile.maxDepth, profile.budget, profile.minGuaranteedDepth);
           if (analysis.bestMove) return analysis.bestMove;
         }
 
         this.timeBudget = profile.budget;
-        this.orderMoves(legal);
+        this.orderMoves(engine, legal);
         let bestMove = legal[0], bestScoredList = [];
 
         for (let depth = 1; depth <= profile.maxDepth; depth++) {
@@ -2333,7 +2515,7 @@
           for (const m of legal) {
             const snap = engine.cloneState();
             engine.applyMoveRaw(m);
-            const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing, 1);
+            const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing, 1, true);
             engine.restoreState(snap);
             if (!isGuaranteed && this.aborted) break;
             const noisyScore = profile.jitter > 0 ? sc + (Math.random() - 0.5) * profile.jitter : sc;
@@ -2370,7 +2552,7 @@
       if (positionAnalysisCache.has(key)) {
         return positionAnalysisCache.get(key);
       }
-      const res = ai.analyzePositionDeterministic(engine, 5, 1450);
+      const res = ai.analyzePositionDeterministic(engine, 7, 2400, 5);
       if (positionAnalysisCache.size > 400) positionAnalysisCache.clear();
       positionAnalysisCache.set(key, res);
       return res;
@@ -2398,6 +2580,20 @@
       const moverColor = engine.turn;
       const legal = engine.generateLegalMoves(moverColor);
       if (legal.length <= 1) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+
+      // Fast evaluation for AI's own moves so Hint cache stays dedicated to player turns
+      if (state.mode === 'ai' && moverColor !== state.humanColor) {
+        const snapAi = engine.cloneState();
+        const beforeAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
+        engine.applyMoveRaw(move);
+        const afterAi = ai.evaluate(engine) * (moverColor === 'w' ? 1 : -1);
+        engine.restoreState(snapAi);
+        const diff = Math.max(0, beforeAi - afterAi);
+        if (diff <= 45) return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
+        if (diff <= 110) return { key: 'good', symbol: '✓', label: 'Good', css: 'badge-good', color: '#4ade80' };
+        if (diff <= 220) return { key: 'inaccuracy', symbol: '?!', label: 'Inaccuracy', css: 'badge-inaccuracy', color: '#facc15' };
+        return { key: 'mistake', symbol: '?', label: 'Mistake', css: 'badge-mistake', color: '#fb923c' };
+      }
 
       const movedPiece = engine.board[move.from], movedVal = PIECE_VALUES[movedPiece[1]] || 0, capturedVal = move.capture ? (PIECE_VALUES[move.capture[1]] || 100) : 0;
       const analysis = getCachedPositionAnalysis();
@@ -2427,6 +2623,7 @@
       tabletopMode: true,
       allowUndo: false,
       allowHints: false,
+      matchBookSeed: Math.floor(Math.random() * 1000),
       selectedSq: null,
       legalMovesForSelected: [],
       hintMove: null,
@@ -3963,6 +4160,8 @@
     function startNewMatch() {
       clearInterval(state.timerInterval);
       engine.reset();
+      positionAnalysisCache.clear();
+      state.matchBookSeed = Math.floor(Math.random() * 1000);
       if (state.mode === 'ai') {
         state.humanColor = state.colorPref === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : state.colorPref;
       } else {
