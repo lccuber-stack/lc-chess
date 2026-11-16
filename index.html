@@ -2059,14 +2059,22 @@
             for (let af = Math.max(0, f - 1); af <= Math.min(7, f + 1); af++) {
               if (bPawnFiles[af] > 0 && bPawnRanks[af] < wPawnRanks[f]) { blocked = true; break; }
             }
-            if (!blocked) whiteScore += (7 - wPawnRanks[f]) * 12;
+            if (!blocked) {
+              const adv = 7 - wPawnRanks[f];
+              const endgameBonus = nonPawnMaterial <= 2600 ? [0, 8, 16, 30, 65, 130, 260, 0][adv] : 0;
+              whiteScore += adv * 14 + endgameBonus;
+            }
           }
           if (bPawnFiles[f] > 0) {
             let blocked = false;
             for (let af = Math.max(0, f - 1); af <= Math.min(7, f + 1); af++) {
               if (wPawnFiles[af] > 0 && wPawnRanks[af] > bPawnRanks[f]) { blocked = true; break; }
             }
-            if (!blocked) blackScore += bPawnRanks[f] * 12;
+            if (!blocked) {
+              const adv = bPawnRanks[f];
+              const endgameBonus = nonPawnMaterial <= 2600 ? [0, 8, 16, 30, 65, 130, 260, 0][adv] : 0;
+              blackScore += adv * 14 + endgameBonus;
+            }
           }
         }
 
@@ -2198,10 +2206,11 @@
         }
 
         const posKey = engine.getPositionKey();
-        if (ply > 0 && ((engine.positionCounts.get(posKey) || 0) >= 2 || (pathKeys && pathKeys.has(posKey)))) {
+        const priorVisits = engine.positionCounts.get(posKey) || 0;
+        if (ply > 0 && (priorVisits >= 1 || (pathKeys && pathKeys.has(posKey)))) {
           const staticScore = this.evaluate(engine);
           if (Math.abs(staticScore) > 40) {
-            return staticScore > 0 ? -75 : 75;
+            return staticScore > 0 ? -140 : 140;
           }
           return 0;
         }
@@ -2337,7 +2346,12 @@
               iterAborted = true;
               break;
             }
-            iterResults.push({ move: m, score: Math.round(rawEval * sign) });
+            let finalScore = Math.round(rawEval * sign);
+            if (finalScore > 120) {
+              if (m.piece[1] === 'P') finalScore += 6;
+              if (m.promo) finalScore += 25;
+            }
+            iterResults.push({ move: m, score: finalScore });
           }
 
           if (!iterAborted && iterResults.length === legal.length) {
