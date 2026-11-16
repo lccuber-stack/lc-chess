@@ -2367,7 +2367,7 @@
           const isGuaranteed = depth <= minGuaranteedDepth;
           const elapsed = performance.now() - this.startTime;
           if (!isGuaranteed && elapsed > budgetMs * 0.72) break;
-          this.timeBudget = isGuaranteed ? Math.max(budgetMs, 4500) : budgetMs;
+          this.timeBudget = isGuaranteed ? Math.max(budgetMs, 6000) : budgetMs;
 
           const ordered = completedResults
             ? completedResults.map(r => r.move)
@@ -2382,7 +2382,7 @@
             const rawEval = this.minimax(engine, depth - 1, -Infinity, Infinity, !maximizing, 1, true);
             engine.restoreState(snap);
 
-            if (!isGuaranteed && this.aborted) {
+            if (this.aborted) {
               iterAborted = true;
               break;
             }
@@ -2401,6 +2401,7 @@
             }
             completedResults = iterResults;
           }
+          if (iterAborted) break;
           this.aborted = false;
         }
 
@@ -2517,7 +2518,7 @@
             engine.applyMoveRaw(m);
             const sc = this.minimax(engine, depth - 1, alpha, beta, !maximizing, 1, true);
             engine.restoreState(snap);
-            if (!isGuaranteed && this.aborted) break;
+            if (this.aborted) break;
             const noisyScore = profile.jitter > 0 ? sc + (Math.random() - 0.5) * profile.jitter : sc;
             iterScored.push({ move: m, score: noisyScore });
             if (maximizing) {
@@ -2528,10 +2529,11 @@
               if (sc < beta) beta = sc;
             }
           }
-          if ((isGuaranteed || !this.aborted) && currentBest) {
+          if (!this.aborted && currentBest) {
             bestMove = currentBest;
             bestScoredList = iterScored;
           }
+          if (this.aborted) break;
           this.aborted = false;
         }
         if (profile.topPool > 1 && bestScoredList.length > 0) {
@@ -2566,7 +2568,7 @@
       const gapToSecond = bestScoreForMover - secondBestScoreForMover;
 
       if (isExactBestMove || cpLoss === 0) {
-        if (isSacrifice && playedScoreForMover >= -40 && gapToSecond >= 75) return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
+        if (isSacrifice && sanHistory.length > 10 && playedScoreForMover >= 90 && gapToSecond >= 110) return { key: 'brilliant', symbol: '!!', label: 'Brilliant', css: 'badge-brilliant', color: '#22d3ee' };
         if (gapToSecond >= 135 && bestScoreForMover > -150) return { key: 'great', symbol: '!', label: 'Great Move', css: 'badge-great', color: '#60a5fa' };
         return { key: 'best', symbol: '★', label: 'Best Move', css: 'badge-best', color: '#34d399' };
       }
