@@ -555,13 +555,18 @@
       justify-content: center;
       font-size: 9px;
       font-weight: 900;
-      letter-spacing: -0.04em;
+      letter-spacing: 0;
       line-height: 1;
       color: #ffffff;
       border: 1.5px solid #ffffff;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
       z-index: 6;
       pointer-events: none;
+    }
+    .move-badge svg {
+      display: block;
+      width: 10px;
+      height: 10px;
     }
     .move-badge.rotated-180 { transform: rotate(180deg); }
 
@@ -2670,7 +2675,11 @@
           const badge = document.createElement('div');
           badge.className = `move-badge ${lastRecord.quality.css}`;
           if (state.mode === 'friend' && state.tabletopMode && lastRecord.moverColor === 'b') badge.classList.add('rotated-180');
-          badge.textContent = lastRecord.quality.symbol;
+          if (lastRecord.quality.key === 'best') {
+            badge.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.4l2.92 5.92 6.53.95-4.72 4.6 1.11 6.5L12 17.3l-5.84 3.07 1.11-6.5-4.72-4.6 6.53-.95L12 2.4z"/></svg>`;
+          } else {
+            badge.textContent = lastRecord.quality.symbol;
+          }
           badge.title = `${lastRecord.san}: ${lastRecord.quality.label}`;
           sqEl.appendChild(badge);
         }
