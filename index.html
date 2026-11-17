@@ -11,6 +11,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
+  <link id="pwa-manifest" rel="manifest" href="" />
   <!-- Crisp Staunton Knight App Icon (No dark neck line, full emerald gradient) -->
   <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23065f46'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23bg)'/%3E%3Cg transform='translate(68, 58) scale(8.4)'%3E%3Cpath d='M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z' fill='%23ffffff' stroke='%23090d16' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='9' cy='25.5' r='0.9' fill='%23090d16'/%3E%3Cellipse cx='14.5' cy='15.5' rx='0.95' ry='1.75' transform='rotate(28 14.5 15.5)' fill='%23090d16'/%3E%3Cpath d='M 12.5,39 L 38.5,39 L 38.5,42.5 L 12.5,42.5 Z' fill='%23a7f3d0' stroke='%23090d16' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E" />
   <link id="apple-touch-icon" rel="apple-touch-icon" sizes="512x512" href="" />
@@ -1084,6 +1085,68 @@
     .gameover-title { font-size: 22px; font-weight: 800; }
     .gameover-reason { font-size: 13px; color: var(--text-secondary); }
 
+    .install-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .install-step-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+    }
+    .install-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #6ee7b7;
+      font-size: 12px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .install-step-body {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 12.5px;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+    .install-step-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+    .install-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 7px;
+      border-radius: 6px;
+      background: #0b1120;
+      border: 1px solid var(--border-strong);
+      font-weight: 700;
+      font-size: 11.5px;
+      color: #f8fafc;
+      vertical-align: baseline;
+    }
+    .icon-btn.install-accent {
+      background: rgba(56, 189, 248, 0.14);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+    }
+    .icon-btn.install-accent:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+
     #toast {
       position: fixed;
       bottom: 72px;
@@ -1122,6 +1185,9 @@
             <span>LC Chess</span>
           </div>
           <div class="top-actions">
+            <button id="btn-install-mobile" class="icon-btn install-accent" title="Install App" aria-label="Install App">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
             <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
             </button>
@@ -1221,9 +1287,15 @@
                 <div id="desktop-mode-sub" style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">vs Computer • Intermediate (1200)</div>
               </div>
             </div>
-            <button id="btn-sound-desktop" class="icon-btn" title="Toggle Sound">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-            </button>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <button id="btn-install-desktop" class="icon-btn install-accent" title="Install Desktop App">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Install</span>
+              </button>
+              <button id="btn-sound-desktop" class="icon-btn" title="Toggle Sound">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+              </button>
+            </div>
           </div>
 
           <div class="status-banner">
@@ -1486,6 +1558,92 @@
         <button id="btn-go-settings" class="action-btn" style="width: 100%; height: 44px; min-height: 44px; flex: 0 0 auto; font-size: 13.5px; border-radius: var(--radius-md);">Change Settings</button>
         <button id="btn-go-review" class="action-btn" style="width: 100%; height: 44px; min-height: 44px; flex: 0 0 auto; font-size: 13.5px; border-radius: var(--radius-md); background: rgba(30, 41, 59, 0.55); border-color: var(--border-strong); color: var(--text-secondary);">Review Final Board</button>
       </div>
+    </div>
+  </div>
+
+  <div id="modal-install" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="install-title">
+    <div class="modal-card" style="max-width: 420px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="brand-icon" style="width: 36px; height: 36px; border-radius: 10px;">
+            <svg viewBox="0 0 45 45">
+              <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="25.5" r="0.85" fill="#090d16"/>
+              <ellipse cx="14.5" cy="15.5" rx="0.9" ry="1.65" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
+              <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div>
+            <div id="install-title" class="modal-title">Install LC Chess</div>
+            <div id="install-subtitle" class="modal-subtitle">Use LC Chess as a standalone app</div>
+          </div>
+        </div>
+        <button id="btn-close-install" class="close-modal-btn" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div id="install-tab-row" class="seg-grid-2">
+        <button id="tab-install-ios" class="seg-btn active" type="button">
+          <span class="seg-btn-main">iPhone &amp; iPad</span>
+          <span class="seg-btn-sub">Safari Guide</span>
+        </button>
+        <button id="tab-install-desktop" class="seg-btn" type="button">
+          <span class="seg-btn-main">Desktop (Chrome)</span>
+          <span class="seg-btn-sub">macOS &amp; Windows</span>
+        </button>
+      </div>
+
+      <div id="install-panel-ios" class="install-steps">
+        <div class="install-step-card">
+          <div class="install-step-num">1</div>
+          <div class="install-step-body">
+            <div><strong>Open this page in Safari</strong></div>
+            <div class="install-step-sub">Make sure you are viewing LC Chess directly in Safari on your iPhone or iPad (not inside an in-app preview).</div>
+          </div>
+        </div>
+        <div class="install-step-card">
+          <div class="install-step-num">2</div>
+          <div class="install-step-body">
+            <div>Tap the <strong>Share</strong> button <span class="install-chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share</span></div>
+            <div class="install-step-sub">Located in the top-right address bar on iPad, or at the bottom toolbar on iPhone.</div>
+          </div>
+        </div>
+        <div class="install-step-card">
+          <div class="install-step-num">3</div>
+          <div class="install-step-body">
+            <div>Scroll down and tap <span class="install-chip">+ Add to Home Screen</span></div>
+            <div class="install-step-sub">Then tap <strong>Add</strong> in the upper-right corner. LC Chess will launch full-screen with its emerald knight icon and auto-update whenever a new version is published.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="install-panel-desktop" class="install-steps" style="display: none;">
+        <div id="chrome-direct-install-box" class="install-step-card" style="border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.08); display: none;">
+          <div class="install-step-num">✓</div>
+          <div class="install-step-body" style="width: 100%;">
+            <div><strong>One-Click Chrome Installation Ready</strong></div>
+            <div class="install-step-sub" style="margin-bottom: 6px;">Install LC Chess directly as a native desktop window with Dock/Taskbar icon.</div>
+            <button id="btn-chrome-native-install" class="btn-full-primary" style="height: 38px; min-height: 38px; font-size: 13px;">Install Desktop App Now</button>
+          </div>
+        </div>
+        <div class="install-step-card">
+          <div class="install-step-num">1</div>
+          <div class="install-step-body">
+            <div>Look at the right side of Chrome's address bar</div>
+            <div class="install-step-sub">Click the <span class="install-chip">Install LC Chess</span> icon, or open the Chrome menu <span class="install-chip">⋮</span> in the top-right corner.</div>
+          </div>
+        </div>
+        <div class="install-step-card">
+          <div class="install-step-num">2</div>
+          <div class="install-step-body">
+            <div>Select <span class="install-chip">Cast, save, and share</span> → <span class="install-chip">Install page as app…</span></div>
+            <div class="install-step-sub">Confirm by clicking <strong>Install</strong>. LC Chess opens in its own dedicated app window without browser tabs.</div>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-install-done" class="action-btn" style="height: 40px; min-height: 40px; flex: 0 0 auto; font-size: 13px;">Got it</button>
     </div>
   </div>
 
@@ -2750,7 +2908,7 @@
 
     const $ = id => document.getElementById(id);
 
-    (function generateAppleTouchIcon() {
+    (function initPwaAndIcons() {
       try {
         const c = document.createElement('canvas');
         c.width = 512; c.height = 512;
@@ -2765,12 +2923,97 @@
         const img = new Image();
         img.onload = () => {
           ctx.drawImage(img, 76, 66, 360, 360);
+          const pngDataUrl = c.toDataURL('image/png');
           const touchLink = $('apple-touch-icon');
-          if (touchLink) touchLink.href = c.toDataURL('image/png');
+          if (touchLink) touchLink.href = pngDataUrl;
+
+          // Build dynamic Web App Manifest for Chrome Desktop & Android PWA installation
+          const startUrl = window.location.protocol.startsWith('http')
+            ? window.location.href.split('#')[0].split('?')[0]
+            : './';
+          const manifestObj = {
+            name: 'LC Chess — Tactical Board & Adaptive Engine',
+            short_name: 'LC Chess',
+            description: 'Play tactical chess offline or online against adaptive ELO bots and grandmaster personas.',
+            start_url: startUrl,
+            scope: startUrl.substring(0, startUrl.lastIndexOf('/') + 1) || './',
+            display: 'standalone',
+            orientation: 'any',
+            background_color: '#090d16',
+            theme_color: '#090d16',
+            icons: [
+              { src: pngDataUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+              { src: pngDataUrl, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+            ]
+          };
+          const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+          const manifestLink = $('pwa-manifest');
+          if (manifestLink) manifestLink.href = URL.createObjectURL(manifestBlob);
         };
         img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
+
+        // Register lightweight network-first Service Worker on HTTP/HTTPS so Chrome enables full Desktop App installability
+        if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+          const swCode = `
+            self.addEventListener('install', e => self.skipWaiting());
+            self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+            self.addEventListener('fetch', e => {
+              if (e.request.method !== 'GET') return;
+              e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+            });
+          `;
+          const swBlob = new Blob([swCode], { type: 'application/javascript' });
+          navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+        }
       } catch (_) {}
     })();
+
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const directBox = $('chrome-direct-install-box');
+      if (directBox) directBox.style.display = 'flex';
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      const directBox = $('chrome-direct-install-box');
+      if (directBox) directBox.style.display = 'none';
+      $('modal-install').classList.remove('open');
+      showToast('LC Chess installed as an app!');
+    });
+
+    function switchInstallTab(platform) {
+      const isIos = platform === 'ios';
+      $('tab-install-ios').classList.toggle('active', isIos);
+      $('tab-install-desktop').classList.toggle('active', !isIos);
+      $('install-panel-ios').style.display = isIos ? 'flex' : 'none';
+      $('install-panel-desktop').style.display = isIos ? 'none' : 'flex';
+    }
+
+    function openInstallModal() {
+      const isAppleTouch = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      switchInstallTab(isAppleTouch ? 'ios' : 'desktop');
+      $('modal-install').classList.add('open');
+    }
+
+    async function handleInstallButtonClick() {
+      const isAppleTouch = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (!isAppleTouch && deferredInstallPrompt) {
+        try {
+          deferredInstallPrompt.prompt();
+          const choice = await deferredInstallPrompt.userChoice;
+          if (choice && choice.outcome === 'accepted') {
+            deferredInstallPrompt = null;
+            return;
+          }
+        } catch (_) {}
+      }
+      openInstallModal();
+    }
 
     document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
     document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -4188,6 +4431,29 @@
 
     $('btn-sound-mobile').addEventListener('click', toggleSound);
     $('btn-sound-desktop').addEventListener('click', toggleSound);
+
+    $('btn-install-mobile').addEventListener('click', handleInstallButtonClick);
+    $('btn-install-desktop').addEventListener('click', handleInstallButtonClick);
+    $('btn-close-install').addEventListener('click', () => $('modal-install').classList.remove('open'));
+    $('btn-install-done').addEventListener('click', () => $('modal-install').classList.remove('open'));
+    $('tab-install-ios').addEventListener('click', () => switchInstallTab('ios'));
+    $('tab-install-desktop').addEventListener('click', () => switchInstallTab('desktop'));
+    $('btn-chrome-native-install').addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+      try {
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+      } catch (_) {}
+    });
+
+    (function hideInstallButtonsIfStandalone() {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      if (isStandalone) {
+        $('btn-install-mobile').style.display = 'none';
+        $('btn-install-desktop').style.display = 'none';
+      }
+    })();
 
     const openConfig = () => { syncConfigModalUI(); els.modalConfig.classList.add('open'); };
     $('btn-new-mobile').addEventListener('click', openConfig);
