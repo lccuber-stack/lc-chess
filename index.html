@@ -8,11 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LC Chess" />
   <meta name="theme-color" content="#090d16" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
   <link id="pwa-manifest" rel="manifest" href="" />
-  <!-- Crisp Staunton Knight App Icon (No dark neck line, full emerald gradient) -->
+  <!-- Crisp Staunton Knight App Icon -->
   <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23065f46'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23bg)'/%3E%3Cg transform='translate(68, 58) scale(8.4)'%3E%3Cpath d='M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z' fill='%23ffffff' stroke='%23090d16' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='9' cy='25.5' r='0.9' fill='%23090d16'/%3E%3Cellipse cx='14.5' cy='15.5' rx='0.95' ry='1.75' transform='rotate(28 14.5 15.5)' fill='%23090d16'/%3E%3Cpath d='M 12.5,39 L 38.5,39 L 38.5,42.5 L 12.5,42.5 Z' fill='%23a7f3d0' stroke='%23090d16' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E" />
   <link id="apple-touch-icon" rel="apple-touch-icon" sizes="512x512" href="" />
   <style>
@@ -100,7 +97,7 @@
       width: 100%;
       height: 100%;
       height: 100dvh;
-      padding-top: max(16px, env(safe-area-inset-top, 0px));
+      padding-top: max(12px, env(safe-area-inset-top, 0px));
       padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
       padding-left: env(safe-area-inset-left, 0px);
       padding-right: env(safe-area-inset-right, 0px);
@@ -111,7 +108,7 @@
 
     @media (display-mode: standalone) and (max-width: 899px) {
       #app {
-        padding-top: calc(env(safe-area-inset-top, 47px) + 26px);
+        padding-top: calc(env(safe-area-inset-top, 47px) + 22px);
       }
     }
 
@@ -139,6 +136,7 @@
       font-size: 16px;
       letter-spacing: -0.02em;
       white-space: nowrap;
+      min-width: 0;
     }
 
     .brand-icon {
@@ -156,7 +154,7 @@
 
     .brand-icon svg { width: 22px; height: 22px; }
 
-    .top-actions { display: flex; align-items: center; gap: 6px; }
+    .top-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
     .icon-btn {
       display: inline-flex;
@@ -177,11 +175,13 @@
     .icon-btn:active { transform: scale(0.96); }
 
     .icon-btn.sound-square {
-      width: 34px;
-      height: 34px;
-      min-width: 34px;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
       padding: 0;
       border-radius: 10px;
+      display: grid;
+      place-items: center;
       flex-shrink: 0;
     }
 
@@ -193,17 +193,6 @@
     }
     .icon-btn.primary:hover { background: #34d399; }
 
-    .icon-btn.sound-square {
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
-      padding: 0;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-    }
-
     #main-workspace {
       flex: 1;
       display: flex;
@@ -211,7 +200,6 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 1680px;
       margin: 0 auto;
       padding: 4px 12px;
       gap: 6px;
@@ -418,9 +406,9 @@
       align-items: center;
       gap: 7px;
       width: 100%;
-      height: 40px;
-      min-height: 40px;
-      max-height: 40px;
+      height: 36px;
+      min-height: 36px;
+      max-height: 36px;
       padding: 4px 10px;
       border-radius: var(--radius-sm);
       background: rgba(16, 185, 129, 0.09);
@@ -445,9 +433,7 @@
       font-style: italic;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+      white-space: nowrap;
     }
 
     #board-bottom-resign-wrap {
@@ -598,12 +584,19 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 800;
       padding: 1px 4px;
       border-radius: 4px;
-      margin-left: 3px;
+      margin-left: 4px;
       vertical-align: middle;
+      line-height: 1;
+    }
+    .hist-badge svg {
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      vertical-align: -1px;
     }
 
     .coord-rank {
@@ -733,6 +726,7 @@
       transition: all 0.15s ease;
     }
     .action-btn:hover:not(:disabled) { background: var(--bg-hover); }
+    .action-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .action-btn.hint-style {
       background: rgba(56, 189, 248, 0.14);
       border-color: rgba(56, 189, 248, 0.35);
@@ -765,7 +759,7 @@
     #desktop-sidebar {
       display: none;
       flex-direction: column;
-      width: 360px;
+      width: 340px;
       height: 100%;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -775,7 +769,7 @@
     }
 
     .sidebar-header {
-      padding: 16px 18px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
@@ -786,7 +780,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding-right: 2px;
+      width: 100%;
     }
 
     .status-banner {
@@ -877,41 +871,26 @@
       #app {
         height: 100%;
         height: 100dvh;
-        padding-top: max(10px, env(safe-area-inset-top, 0px));
-        padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+        padding-top: max(8px, env(safe-area-inset-top, 0px));
+        padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
         justify-content: center;
       }
       #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
       #main-workspace {
         flex: 1 1 auto;
         width: 100%;
+        max-width: none;
         height: 100%;
         max-height: 100%;
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        padding: 6px 18px;
+        padding: 10px 20px;
         gap: 20px;
-      }
-      #board-column { width: auto; max-width: none; flex: 0 1 auto; gap: 7px; }
-      #desktop-sidebar { display: flex; }
-      .player-bar { height: 42px; min-height: 42px; padding: 0 14px; }
-      .top-resign-btn { height: 38px; min-height: 38px; }
-    }
-      #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
-      #main-workspace {
-        flex: 0 1 auto;
-        height: 100%;
-        max-height: 100%;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 24px;
-        gap: 24px;
       }
       #board-column { width: auto; max-width: none; flex: 0 1 auto; gap: 8px; }
       #desktop-sidebar { display: flex; }
-      .player-bar { height: 44px; min-height: 44px; padding: 0 14px; }
+      .player-bar { height: 42px; min-height: 42px; padding: 0 14px; }
       .top-resign-btn { height: 40px; min-height: 40px; }
     }
 
@@ -1128,68 +1107,6 @@
     .gameover-title { font-size: 22px; font-weight: 800; }
     .gameover-reason { font-size: 13px; color: var(--text-secondary); }
 
-    .install-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .install-step-card {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-    }
-    .install-step-num {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(16, 185, 129, 0.18);
-      border: 1px solid rgba(16, 185, 129, 0.45);
-      color: #6ee7b7;
-      font-size: 12px;
-      font-weight: 800;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .install-step-body {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      font-size: 12.5px;
-      line-height: 1.4;
-      color: var(--text-primary);
-    }
-    .install-step-sub {
-      font-size: 11.5px;
-      color: var(--text-secondary);
-    }
-    .install-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 1px 7px;
-      border-radius: 6px;
-      background: #0b1120;
-      border: 1px solid var(--border-strong);
-      font-weight: 700;
-      font-size: 11.5px;
-      color: #f8fafc;
-      vertical-align: baseline;
-    }
-    .icon-btn.install-accent {
-      background: rgba(56, 189, 248, 0.14);
-      border-color: rgba(56, 189, 248, 0.35);
-      color: #7dd3fc;
-    }
-    .icon-btn.install-accent:hover {
-      background: rgba(56, 189, 248, 0.24);
-    }
-
     #toast {
       position: fixed;
       bottom: 72px;
@@ -1228,9 +1145,6 @@
             <span>LC Chess</span>
           </div>
           <div class="top-actions">
-            <button id="btn-install-mobile" class="icon-btn install-accent" title="Install App" aria-label="Install App">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            </button>
             <button id="btn-sound-mobile" class="icon-btn sound-square" title="Toggle Sound">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
             </button>
@@ -1330,15 +1244,9 @@
                 <div id="desktop-mode-sub" style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">vs Computer • Intermediate (1200)</div>
               </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-              <button id="btn-install-desktop" class="icon-btn install-accent" title="Install Desktop App" style="display: none;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span>Install</span>
-              </button>
-              <button id="btn-sound-desktop" class="icon-btn sound-square" title="Toggle Sound">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-              </button>
-            </div>
+            <button id="btn-sound-desktop" class="icon-btn sound-square" title="Toggle Sound">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </button>
           </div>
 
           <div class="status-banner">
@@ -1604,92 +1512,6 @@
     </div>
   </div>
 
-  <div id="modal-install" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="install-title">
-    <div class="modal-card" style="max-width: 420px;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div class="brand-icon" style="width: 36px; height: 36px; border-radius: 10px;">
-            <svg viewBox="0 0 45 45">
-              <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18 C 23.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10 Z" fill="#ffffff" stroke="#090d16" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="9" cy="25.5" r="0.85" fill="#090d16"/>
-              <ellipse cx="14.5" cy="15.5" rx="0.9" ry="1.65" transform="rotate(28 14.5 15.5)" fill="#090d16"/>
-              <path d="M 12.5,39 L 38.5,39 L 38.5,42 L 12.5,42 Z" fill="#a7f3d0" stroke="#090d16" stroke-width="1.6"/>
-            </svg>
-          </div>
-          <div>
-            <div id="install-title" class="modal-title">Install LC Chess</div>
-            <div id="install-subtitle" class="modal-subtitle">Use LC Chess as a standalone app</div>
-          </div>
-        </div>
-        <button id="btn-close-install" class="close-modal-btn" aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-
-      <div id="install-tab-row" class="seg-grid-2">
-        <button id="tab-install-ios" class="seg-btn active" type="button">
-          <span class="seg-btn-main">iPhone &amp; iPad</span>
-          <span class="seg-btn-sub">Safari Guide</span>
-        </button>
-        <button id="tab-install-desktop" class="seg-btn" type="button">
-          <span class="seg-btn-main">Desktop (Chrome)</span>
-          <span class="seg-btn-sub">macOS &amp; Windows</span>
-        </button>
-      </div>
-
-      <div id="install-panel-ios" class="install-steps">
-        <div class="install-step-card">
-          <div class="install-step-num">1</div>
-          <div class="install-step-body">
-            <div><strong>Open this page in Safari</strong></div>
-            <div class="install-step-sub">Make sure you are viewing LC Chess directly in Safari on your iPhone or iPad (not inside an in-app preview).</div>
-          </div>
-        </div>
-        <div class="install-step-card">
-          <div class="install-step-num">2</div>
-          <div class="install-step-body">
-            <div>Tap the <strong>Share</strong> button <span class="install-chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share</span></div>
-            <div class="install-step-sub">Located in the top-right address bar on iPad, or at the bottom toolbar on iPhone.</div>
-          </div>
-        </div>
-        <div class="install-step-card">
-          <div class="install-step-num">3</div>
-          <div class="install-step-body">
-            <div>Scroll down and tap <span class="install-chip">+ Add to Home Screen</span></div>
-            <div class="install-step-sub">Then tap <strong>Add</strong> in the upper-right corner. LC Chess will launch full-screen with its emerald knight icon and auto-update whenever a new version is published.</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="install-panel-desktop" class="install-steps" style="display: none;">
-        <div id="chrome-direct-install-box" class="install-step-card" style="border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.08); display: none;">
-          <div class="install-step-num">✓</div>
-          <div class="install-step-body" style="width: 100%;">
-            <div><strong>One-Click Chrome Installation Ready</strong></div>
-            <div class="install-step-sub" style="margin-bottom: 6px;">Install LC Chess directly as a native desktop window with Dock/Taskbar icon.</div>
-            <button id="btn-chrome-native-install" class="btn-full-primary" style="height: 38px; min-height: 38px; font-size: 13px;">Install Desktop App Now</button>
-          </div>
-        </div>
-        <div class="install-step-card">
-          <div class="install-step-num">1</div>
-          <div class="install-step-body">
-            <div>Look at the right side of Chrome's address bar</div>
-            <div class="install-step-sub">Click the <span class="install-chip">Install LC Chess</span> icon, or open the Chrome menu <span class="install-chip">⋮</span> in the top-right corner.</div>
-          </div>
-        </div>
-        <div class="install-step-card">
-          <div class="install-step-num">2</div>
-          <div class="install-step-body">
-            <div>Select <span class="install-chip">Cast, save, and share</span> → <span class="install-chip">Install page as app…</span></div>
-            <div class="install-step-sub">Confirm by clicking <strong>Install</strong>. LC Chess opens in its own dedicated app window without browser tabs.</div>
-          </div>
-        </div>
-      </div>
-
-      <button id="btn-install-done" class="action-btn" style="height: 40px; min-height: 40px; flex: 0 0 auto; font-size: 13px;">Got it</button>
-    </div>
-  </div>
-
   <div id="toast"></div>
 
   <script>
@@ -1698,6 +1520,10 @@
      * LC CHESS — CLASSIC STAUNTON PIECES, 3200-ELO ENGINE & ADAPTIVE UI
      * =========================================================================
      */
+    const APP_VERSION = '2026.11.17.6';
+    const STORAGE_KEY_SETTINGS = 'lc_chess_settings_v1';
+    const STORAGE_KEY_MATCH = 'lc_chess_active_match_v1';
+
     const PIECE_VALUES = { P: 100, N: 320, B: 330, R: 500, Q: 900, K: 20000 };
     const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -2304,7 +2130,6 @@
           if (wKingSq === 62 || wKingSq === 61 || wKingSq === 58) whiteScore += 28;
           if (bKingSq === 6 || bKingSq === 5 || bKingSq === 2) blackScore += 28;
 
-          // King shield & enemy attackers near king zone
           if (wKingSq !== -1) {
             const wkr = Math.floor(wKingSq / 8), wkf = wKingSq % 8;
             if (wkr >= 6) {
@@ -2560,9 +2385,9 @@
         return bestScore;
       }
 
-      getBookMove(engine) {
+      getBookMove(engine, personaKey = null) {
         const ply = engine.history.length;
-        if (ply >= 14) return null;
+        if (ply >= 12) return null;
         const playedSans = engine.history.map(h => h.san.replace(/[+#]/g, ''));
         const matchingLines = OPENING_BOOK_LINES.filter(line =>
           line.length > ply && playedSans.every((s, i) => line[i] === s)
@@ -2579,7 +2404,14 @@
             engine.restoreState(snap);
             return sanClean === targetSan;
           });
-          if (found && !candidates.some(c => this.isSameMove(c, found))) candidates.push(found);
+          if (found) {
+            const weight = (personaKey === 'andrea' || personaKey === 'gotham')
+              ? (line[0] === 'e4' ? 3 : 1)
+              : (personaKey === 'magnus' || personaKey === 'alexandra')
+                ? ((line[0] === 'd4' || line[0] === 'c4' || line[0] === 'Nf3') ? 2 : 1)
+                : 1;
+            for (let w = 0; w < weight; w++) candidates.push(found);
+          }
         }
         if (candidates.length === 0) return null;
         return candidates[Math.floor(Math.random() * candidates.length)];
@@ -2634,7 +2466,7 @@
             iterResults.sort((a, b) => b.score - a.score);
             if (bookMove) {
               const bIdx = iterResults.findIndex(r => this.isSameMove(r.move, bookMove));
-              if (bIdx > 0 && iterResults[bIdx].score >= iterResults[0].score) {
+              if (bIdx > 0 && iterResults[bIdx].score >= iterResults[0].score - 120) {
                 const [bm] = iterResults.splice(bIdx, 1);
                 iterResults.unshift(bm);
               }
@@ -2688,6 +2520,16 @@
         if (legal.length === 1) return legal[0];
         const maximizing = engine.turn === 'w';
         this.nodes = 0; this.startTime = performance.now(); this.aborted = false;
+
+        const personaKey = (difficulty === 'custom' && typeof state !== 'undefined') ? state.customPersona : null;
+        const effElo = difficulty === 'easy' ? 300 : (difficulty === 'medium' ? 1200 : (difficulty === 'hard' ? 1800 : customElo));
+        if (engine.history.length < 12) {
+          const bookChance = effElo >= 1600 ? 0.92 : (effElo >= 900 ? 0.65 : 0.35);
+          if (Math.random() < bookChance) {
+            const bookMove = this.getBookMove(engine, personaKey);
+            if (bookMove) return bookMove;
+          }
+        }
 
         if (difficulty === 'easy') {
           this.timeBudget = 120;
@@ -2779,10 +2621,6 @@
     const engine = new ChessEngine();
     const ai = new ChessAI();
 
-    const APP_VERSION = '2026.11.17.2';
-    const STORAGE_KEY_SETTINGS = 'lc_chess_settings_v1';
-    const STORAGE_KEY_MATCH = 'lc_chess_active_match_v1';
-
     const state = {
       mode: 'ai',
       difficulty: 'medium',
@@ -2807,6 +2645,8 @@
       gameOver: false
     };
 
+    const $ = id => document.getElementById(id);
+
     function savePersistentData() {
       try {
         localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
@@ -2821,15 +2661,20 @@
           allowHints: state.allowHints,
           soundEnabled: sfx.enabled
         }));
-        localStorage.setItem(STORAGE_KEY_MATCH, JSON.stringify({
+        const matchData = {
           version: APP_VERSION,
           humanColor: state.humanColor,
           matchBookSeed: state.matchBookSeed,
           whiteTime: state.whiteTime,
           blackTime: state.blackTime,
           gameOver: state.gameOver,
-          history: engine.history.map(h => ({ move: h.move, san: h.san, quality: h.quality || null, moverColor: h.moverColor || null }))
-        }));
+          moves: engine.history.map(h => ({
+            move: h.move,
+            quality: h.quality || null,
+            moverColor: h.moverColor || null
+          }))
+        };
+        localStorage.setItem(STORAGE_KEY_MATCH, JSON.stringify(matchData));
       } catch (_) {}
     }
 
@@ -2837,25 +2682,22 @@
       try {
         const raw = localStorage.getItem(STORAGE_KEY_SETTINGS);
         if (!raw) return;
-        const s = JSON.parse(raw);
-        if (s && typeof s === 'object') {
-          if (s.mode === 'ai' || s.mode === 'friend') state.mode = s.mode;
-          if (['easy', 'medium', 'hard', 'custom'].includes(s.difficulty)) state.difficulty = s.difficulty;
-          if (typeof s.customElo === 'number') state.customElo = Math.max(100, Math.min(3000, s.customElo));
-          if (s.customPersona !== undefined) state.customPersona = s.customPersona;
-          if (typeof s.timeControl === 'number') state.timeControl = s.timeControl;
-          if (['w', 'b', 'random'].includes(s.colorPref)) state.colorPref = s.colorPref;
-          if (typeof s.tabletopMode === 'boolean') state.tabletopMode = s.tabletopMode;
-          if (typeof s.allowUndo === 'boolean') state.allowUndo = s.allowUndo;
-          if (typeof s.allowHints === 'boolean') state.allowHints = s.allowHints;
-          if (typeof s.soundEnabled === 'boolean') {
-            sfx.enabled = s.soundEnabled;
-            const svgOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
-            const svgOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
-            const mBtn = document.getElementById('btn-sound-mobile'), dBtn = document.getElementById('btn-sound-desktop');
-            if (mBtn) mBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
-            if (dBtn) dBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
-          }
+        const cfg = JSON.parse(raw);
+        if (cfg.mode === 'ai' || cfg.mode === 'friend') state.mode = cfg.mode;
+        if (['easy', 'medium', 'hard', 'custom'].includes(cfg.difficulty)) state.difficulty = cfg.difficulty;
+        if (typeof cfg.customElo === 'number') state.customElo = Math.max(100, Math.min(3000, cfg.customElo));
+        if (cfg.customPersona) state.customPersona = cfg.customPersona;
+        if (typeof cfg.timeControl === 'number') state.timeControl = cfg.timeControl;
+        if (['w', 'b', 'random'].includes(cfg.colorPref)) state.colorPref = cfg.colorPref;
+        if (typeof cfg.tabletopMode === 'boolean') state.tabletopMode = cfg.tabletopMode;
+        if (typeof cfg.allowUndo === 'boolean') state.allowUndo = cfg.allowUndo;
+        if (typeof cfg.allowHints === 'boolean') state.allowHints = cfg.allowHints;
+        if (typeof cfg.soundEnabled === 'boolean') {
+          sfx.enabled = cfg.soundEnabled;
+          const svgOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+          const svgOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+          if ($('btn-sound-mobile')) $('btn-sound-mobile').innerHTML = sfx.enabled ? svgOn : svgOff;
+          if ($('btn-sound-desktop')) $('btn-sound-desktop').innerHTML = sfx.enabled ? svgOn : svgOff;
         }
       } catch (_) {}
     }
@@ -2864,19 +2706,20 @@
       try {
         const raw = localStorage.getItem(STORAGE_KEY_MATCH);
         if (!raw) return false;
-        const m = JSON.parse(raw);
-        if (!m || !Array.isArray(m.history) || m.history.length === 0) return false;
+        const saved = JSON.parse(raw);
+        if (!saved || !Array.isArray(saved.moves) || saved.moves.length === 0) return false;
         engine.reset();
-        for (const item of m.history) {
-          const rec = engine.makeMove(item.move);
-          rec.quality = item.quality || null;
-          rec.moverColor = item.moverColor || rec.snapshot.turn;
+        state.humanColor = (saved.humanColor === 'w' || saved.humanColor === 'b') ? saved.humanColor : 'w';
+        state.matchBookSeed = typeof saved.matchBookSeed === 'number' ? saved.matchBookSeed : state.matchBookSeed;
+        for (const entry of saved.moves) {
+          if (!entry || !entry.move) continue;
+          const rec = engine.makeMove(entry.move);
+          rec.quality = entry.quality || null;
+          rec.moverColor = entry.moverColor || null;
         }
-        if (m.humanColor === 'w' || m.humanColor === 'b') state.humanColor = m.humanColor;
-        if (typeof m.matchBookSeed === 'number') state.matchBookSeed = m.matchBookSeed;
-        if (typeof m.whiteTime === 'number') state.whiteTime = m.whiteTime;
-        if (typeof m.blackTime === 'number') state.blackTime = m.blackTime;
-        state.gameOver = Boolean(m.gameOver);
+        state.whiteTime = typeof saved.whiteTime === 'number' ? saved.whiteTime : state.timeControl;
+        state.blackTime = typeof saved.blackTime === 'number' ? saved.blackTime : state.timeControl;
+        state.gameOver = Boolean(saved.gameOver);
         return true;
       } catch (_) {
         return false;
@@ -2886,17 +2729,23 @@
     let updateCheckInFlight = false;
     async function checkForRemoteUpdate() {
       if (updateCheckInFlight) return;
-      if (!window.location || !/^https?:/.test(window.location.protocol)) return;
+      if (window.location.protocol !== 'http:' && window.location.protocol !== 'https:') return;
       updateCheckInFlight = true;
       try {
-        const baseUrl = window.location.href.split('#')[0].split('?')[0];
-        const res = await fetch(`${baseUrl}?v=${Date.now()}`, { cache: 'no-store' });
-        if (!res.ok) return;
-        const html = await res.text();
+        const baseUrl = window.location.href.split('?')[0].split('#')[0];
+        const resp = await fetch(`${baseUrl}?_cb=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+        });
+        if (!resp.ok) return;
+        const html = await resp.text();
         const match = html.match(/const\s+APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
         if (match && match[1] && match[1] !== APP_VERSION) {
           savePersistentData();
-          window.location.replace(`${baseUrl}?v=${encodeURIComponent(match[1])}_${Date.now()}`);
+          showToast('Updating LC Chess to latest version…');
+          setTimeout(() => {
+            window.location.replace(`${baseUrl}?v=${encodeURIComponent(match[1])}&t=${Date.now()}`);
+          }, 350);
         }
       } catch (_) {
       } finally {
@@ -2913,147 +2762,75 @@
       }
     });
     window.addEventListener('pageshow', e => {
+      state.lastClockTickMs = performance.now();
       if (e.persisted) checkForRemoteUpdate();
     });
-    window.addEventListener('pagehide', savePersistentData);
 
-    const $ = id => document.getElementById(id);
-
-    (function setupPWAAndIcons() {
+    (function setupAppIconsAndPWA() {
       try {
-        const c = document.createElement('canvas');
-        c.width = 512; c.height = 512;
-        const ctx = c.getContext('2d');
         const svgEl = document.querySelector('#top-bar .brand-icon svg');
-        if (!ctx || !svgEl) return;
-        const grad = ctx.createLinearGradient(0, 0, 512, 512);
-        grad.addColorStop(0, '#10b981'); grad.addColorStop(1, '#065f46');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 512, 512);
+        if (!svgEl) return;
         const svgData = new XMLSerializer().serializeToString(svgEl);
         const img = new Image();
         img.onload = () => {
-          ctx.drawImage(img, 76, 66, 360, 360);
-          const png512 = c.toDataURL('image/png');
-          const touchLink = $('apple-touch-icon');
-          if (touchLink) touchLink.href = png512;
-
-          const c192 = document.createElement('canvas');
-          c192.width = 192; c192.height = 192;
-          const ctx192 = c192.getContext('2d');
-          if (ctx192) ctx192.drawImage(c, 0, 0, 192, 192);
-          const png192 = c192.toDataURL('image/png');
-
-          const startUrl = window.location.href.split('#')[0].split('?')[0];
-          const manifestObj = {
-            name: 'LC Chess',
-            short_name: 'LC Chess',
-            description: 'Tactical Chess Board & Adaptive 3000-ELO Engine',
-            start_url: startUrl,
-            scope: startUrl.substring(0, startUrl.lastIndexOf('/') + 1) || '/',
-            display: 'standalone',
-            background_color: '#090d16',
-            theme_color: '#090d16',
-            icons: [
-              { src: png192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-              { src: png512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
-            ]
+          const renderIconDataUrl = (size) => {
+            const c = document.createElement('canvas');
+            c.width = size; c.height = size;
+            const ctx = c.getContext('2d');
+            if (!ctx) return '';
+            const grad = ctx.createLinearGradient(0, 0, size, size);
+            grad.addColorStop(0, '#10b981'); grad.addColorStop(1, '#065f46');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, size, size);
+            const pad = Math.round(size * 0.14);
+            ctx.drawImage(img, pad, Math.round(size * 0.12), size - pad * 2, size - pad * 2);
+            return c.toDataURL('image/png');
           };
-          const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
-          const manifestLink = $('pwa-manifest');
-          if (manifestLink) manifestLink.href = URL.createObjectURL(manifestBlob);
+
+          const icon512 = renderIconDataUrl(512);
+          const icon192 = renderIconDataUrl(192);
+          const touchLink = $('apple-touch-icon');
+          if (touchLink && icon512) touchLink.href = icon512;
+
+          if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+            const startUrl = window.location.href.split('?')[0].split('#')[0];
+            const manifestObj = {
+              id: startUrl,
+              name: 'LC Chess',
+              short_name: 'LC Chess',
+              description: 'Tactical Chess Board & Adaptive 3000-ELO Engine',
+              start_url: startUrl,
+              scope: startUrl.substring(0, startUrl.lastIndexOf('/') + 1),
+              display: 'standalone',
+              orientation: 'any',
+              background_color: '#090d16',
+              theme_color: '#090d16',
+              icons: [
+                { src: icon192 || icon512, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+                { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+              ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+            const manifestLink = $('pwa-manifest');
+            if (manifestLink) manifestLink.href = URL.createObjectURL(manifestBlob);
+
+            if ('serviceWorker' in navigator) {
+              const swCode = `
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => {
+                  if (e.request.method !== 'GET') return;
+                  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+              `;
+              const swUrl = URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }));
+              navigator.serviceWorker.register(swUrl).catch(() => {});
+            }
+          }
         };
         img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
-
-        if ('serviceWorker' in navigator && /^https?:/.test(window.location.protocol)) {
-          const swCode = `
-            self.addEventListener('install', e => self.skipWaiting());
-            self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-            self.addEventListener('fetch', e => {
-              if (e.request.method !== 'GET') return;
-              e.respondWith(fetch(e.request, { cache: 'no-store' }).catch(() => caches.match(e.request)));
-            });
-          `;
-          const swUrl = URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }));
-          navigator.serviceWorker.register(swUrl).catch(() => {});
-        }
       } catch (_) {}
     })();
-
-    let deferredInstallPrompt = null;
-    const STORAGE_KEY_INSTALL_SEEN = 'lc_chess_install_seen_v1';
-
-    function isAppAlreadyInstalled() {
-      const hasWindowControls = Boolean(navigator.windowControlsOverlay && navigator.windowControlsOverlay.visible);
-      const isPwaScreenSize = window.matchMedia('(display-mode: standalone)').matches ||
-                              window.matchMedia('(display-mode: minimal-ui)').matches ||
-                              window.matchMedia('(display-mode: fullscreen)').matches ||
-                              window.matchMedia('(display-mode: window-controls-overlay)').matches;
-      return isPwaScreenSize || hasWindowControls || window.navigator.standalone === true || !window.menubar?.visible;
-    }
-
-    function hasSeenInstallPromptOnce() {
-      try { return localStorage.getItem(STORAGE_KEY_INSTALL_SEEN) === '1'; } catch (_) { return false; }
-    }
-
-    function markInstallPromptSeen() {
-      try { localStorage.setItem(STORAGE_KEY_INSTALL_SEEN, '1'); } catch (_) {}
-    }
-
-    function updateInstallButtonsVisibility() {
-      const hideBtn = isAppAlreadyInstalled() || hasSeenInstallPromptOnce();
-      const mobBtn = $('btn-install-mobile');
-      const deskBtn = $('btn-install-desktop');
-      if (mobBtn) mobBtn.style.display = hideBtn ? 'none' : 'inline-flex';
-      if (deskBtn) deskBtn.style.display = hideBtn ? 'none' : 'inline-flex';
-      if (!hideBtn) markInstallPromptSeen();
-    }
-
-    function updateInstallButtonsVisibility() {
-      const installed = isAppAlreadyInstalled();
-      const mobBtn = $('btn-install-mobile');
-      const deskBtn = $('btn-install-desktop');
-      if (mobBtn) mobBtn.style.display = installed ? 'none' : 'inline-flex';
-      if (deskBtn) deskBtn.style.display = installed ? 'none' : 'inline-flex';
-    }
-
-    function switchInstallModalTab(tab) {
-      const isIOS = tab === 'ios';
-      const tabIos = $('tab-install-ios'), tabDesk = $('tab-install-desktop');
-      const panelIos = $('install-panel-ios'), panelDesk = $('install-panel-desktop');
-      if (tabIos) tabIos.classList.toggle('active', isIOS);
-      if (tabDesk) tabDesk.classList.toggle('active', !isIOS);
-      if (panelIos) panelIos.style.display = isIOS ? 'flex' : 'none';
-      if (panelDesk) panelDesk.style.display = isIOS ? 'none' : 'flex';
-    }
-
-    function openInstallGuideModal(preferredTab = null) {
-      const ua = navigator.userAgent || '';
-      const isAppleMobile = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      const tab = preferredTab || (isAppleMobile ? 'ios' : 'desktop');
-      switchInstallModalTab(tab);
-      const directBox = $('chrome-direct-install-box');
-      if (directBox) directBox.style.display = deferredInstallPrompt ? 'flex' : 'none';
-      const modal = $('modal-install');
-      if (modal) modal.classList.add('open');
-    }
-
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      deferredInstallPrompt = e;
-      updateInstallButtonsVisibility();
-      const directBox = $('chrome-direct-install-box');
-      if (directBox) directBox.style.display = 'flex';
-    });
-
-    window.addEventListener('appinstalled', () => {
-      deferredInstallPrompt = null;
-      markInstallPromptSeen();
-      updateInstallButtonsVisibility();
-      const modal = $('modal-install');
-      if (modal) modal.classList.remove('open');
-      showToast('LC Chess installed as an app!');
-    });
 
     document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
     document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -3113,39 +2890,37 @@
       const appStyle = getComputedStyle($('app'));
       const padTop = parseFloat(appStyle.paddingTop) || 0;
       const padBottom = parseFloat(appStyle.paddingBottom) || 0;
-      const usableH = Math.max(320, vh - padTop - padBottom);
-
+      const usableH = vh - padTop - padBottom;
       const celebEl = $('celeb-comment-bar');
       const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
-      const celebExtraH = hasCelebComment ? 47 : 0;
+      const celebExtraH = hasCelebComment ? 44 : 0;
 
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const extraTopResign = isFriend ? 45 : 0;
-        const sidebarW = vw < 1180 ? 305 : Math.min(430, Math.max(350, Math.floor(vw * 0.23)));
+        const isTabletLandscape = vw <= 1220;
+        const sidebarW = isTabletLandscape ? 306 : Math.min(410, Math.max(340, Math.floor(vw * 0.23)));
         $('desktop-sidebar').style.width = sidebarW + 'px';
-        const gapBetweenCols = 20;
-        const evalAndGapW = 26;
-        const horizPad = 36;
-        const availW = vw - sidebarW - gapBetweenCols - evalAndGapW - horizPad;
 
-        // Exact vertical chrome: top player (42) + bottom player (42) + bottom resign (40) + gaps + safe padding
-        const baseGaps = isFriend ? 28 : 21;
-        const verticalChrome = 42 + 42 + 40 + extraTopResign + celebExtraH + baseGaps + 16;
+        const topBarH = 42, botBarH = 42, resignH = 40;
+        const extraTopResign = isFriend ? 48 : 0;
+        const gapCount = (isFriend ? 4 : 3) + (hasCelebComment ? 1 : 0);
+        const verticalChrome = topBarH + botBarH + resignH + extraTopResign + celebExtraH + (gapCount * 8) + 24;
+
+        const availW = vw - sidebarW - 26 - 56;
         const availH = usableH - verticalChrome;
         boardSize = Math.floor(Math.min(availW, availH, 1400));
       } else {
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
         const extraTopResign = isFriend ? 46 : 0;
-        const chromeH = 46 + 30 + extraTopResign + celebExtraH + 40 + 40 + 40 + 30 + (hasActions ? 40 : 0) + 46;
+        const chromeH = 46 + 30 + extraTopResign + celebExtraH + 40 + 40 + 40 + 30 + (hasActions ? 40 : 0) + 52;
         const availH = usableH - chromeH;
         const availW = vw - 24 - 8 - 18;
         boardSize = Math.floor(Math.min(availW, availH));
       }
 
-      boardSize = Math.max(220, boardSize);
+      boardSize = Math.max(200, boardSize);
       boardSize = boardSize - (boardSize % 8);
 
       els.boardFrame.style.width = boardSize + 'px';
@@ -3154,11 +2929,10 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const baseGaps = isFriend ? 28 : 21;
-        const totalColumnHeight = boardSize + 42 + 42 + 40 + (isFriend ? 45 : 0) + celebExtraH + baseGaps;
-        const clampedSidebarH = Math.min(totalColumnHeight, usableH - 12);
-        $('desktop-sidebar').style.height = clampedSidebarH + 'px';
-        $('desktop-sidebar').style.maxHeight = (usableH - 12) + 'px';
+        const gapCount = (isFriend ? 4 : 3) + (hasCelebComment ? 1 : 0);
+        const totalColumnHeight = boardSize + 42 + 42 + 40 + (isFriend ? 48 : 0) + celebExtraH + (gapCount * 8);
+        $('desktop-sidebar').style.height = Math.min(totalColumnHeight, usableH - 20) + 'px';
+        $('desktop-sidebar').style.maxHeight = (usableH - 20) + 'px';
       }
 
       const barWidth = (boardSize + 8 + 18) + 'px';
@@ -3251,6 +3025,8 @@
           if (state.mode === 'friend' && state.tabletopMode && lastRecord.moverColor === 'b') badge.classList.add('rotated-180');
           if (lastRecord.quality.key === 'best') {
             badge.innerHTML = `<svg viewBox="0 0 20 20" fill="#ffffff" aria-hidden="true"><path d="M10 2.3l2.32 4.7 5.18.75-3.75 3.66.89 5.16L10 14.13l-4.64 2.44.89-5.16-3.75-3.66 5.18-.75L10 2.3z"/></svg>`;
+          } else if (lastRecord.quality.key === 'book') {
+            badge.innerHTML = `<svg viewBox="0 0 20 20" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 4.8A2.3 2.3 0 0 1 5.8 3.5H10v12.5H5.8a2.3 2.3 0 0 0-2.3 1.3V4.8z"/><path d="M16.5 4.8A2.3 2.3 0 0 0 14.2 3.5H10v12.5h4.2a2.3 2.3 0 0 1 2.3 1.3V4.8z"/></svg>`;
           } else {
             badge.textContent = lastRecord.quality.symbol;
           }
@@ -3274,8 +3050,7 @@
       if (positionAnalysisCache.has(key)) {
         return positionAnalysisCache.get(key);
       }
-      const profile3000 = ai.getCustomEloProfile(3000);
-      const analysis = ai.analyzePositionDeterministic(engine, profile3000.maxDepth, profile3000.budget, profile3000.minGuaranteedDepth);
+      const analysis = ai.analyzePositionDeterministic(engine, 8, 2800, 6);
       if (positionAnalysisCache.size > 300) positionAnalysisCache.clear();
       positionAnalysisCache.set(key, analysis);
       return analysis;
@@ -3393,6 +3168,23 @@
       if (!state.allowHints || state.gameOver || state.aiThinking) return;
       if (state.mode === 'ai' && engine.turn !== state.humanColor) return;
 
+      if (engine.history.length < 12) {
+        const directBook = ai.getBookMove(engine);
+        if (directBook) {
+          let chosen = directBook;
+          if (state.hintMove && ai.isSameMove(chosen, state.hintMove)) {
+            for (let tries = 0; tries < 6; tries++) {
+              const alt = ai.getBookMove(engine);
+              if (alt && !ai.isSameMove(alt, state.hintMove)) { chosen = alt; break; }
+            }
+          }
+          state.hintMove = chosen;
+          renderBoard();
+          showToast(`Hint: ${engine.sqToAlgebraic(chosen.from)} → ${engine.sqToAlgebraic(chosen.to)}`);
+          return;
+        }
+      }
+
       const { bestMove } = getCachedPositionAnalysis();
       if (bestMove) {
         state.hintMove = bestMove;
@@ -3415,7 +3207,7 @@
 
     function commitMove(move) {
       const moverColor = engine.turn;
-      if (state.timeControl > 0 && engine.history.length > 0 && state.lastClockTickMs > 0) {
+      if (state.timeControl > 0 && engine.history.length > 0 && state.lastClockTickMs) {
         const elapsedSec = Math.max(0, (performance.now() - state.lastClockTickMs) / 1000);
         if (moverColor === 'w') state.whiteTime = Math.max(0, state.whiteTime - elapsedSec);
         else state.blackTime = Math.max(0, state.blackTime - elapsedSec);
@@ -3581,7 +3373,7 @@
 
     function formatTime(sec) {
       if (state.timeControl === 0) return '∞';
-      const s = Math.max(0, Math.floor(sec));
+      const s = Math.max(0, Math.ceil(sec));
       return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
     }
 
@@ -3607,15 +3399,15 @@
       if (state.timeControl === 0) return;
       state.timerInterval = setInterval(() => {
         const now = performance.now();
-        const dt = state.lastClockTickMs > 0 ? (now - state.lastClockTickMs) / 1000 : 0.25;
+        const dt = (now - (state.lastClockTickMs || now)) / 1000;
         state.lastClockTickMs = now;
         if (state.gameOver || engine.history.length === 0) return;
         if (engine.turn === 'w') {
           state.whiteTime = Math.max(0, state.whiteTime - dt);
-          if (state.whiteTime === 0) { handleGameOver({ over: true, type: 'timeout', winner: 'Black', title: 'Time Out!', desc: 'Black wins on time.' }); return; }
+          if (state.whiteTime <= 0) { handleGameOver({ over: true, type: 'timeout', winner: 'Black', title: 'Time Out!', desc: 'Black wins on time.' }); return; }
         } else {
           state.blackTime = Math.max(0, state.blackTime - dt);
-          if (state.blackTime === 0) { handleGameOver({ over: true, type: 'timeout', winner: 'White', title: 'Time Out!', desc: 'White wins on time.' }); return; }
+          if (state.blackTime <= 0) { handleGameOver({ over: true, type: 'timeout', winner: 'White', title: 'Time Out!', desc: 'White wins on time.' }); return; }
         }
         updateClocksUI();
       }, 250);
@@ -3654,11 +3446,18 @@
         els.mobileMoveTicker.innerHTML = `<span style="color: var(--text-muted); font-family: inherit;">Tap a piece to start playing...</span>`;
         return;
       }
+      const renderHistBadge = (q) => {
+        if (!q) return '';
+        if (q.key === 'best') {
+          return `<span class="hist-badge" title="${q.label}"><svg viewBox="0 0 20 20" fill="${q.color}" aria-hidden="true"><path d="M10 2.3l2.32 4.7 5.18.75-3.75 3.66.89 5.16L10 14.13l-4.64 2.44.89-5.16-3.75-3.66 5.18-.75L10 2.3z"/></svg></span>`;
+        }
+        return `<span class="hist-badge" style="color:${q.color}" title="${q.label}">${q.symbol}</span>`;
+      };
       let desktopHTML = '', tickerHTML = '';
       for (let i = 0; i < hist.length; i += 2) {
         const moveNum = Math.floor(i / 2) + 1, wMove = hist[i], bMove = hist[i + 1];
-        const wBadge = wMove.quality ? `<span class="hist-badge" style="color:${wMove.quality.color}">${wMove.quality.symbol}</span>` : '';
-        const bBadge = bMove && bMove.quality ? `<span class="hist-badge" style="color:${bMove.quality.color}">${bMove.quality.symbol}</span>` : '';
+        const wBadge = renderHistBadge(wMove.quality);
+        const bBadge = bMove ? renderHistBadge(bMove.quality) : '';
         desktopHTML += `<div class="move-row"><span class="move-num">${moveNum}.</span><span class="move-cell ${i === hist.length - 1 ? 'latest' : ''}">${wMove.san}${wBadge}</span><span class="move-cell ${i + 1 === hist.length - 1 ? 'latest' : ''}">${bMove ? bMove.san + bBadge : ''}</span></div>`;
         tickerHTML += `<span style="color: var(--text-muted);">${moveNum}.</span> <strong style="color:${i === hist.length - 1 ? '#6ee7b7' : '#f8fafc'}">${wMove.san}</strong>${wBadge} `;
         if (bMove) tickerHTML += `<strong style="color:${i + 1 === hist.length - 1 ? '#6ee7b7' : '#e2e8f0'}">${bMove.san}</strong>${bBadge} `;
@@ -3680,494 +3479,119 @@
 
     const CELEBRITY_LINES = {
       andrea: {
-        start: [
-          "Full send! Attack mode activated!",
-          "Let's go! No passive chess today!",
-          "Hope you're ready for fireworks on the board!",
-          "All gas, no brakes—let's make this wild!",
-          "I came here to attack, not to trade into an endgame!"
-        ],
-        humanBlunder: [
-          "Ooh, free material! Botez Gambit reversed!",
-          "Wait, did you just hang that?! I'll take it!",
-          "Thank youuu! Adding that to my collection!",
-          "No way you just left that undefended—yoink!",
-          "Oof, that's a massive gift! Let's go!"
-        ],
-        humanInaccuracy: [
-          "Hmm, are you sure about that square?",
-          "Ooh, a tiny slip—let me see how I can punish that!",
-          "Careful, you're giving me initiative!",
-          "A little bit passive—now it's my turn to attack!"
-        ],
-        humanBrilliant: [
-          "Whoa, okay! Respect for finding that!",
-          "Wait—that's actually super nasty!",
-          "Okay, I see you! What a tactical shot!",
-          "Hold on, did you calculate all of that?! Crazy move!"
-        ],
-        humanGood: [
-          "Solid move! Keeping the tension high!",
-          "Nice! You're not making this easy for me.",
-          "Clean development! Let's see what happens next!",
-          "Okay, solid defense—time for me to turn up the heat!",
-          "Good move! Now watch how fast the board opens up!"
-        ],
-        humanCastle: [
-          "Castled to safety! Smart, because I was coming for your king!",
-          "Tucking the king away—let's see if it stays safe!",
-          "Nice castle! Too bad my pieces are already aiming that way!"
-        ],
-        humanCaptureQueen: [
-          "NOOO, my queen!! Classic Botez Gambit...",
-          "I meant to sacrifice the queen! Totally planned!",
-          "Okay, who needs a queen when you have pure vibes?!"
-        ],
-        botBlunder: [
-          "Wait… ignore that move, it's a galaxy-brain trap!",
-          "Botez Gambit activated! Who needs pieces anyway?!",
-          "Totally meant to do that—pure psychological warfare!"
-        ],
-        botCapture: [
-          "Snatched! Keep your pieces defended!",
-          "Boom! One piece closer to victory.",
-          "Yoink! I'll take that!",
-          "Clearing the board—attack incoming!"
-        ],
-        botCheck: [
-          "Check! Nowhere to hide!",
-          "Watch your king! Feel the pressure!",
-          "Check! Keep running!"
-        ],
-        botNormal: [
-          "Let's open up the board!",
-          "I'm coming straight for your king!",
-          "Pushing forward—time to create some chaos!",
-          "No retreating—every piece goes forward!",
-          "Let's see how you handle full-board aggression!"
-        ],
-        humanWin: [
-          "GG! You out-tacticked me today!",
-          "Okay, rematch right now!",
-          "Well played! You survived the storm and struck back!"
-        ],
-        botWin: [
-          "Let's go!! Aggressive chess pays off!",
-          "GG! That attack was unstoppable!",
-          "Boom! Checkmate—what a game!"
-        ],
-        draw: [
-          "A draw?! After all that chaos?! GG!",
-          "Wait, we actually drew that?! Insane game!"
-        ]
+        start: ["Full send! Attack mode activated!", "Let's go! No passive chess today!", "Hope you're ready for fireworks on the board!", "All gas, no brakes—let's make this wild!"],
+        humanBlunder: ["Ooh, free material! Botez Gambit reversed!", "Wait, did you just hang that?! I'll take it!", "Thank youuu! Adding that to my collection!"],
+        humanInaccuracy: ["Hmm, are you sure about that square?", "Ooh, a tiny slip—let me see how I can punish that!"],
+        humanBrilliant: ["Whoa, okay! Respect for finding that!", "Wait—that's actually super nasty!", "Okay, I see you! What a tactical shot!"],
+        humanGood: ["Solid move! Keeping the tension high!", "Nice! You're not making this easy for me.", "Clean development! Let's see what happens next!"],
+        humanCastle: ["Castled to safety! Smart, because I was coming for your king!", "Tucking the king away—let's see if it stays safe!"],
+        humanCaptureQueen: ["NOOO, my queen!! Classic Botez Gambit...", "I meant to sacrifice the queen! Totally planned!"],
+        botBlunder: ["Wait… ignore that move, it's a galaxy-brain trap!", "Botez Gambit activated! Who needs pieces anyway?!"],
+        botCapture: ["Snatched! Keep your pieces defended!", "Boom! One piece closer to victory.", "Yoink! I'll take that!"],
+        botCheck: ["Check! Nowhere to hide!", "Watch your king! Feel the pressure!"],
+        botNormal: ["Let's open up the board!", "I'm coming straight for your king!", "Pushing forward—time to create some chaos!"],
+        humanWin: ["GG! You out-tacticked me today!", "Okay, rematch right now!"],
+        botWin: ["Let's go!! Aggressive chess pays off!", "GG! That attack was unstoppable!"],
+        draw: ["A draw?! After all that chaos?! GG!"]
       },
       alexandra: {
-        start: [
-          "Let's keep the center tight. Good luck!",
-          "Focus, structure, and clean tactics. Have fun!",
-          "Solid opening principles win games—let's begin!",
-          "Let's play a clean, strategic battle!"
-        ],
-        humanBlunder: [
-          "That leaves a big hole in your position.",
-          "Oof, that drops material right away.",
-          "I have to punish that oversight!",
-          "Always double-check your undefended pieces before moving!"
-        ],
-        humanInaccuracy: [
-          "A bit passive—that lets me activate my pieces.",
-          "That weakens your dark squares slightly.",
-          "You gave me a free tempo to improve my structure."
-        ],
-        humanBrilliant: [
-          "Very clean calculation! Well played.",
-          "Super sharp tactic—you spotted the weak point!",
-          "Impressive vision—that completely shifts the momentum!"
-        ],
-        humanGood: [
-          "Very solid! Good positional awareness.",
-          "Clean and principled chess.",
-          "Good structure—hard to break through.",
-          "Nice prophylaxis—keeping everything under control.",
-          "Disciplined move. Let's see how the middlegame develops."
-        ],
-        humanCastle: [
-          "King is safe—now the real middlegame battle begins.",
-          "Good timing on castling.",
-          "Smart castling—now connect your rooks."
-        ],
-        humanCaptureQueen: [
-          "Ugh, walked right into that tactic!",
-          "Well, playing without a queen builds character…",
-          "I completely missed that tactical motif—nice catch!"
-        ],
-        botBlunder: [
-          "Not my cleanest move—let's see if you find the refutation.",
-          "A slight miscalculation on my part!",
-          "Hmm, I got a bit too ambitious there."
-        ],
-        botCapture: [
-          "I'll gladly simplify into a winning endgame.",
-          "Clean trade—up material now.",
-          "Removing a key defender from your camp."
-        ],
-        botCheck: [
-          "Check! Let's see how you defend this.",
-          "Putting pressure on your king now.",
-          "Check—forcing your pieces onto passive squares."
-        ],
-        botNormal: [
-          "Control the open files, control the game.",
-          "Solid positional squeeze.",
-          "Improving my worst-placed piece.",
-          "Building pressure slowly without creating weaknesses.",
-          "Patience and structure will decide this position."
-        ],
-        humanWin: [
-          "Well played! You converted that cleanly.",
-          "GG! Your tactics were on point.",
-          "Great game—you punished every mistake!"
-        ],
-        botWin: [
-          "GG! Positional pressure wins again.",
-          "Thanks for the game! Solid effort.",
-          "Clean endgame conversion—good game!"
-        ],
-        draw: [
-          "A hard-fought draw! Well played.",
-          "Neither side gave an inch—fair result!"
-        ]
+        start: ["Let's keep the center tight. Good luck!", "Focus, structure, and clean tactics. Have fun!"],
+        humanBlunder: ["That leaves a big hole in your position.", "Oof, that drops material right away."],
+        humanInaccuracy: ["A bit passive—that lets me activate my pieces.", "That weakens your dark squares slightly."],
+        humanBrilliant: ["Very clean calculation! Well played.", "Super sharp tactic—you spotted the weak point!"],
+        humanGood: ["Very solid! Good positional awareness.", "Clean and principled chess.", "Good structure—hard to break through."],
+        humanCastle: ["King is safe—now the real middlegame battle begins.", "Good timing on castling."],
+        humanCaptureQueen: ["Ugh, walked right into that tactic!", "Well, playing without a queen builds character…"],
+        botBlunder: ["Not my cleanest move—let's see if you find the refutation.", "A slight miscalculation on my part!"],
+        botCapture: ["I'll gladly simplify into a winning endgame.", "Clean trade—up material now."],
+        botCheck: ["Check! Let's see how you defend this.", "Putting pressure on your king now."],
+        botNormal: ["Control the open files, control the game.", "Solid positional squeeze.", "Improving my worst-placed piece."],
+        humanWin: ["Well played! You converted that cleanly.", "GG! Your tactics were on point."],
+        botWin: ["GG! Positional pressure wins again.", "Thanks for the game! Solid effort."],
+        draw: ["A hard-fought draw! Well played."]
       },
       anna: {
-        start: [
-          "Hiii! Good luck and have fun!",
-          "Yay, chess time! Let's see what you play!",
-          "So excited for this game—let's have a fun one!",
-          "Ready! Let's see what kind of position we get!"
-        ],
-        humanBlunder: [
-          "Oh no! I think you missed a threat there!",
-          "Eek, thank you for the free piece!",
-          "Oopsie! Don't worry, keep fighting!",
-          "Wait—was that square defended?! Let me check… nope!"
-        ],
-        humanInaccuracy: [
-          "Ooh, interesting idea! A tiny bit risky though.",
-          "Hmm, let me see if I can sneak in now!",
-          "A little bit sneaky, but I think I can counter this!"
-        ],
-        humanBrilliant: [
-          "Whaaat?! That move is so cool!",
-          "Ooh, super sneaky! Amazing find!",
-          "No way!! You found the best tactic on the board!",
-          "Okay, that was actually genius—I didn't see that at all!"
-        ],
-        humanGood: [
-          "Ooh, really nice move!",
-          "Super solid! You're playing great!",
-          "Great coordination with your pieces!",
-          "Nice one! You're defending everything so well!",
-          "Ooh, I like that idea—very tricky!"
-        ],
-        humanCastle: [
-          "Cozy king! Safety first!",
-          "Nice castle! Now your rook can join the game!",
-          "King is tucked away—super smart!"
-        ],
-        humanCaptureQueen: [
-          "Nooo, my queen! You got me!",
-          "Bye-bye queen… time for a miracle comeback!",
-          "Aaaah, I didn't see that attack on my queen!"
-        ],
-        botBlunder: [
-          "Oopsie! Did I just leave that square open?!",
-          "Hehe, pretend you didn't see that!",
-          "Wait… why did I put my piece there?!"
-        ],
-        botCapture: [
-          "Yay, got a piece! Let's keep going!",
-          "Snip! Clearing some space on the board.",
-          "Ooh, I'll take that! Every pawn helps!"
-        ],
-        botCheck: [
-          "Check! Exciting position!",
-          "Peekaboo—check!",
-          "Check! Where is your king going?"
-        ],
-        botNormal: [
-          "I love this position, so many fun ideas!",
-          "Let's bring all the pieces into the game!",
-          "Developing smoothly and eyeing the center!",
-          "Let's see if we can create a fun attack!",
-          "Everything is coming together nicely!"
-        ],
-        humanWin: [
-          "Yay, congrats!! You played so well!",
-          "GG! That was super fun!",
-          "Well deserved win! Your tactics were awesome!"
-        ],
-        botWin: [
-          "GG!! Thank you for playing with me!",
-          "Woohoo! What a fun game!",
-          "GG! That ending was so exciting!"
-        ],
-        draw: [
-          "A draw! That was such a close game, GG!",
-          "Tie game! Neither of us wanted to lose!"
-        ]
+        start: ["Hiii! Good luck and have fun!", "Yay, chess time! Let's see what you play!"],
+        humanBlunder: ["Oh no! I think you missed a threat there!", "Eek, thank you for the free piece!"],
+        humanInaccuracy: ["Ooh, interesting idea! A tiny bit risky though.", "Hmm, let me see if I can sneak in now!"],
+        humanBrilliant: ["Whaaat?! That move is so cool!", "Ooh, super sneaky! Amazing find!"],
+        humanGood: ["Ooh, really nice move!", "Super solid! You're playing great!", "Great coordination with your pieces!"],
+        humanCastle: ["Cozy king! Safety first!", "Nice castle! Now your rook can join the game!"],
+        humanCaptureQueen: ["Nooo, my queen! You got me!", "Bye-bye queen… time for a miracle comeback!"],
+        botBlunder: ["Oopsie! Did I just leave that square open?!", "Hehe, pretend you didn't see that!"],
+        botCapture: ["Yay, got a piece! Let's keep going!", "Snip! Clearing some space on the board."],
+        botCheck: ["Check! Exciting position!", "Peekaboo—check!"],
+        botNormal: ["I love this position, so many fun ideas!", "Let's bring all the pieces into the game!", "Developing smoothly and eyeing the center!"],
+        humanWin: ["Yay, congrats!! You played so well!", "GG! That was super fun!"],
+        botWin: ["GG!! Thank you for playing with me!", "Woohoo! What a fun game!"],
+        draw: ["A draw! That was such a close game, GG!"]
       },
       gotham: {
-        start: [
-          "Welcome to Guess the ELO—show me what you've got!",
-          "Remember: always look for checks, captures, and attacks!",
-          "Let's see if you play like a 2400 or a 400 today!",
-          "Control the center, develop your knights, and don't blunder!"
-        ],
-        humanBlunder: [
-          "OH NO! What is that move?! Danger levels!!",
-          "You just hung a piece in one move!",
-          "That's going straight into the blunder compilation!",
-          "Why?! You had five good moves and you picked THAT?!"
-        ],
-        humanInaccuracy: [
-          "A little bit sus… you had a much cleaner move!",
-          "Not a blunder, but definitely giving me free tempo.",
-          "Passive! You're letting me take over the whole board!"
-        ],
-        humanBrilliant: [
-          "AND HE SACRIFICES… EVERYTHING!! Brilliant move!",
-          "Stop the video! That move is pure genius!",
-          "Okay, who gave you Stockfish?! What a shot!",
-          "THE ROOK!! Wait—what an insane tactical calculation!"
-        ],
-        humanGood: [
-          "Textbook! Clean, principled chess.",
-          "Very nice—following all the opening principles.",
-          "Developing with purpose—I like it!",
-          "Solid! You're actually looking at my threats!",
-          "Clean move—keeping the tension right where it belongs."
-        ],
-        humanCastle: [
-          "Castled! King safety is paramount!",
-          "Finally getting the king out of the center—good job.",
-          "Castled and ready for the middlegame—respect!"
-        ],
-        humanCaptureQueen: [
-          "OH NO, MY QUEEN!! Anyway…",
-          "I totally sacrificed my queen for positional compensation.",
-          "Okay, I walked straight into that pin—100 ELO moment!"
-        ],
-        botBlunder: [
-          "Wait… why did I play that?! Danger levels!!",
-          "I'm sacrificing for content, obviously!",
-          "Okay, pretend that was a deep positional gambit!"
-        ],
-        botCapture: [
-          "Takes, takes, and I'm just up material!",
-          "Free real estate! Thank you very much.",
-          "Simple math—I count more pieces on my side!"
-        ],
-        botCheck: [
-          "CHECK! King safety is non-existent!",
-          "Danger levels! Your king is wide open!",
-          "CHECK! Nowhere left to run!"
-        ],
-        botNormal: [
-          "Develop your pieces, castle early, dominate the center.",
-          "Look at that pawn structure—textbook!",
-          "Applying maximum pressure on the weak squares.",
-          "Checks, captures, attacks—let's turn up the heat!",
-          "Taking space and suffocating your position!"
-        ],
-        humanWin: [
-          "Incredible game! Definitely 2400 ELO energy!",
-          "GG! You played like a true tactician!",
-          "Okay, submit this game to Guess the ELO right now—GG!"
-        ],
-        botWin: [
-          "GG! Subscribe for more tactical masterclasses!",
-          "And THAT is why you never neglect king safety!",
-          "GG! Textbook conversion from start to finish!"
-        ],
-        draw: [
-          "A draw?! Honestly, we both deserve credit for that fight.",
-          "Dead even! Nobody blinked—GG!"
-        ]
+        start: ["Welcome to Guess the ELO—show me what you've got!", "Remember: always look for checks, captures, and attacks!"],
+        humanBlunder: ["OH NO! What is that move?! Danger levels!!", "You just hung a piece in one move!"],
+        humanInaccuracy: ["A little bit sus… you had a much cleaner move!", "Not a blunder, but definitely giving me free tempo."],
+        humanBrilliant: ["AND HE SACRIFICES… EVERYTHING!! Brilliant move!", "Stop the video! That move is pure genius!"],
+        humanGood: ["Textbook! Clean, principled chess.", "Very nice—following all the opening principles.", "Developing with purpose—I like it!"],
+        humanCastle: ["Castled! King safety is paramount!", "Finally getting the king out of the center—good job."],
+        humanCaptureQueen: ["OH NO, MY QUEEN!! Anyway…", "I totally sacrificed my queen for positional compensation."],
+        botBlunder: ["Wait… why did I play that?! Danger levels!!", "I'm sacrificing for content, obviously!"],
+        botCapture: ["Takes, takes, and I'm just up material!", "Free real estate! Thank you very much."],
+        botCheck: ["CHECK! King safety is non-existent!", "Danger levels! Your king is wide open!"],
+        botNormal: ["Develop your pieces, castle early, dominate the center.", "Look at that pawn structure—textbook!", "Applying maximum pressure on the weak squares."],
+        humanWin: ["Incredible game! Definitely 2400 ELO energy!", "GG! You played like a true tactician!"],
+        botWin: ["GG! Subscribe for more tactical masterclasses!", "And THAT is why you never neglect king safety!"],
+        draw: ["A draw?! Honestly, we both deserve credit for that fight."]
       },
       hikaru: {
-        start: [
-          "Alright, let's play. Don't blunder anything early!",
-          "Fast calculation, clean execution. Let's play!",
-          "Okay, let's see what opening you go for.",
-          "Keep it sharp—I'm already calculating five moves deep."
-        ],
-        humanBlunder: [
-          "Wait, what?! You just blundered! Easy game!",
-          "Takes, takes—I'm completely winning here!",
-          "Yeah, that loses on the spot. Thank you!",
-          "Oh, that's just a clean piece. Game over basically."
-        ],
-        humanInaccuracy: [
-          "Hmm, not the most accurate. I'm slightly better now.",
-          "A bit slow—I can take over the center now.",
-          "Yeah, that gives me a very comfortable edge."
-        ],
-        humanBrilliant: [
-          "Okay, okay, nice find! Very tricky.",
-          "Wait—did you see that whole line? Pretty clean!",
-          "Alright, fair play, that was the best move.",
-          "Huh, interesting—you actually found the engine move!"
-        ],
-        humanGood: [
-          "Yep, best move. Logical.",
-          "Solid, very solid. Keeping things tight.",
-          "Makes sense, keeping everything defended.",
-          "Yeah, standard theory—nothing wrong with that.",
-          "Okay, good move. Let's see what happens after this."
-        ],
-        humanCastle: [
-          "Castled, standard stuff. Now let's play real chess.",
-          "King tucked away—now watch the kingside.",
-          "Yeah, castling makes total sense here."
-        ],
-        humanCaptureQueen: [
-          "Wait—I missed that! Okay, fine, still playable… maybe.",
-          "Chat, did you see that tactic?!",
-          "Ugh, I premoved too fast—alright, let's see you convert it."
-        ],
-        botBlunder: [
-          "Wait—I premoved that! Okay, still fine.",
-          "Chat, ignore that—totally fine!",
-          "Whatever, still plenty of counterplay."
-        ],
-        botCapture: [
-          "Takes, takes, takes—I'm just up a clean piece.",
-          "Simple chess, clean conversion.",
-          "Takes, and now your structure is completely ruined."
-        ],
-        botCheck: [
-          "Check! You have zero counterplay.",
-          "Check, check, and everything is collapsing.",
-          "Check—your king is stuck in the center."
-        ],
-        botNormal: [
-          "I don't even need to calculate, it's just winning.",
-          "Keep squeezing, no counterplay at all.",
-          "Just improving the position—takes, takes, easy.",
-          "Controlling all the key squares—very simple.",
-          "Push, trade, convert—just clean technique."
-        ],
-        humanWin: [
-          "Okay, you played really well. GG!",
-          "Respect—you didn't give me a single chance.",
-          "Yeah, completely outplayed me there. GGs!"
-        ],
-        botWin: [
-          "GGs! Too fast, too clean.",
-          "Completely winning from move 15. GGs!",
-          "Clean game, no mistakes. GGs!"
-        ],
-        draw: [
-          "Draw? Fine, I'll take the half point. GGs!",
-          "Yeah, nothing left on the board—GGs!"
-        ]
+        start: ["Alright, let's play. Don't blunder anything early!", "Fast calculation, clean execution. Let's play!"],
+        humanBlunder: ["Wait, what?! You just blundered! Easy game!", "Takes, takes—I'm completely winning here!"],
+        humanInaccuracy: ["Hmm, not the most accurate. I'm slightly better now.", "A bit slow—I can take over the center now."],
+        humanBrilliant: ["Okay, okay, nice find! Very tricky.", "Wait—did you see that whole line? Pretty clean!"],
+        humanGood: ["Yep, best move. Logical.", "Solid, very solid. Keeping things tight.", "Makes sense, keeping everything defended."],
+        humanCastle: ["Castled, standard stuff. Now let's play real chess.", "King tucked away—now watch the kingside."],
+        humanCaptureQueen: ["Wait—I missed that! Okay, fine, still playable… maybe.", "Chat, did you see that tactic?!"],
+        botBlunder: ["Wait—I premoved that! Okay, still fine.", "Chat, ignore that—totally fine!"],
+        botCapture: ["Takes, takes, takes—I'm just up a clean piece.", "Simple chess, clean conversion."],
+        botCheck: ["Check! You have zero counterplay.", "Check, check, and everything is collapsing."],
+        botNormal: ["I don't even need to calculate, it's just winning.", "Keep squeezing, no counterplay at all.", "Just improving the position—takes, takes, easy."],
+        humanWin: ["Okay, you played really well. GG!", "Respect—you didn't give me a single chance."],
+        botWin: ["GGs! Too fast, too clean.", "Completely winning from move 15. GGs!"],
+        draw: ["Draw? Fine, I'll take the half point. GGs!"]
       },
       magnus: {
-        start: [
-          "Interesting setup. Let's see how long you can hold on.",
-          "Play whatever you like—I'll outplay you in the endgame.",
-          "Let's see if you can handle long-term positional pressure.",
-          "Make your move. The real game starts after move 20."
-        ],
-        humanBlunder: [
-          "That's a serious mistake. I won't let you off the hook.",
-          "A fatal slip. From here, the technique is straightforward.",
-          "You can't afford inaccuracies like that against me.",
-          "That's all the advantage I need to close this out."
-        ],
-        humanInaccuracy: [
-          "A slight concession. My endgame prospects just improved.",
-          "Subtle, but that gives me long-term pressure.",
-          "Small weaknesses tend to become decisive later on."
-        ],
-        humanBrilliant: [
-          "Not bad at all. You actually found the only move.",
-          "Impressive—that's engine-level precision.",
-          "Well spotted. Most players would have missed that resource.",
-          "Very sharp. You kept yourself in the game with that."
-        ],
-        humanGood: [
-          "Accurate. You're holding the balance well.",
-          "Sound defense.",
-          "Logical continuation. Let's see your next idea.",
-          "Solid enough, though the position remains complex.",
-          "Good awareness—you neutralized my immediate threat."
-        ],
-        humanCastle: [
-          "Sensible. Now let's see how you handle the maneuvering.",
-          "King is safe, but the real test is still ahead.",
-          "Proper development. Now the strategic phase begins."
-        ],
-        humanCaptureQueen: [
-          "Well… that makes things slightly more challenging.",
-          "A rare slip. Let's see if you can actually finish it.",
-          "Credit where it's due—I underestimated that tactic."
-        ],
-        botBlunder: [
-          "Hmm, uncharacteristic. Let's see if you can convert it.",
-          "Interesting—I've given you a chance.",
-          "Even the best can misjudge a nuance."
-        ],
-        botCapture: [
-          "Just a small advantage… which is all I need.",
-          "Every pawn counts in the endgame.",
-          "Simplifying into a structure where I hold all the trumps."
-        ],
-        botCheck: [
-          "Check. Your coordination is falling apart.",
-          "Check—now every move is forced.",
-          "Check. Nowhere left to hide."
-        ],
-        botNormal: [
-          "Slowly improving every piece. No rush.",
-          "Patience is everything in positions like this.",
-          "Tightening the grip square by square.",
-          "Restricting your options until something gives way.",
-          "When you have the better structure, time is on your side."
-        ],
-        humanWin: [
-          "Well played. You earned that win today.",
-          "Congratulations. You played with real precision.",
-          "Impressive game—you stayed accurate until the very end."
-        ],
-        botWin: [
-          "As expected. Good effort, though.",
-          "Once we reached the endgame, it was over.",
-          "Technique always prevails in the end. Good game."
-        ],
-        draw: [
-          "A solid draw. You defended very well.",
-          "Respectable defense—you earned the draw."
-        ]
+        start: ["Interesting setup. Let's see how long you can hold on.", "Play whatever you like—I'll outplay you in the endgame."],
+        humanBlunder: ["That's a serious mistake. I won't let you off the hook.", "A fatal slip. From here, the technique is straightforward."],
+        humanInaccuracy: ["A slight concession. My endgame prospects just improved.", "Subtle, but that gives me long-term pressure."],
+        humanBrilliant: ["Not bad at all. You actually found the only move.", "Impressive—that's engine-level precision."],
+        humanGood: ["Accurate. You're holding the balance well.", "Sound defense.", "Logical continuation. Let's see your next idea."],
+        humanCastle: ["Sensible. Now let's see how you handle the maneuvering.", "King is safe, but the real test is still ahead."],
+        humanCaptureQueen: ["Well… that makes things slightly more challenging.", "A rare slip. Let's see if you can actually finish it."],
+        botBlunder: ["Hmm, uncharacteristic. Let's see if you can convert it.", "Interesting—I've given you a chance."],
+        botCapture: ["Just a small advantage… which is all I need.", "Every pawn counts in the endgame."],
+        botCheck: ["Check. Your coordination is falling apart.", "Check—now every move is forced."],
+        botNormal: ["Slowly improving every piece. No rush.", "Patience is everything in positions like this.", "Tightening the grip square by square."],
+        humanWin: ["Well played. You earned that win today.", "Congratulations. You played with real precision."],
+        botWin: ["As expected. Good effort, though.", "Once we reached the endgame, it was over."],
+        draw: ["A solid draw. You defended very well."]
       }
     };
 
     const ELO_BOT_LINES = {
       rookie: {
-        start: ["Hi! I just learned how the knight moves! Let's play!", "Watch out—I'm gonna push all my pawns right away!", "My strategy today: move pieces randomly and hope for checkmate!"],
-        humanBlunder: ["Ooh, a free piece! I actually saw that one!", "Wait… is that piece really free?! Yoink!", "Haha, even I noticed that was undefended!"],
+        start: ["Hi! I just learned how the knight moves! Let's play!", "Watch out—I'm gonna push all my pawns right away!"],
+        humanBlunder: ["Ooh, a free piece! I actually saw that one!", "Wait… is that piece really free?! Yoink!"],
         humanInaccuracy: ["Hmm, that looks super scary… what are you planning?", "Ooh, fancy move! I have no idea what it means though!"],
         humanBrilliant: ["Whoa!! Are you secretly a Grandmaster?!", "I didn't see ANY of that coming!"],
-        humanGood: ["Nice move! I'm just gonna move this guy over here.", "Ooh, good one! Now watch my brilliant counter-plan…", "You're developing so fast! Meanwhile my rooks are still sleeping."],
+        humanGood: ["Nice move! I'm just gonna move this guy over here.", "Ooh, good one! Now watch my brilliant counter-plan…"],
         humanCastle: ["Whoa, two pieces moved at once! Is that legal?!", "Nice castle! My king prefers standing right in the middle!"],
         humanCaptureQueen: ["Hey!! That was my favorite piece!!", "Oh no, my queen! Good thing I still have… lots of pawns!"],
         botBlunder: ["Hehe, look at my piece right in front of yours—pure genius!", "I'm a tactical mastermind! Nobody can touch that square!"],
         botCapture: ["Got one!! I'm practically a chess prodigy!", "Boom! Captured! I'm totally winning now!"],
         botCheck: ["CHECK!! Did I just win?!", "Check! Wait… why didn't the game end?!"],
-        botNormal: ["I have a super secret plan… even I don't know what it is yet!", "Moving this piece because it looked lonely!", "Watch out, I'm building a giant pawn wall!"],
+        botNormal: ["I have a super secret plan… even I don't know what it is yet!", "Moving this piece because it looked lonely!"],
         humanWin: ["GG! Wait—how did I lose?! I was sure I was winning!", "You're way too good! Teach me that opening!"],
         botWin: ["WAIT WHAT?! I ACTUALLY WON?!", "GG!! Put me in the Candidates Tournament right now!"],
-        draw: ["A tie?! That means I'm basically half a Grandmaster!", "GG! Neither of us got checkmated—victory!"]
+        draw: ["A tie?! That means I'm basically half a Grandmaster!"]
       },
       club: {
         start: ["Good luck! Let's see a clean battle for the center.", "Control the center, develop knights before bishops—let's go!"],
@@ -4180,10 +3604,10 @@
         botBlunder: ["Wait… did I just leave that undefended?! Good catch if you see it!", "Hmm, I think I miscalculated that exchange."],
         botCapture: ["Clean trade—simplifying while ahead.", "Snatched a pawn! Every little advantage counts."],
         botCheck: ["Check! Your king is feeling the heat.", "Check—let's see how you untangle your pieces."],
-        botNormal: ["Putting my rook on the open file—classic club strategy.", "Looking for forks, pins, and skewers…", "Improving my pieces step by step."],
+        botNormal: ["Putting my rook on the open file—classic club strategy.", "Looking for forks, pins, and skewers…"],
         humanWin: ["Well played! Your tactics were sharper than mine today.", "GG! Clean conversion in the endgame."],
         botWin: ["GG! Tactics win games!", "Good game—controlling the open files paid off!"],
-        draw: ["A fair draw! Both sides played solid chess.", "Dead even in the endgame—good game!"]
+        draw: ["A fair draw! Both sides played solid chess."]
       },
       tactical: {
         start: ["Sharp calculation required. Let's begin.", "I'll punish every loose piece and weak square. Good luck."],
@@ -4199,7 +3623,7 @@
         botNormal: ["Targeting the backward pawn and controlling the key outposts.", "Restricting your counterplay before launching the breakthrough."],
         humanWin: ["Strong performance. You outcalculated me in the critical phase.", "Well earned victory. Clean tactical execution."],
         botWin: ["GG. Superior piece activity decided the game.", "Good game—once the initiative was mine, there was no escape."],
-        draw: ["Accurate defense on both sides. A well-earned draw.", "Neither side cracked under pressure. Good game."]
+        draw: ["Accurate defense on both sides. A well-earned draw."]
       },
       grandmaster: {
         start: ["Maximum precision required. Show me your best chess.", "Every tempo and square matters from move one. Let's begin."],
@@ -4215,7 +3639,7 @@
         botNormal: ["Prophylaxis first, then inexorable expansion.", "Dominating the central files and restricting all counterplay."],
         humanWin: ["Extraordinary game. You defeated 3000-level calculation cleanly.", "Flawless execution. Truly impressive chess."],
         botWin: ["GG. Precision from opening to endgame.", "Good effort—every small advantage accumulated into checkmate."],
-        draw: ["A masterclass in resilience. Holding a draw here is no small feat.", "Perfect balance from start to finish. Well played."]
+        draw: ["A masterclass in resilience. Holding a draw here is no small feat."]
       }
     };
 
@@ -4232,15 +3656,9 @@
         : state.difficulty === 'hard' ? 1800
         : state.customElo;
 
-      if (effElo <= 600) {
-        return { key: 'elo_rookie', shortName: `Rookie (${effElo})`, lines: ELO_BOT_LINES.rookie };
-      }
-      if (effElo <= 1500) {
-        return { key: 'elo_club', shortName: `Club Bot (${effElo})`, lines: ELO_BOT_LINES.club };
-      }
-      if (effElo <= 2200) {
-        return { key: 'elo_tactical', shortName: `Tactician (${effElo})`, lines: ELO_BOT_LINES.tactical };
-      }
+      if (effElo <= 600) return { key: 'elo_rookie', shortName: `Rookie (${effElo})`, lines: ELO_BOT_LINES.rookie };
+      if (effElo <= 1500) return { key: 'elo_club', shortName: `Club Bot (${effElo})`, lines: ELO_BOT_LINES.club };
+      if (effElo <= 2200) return { key: 'elo_tactical', shortName: `Tactician (${effElo})`, lines: ELO_BOT_LINES.tactical };
       return { key: 'elo_gm', shortName: `Grandmaster (${effElo})`, lines: ELO_BOT_LINES.grandmaster };
     }
 
@@ -4479,18 +3897,18 @@
       updateMoveHistoryUI();
       updateCapturedUI();
       updateStatusUI();
-      startClockLoop();
       savePersistentData();
-      if (!state.gameOver) scheduleAITurnIfNeeded();
+      if (!state.gameOver) {
+        startClockLoop();
+        scheduleAITurnIfNeeded();
+      }
     }
 
     function toggleSound() {
       sfx.enabled = !sfx.enabled;
       const svgOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
       const svgOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
-      const mBtn = $('btn-sound-mobile'), dBtn = $('btn-sound-desktop');
-      if (mBtn) mBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
-      if (dBtn) dBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
+      $('btn-sound-mobile').innerHTML = $('btn-sound-desktop').innerHTML = sfx.enabled ? svgOn : svgOff;
       savePersistentData();
       showToast(sfx.enabled ? 'Sound enabled' : 'Sound muted');
     }
@@ -4503,75 +3921,26 @@
     $('btn-new-desktop').addEventListener('click', openConfig);
     $('btn-close-config').addEventListener('click', () => els.modalConfig.classList.remove('open'));
 
-    const btnInstallMobile = $('btn-install-mobile');
-    if (btnInstallMobile) {
-      btnInstallMobile.addEventListener('click', async () => {
-        if (deferredInstallPrompt) {
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
-          deferredInstallPrompt = null;
-          updateInstallButtonsVisibility();
-        } else {
-          openInstallGuideModal();
-        }
-      });
-    }
-
-    const btnInstallDesktop = $('btn-install-desktop');
-    if (btnInstallDesktop) {
-      btnInstallDesktop.addEventListener('click', async () => {
-        if (deferredInstallPrompt) {
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
-          deferredInstallPrompt = null;
-          updateInstallButtonsVisibility();
-        } else {
-          openInstallGuideModal('desktop');
-        }
-      });
-    }
-
-    const btnChromeNativeInstall = $('btn-chrome-native-install');
-    if (btnChromeNativeInstall) {
-      btnChromeNativeInstall.addEventListener('click', async () => {
-        if (deferredInstallPrompt) {
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
-          deferredInstallPrompt = null;
-          updateInstallButtonsVisibility();
-          $('modal-install').classList.remove('open');
-        }
-      });
-    }
-
-    const tabInstallIos = $('tab-install-ios');
-    if (tabInstallIos) tabInstallIos.addEventListener('click', () => switchInstallModalTab('ios'));
-    const tabInstallDesktop = $('tab-install-desktop');
-    if (tabInstallDesktop) tabInstallDesktop.addEventListener('click', () => switchInstallModalTab('desktop'));
-    const btnCloseInstall = $('btn-close-install');
-    if (btnCloseInstall) btnCloseInstall.addEventListener('click', () => $('modal-install').classList.remove('open'));
-    const btnInstallDone = $('btn-install-done');
-    if (btnInstallDone) btnInstallDone.addEventListener('click', () => $('modal-install').classList.remove('open'));
-
-    document.querySelectorAll('#mode-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; syncConfigModalUI(); }));
-    document.querySelectorAll('#difficulty-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.difficulty = b.dataset.diff; syncConfigModalUI(); }));
+    document.querySelectorAll('#mode-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; syncConfigModalUI(); savePersistentData(); }));
+    document.querySelectorAll('#difficulty-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.difficulty = b.dataset.diff; syncConfigModalUI(); savePersistentData(); }));
     document.querySelectorAll('#persona-selector .persona-btn').forEach(b => b.addEventListener('click', () => {
       state.difficulty = 'custom';
       state.customPersona = b.dataset.persona;
       state.customElo = Number(b.dataset.elo) || 1500;
       syncConfigModalUI();
+      savePersistentData();
     }));
 
-    $('custom-elo-slider').addEventListener('input', e => { state.difficulty = 'custom'; setCustomElo(e.target.value); });
-    $('btn-elo-minus').addEventListener('click', () => { state.difficulty = 'custom'; setCustomElo(state.customElo - 100); });
-    $('btn-elo-plus').addEventListener('click', () => { state.difficulty = 'custom'; setCustomElo(state.customElo + 100); });
+    $('custom-elo-slider').addEventListener('input', e => { state.difficulty = 'custom'; setCustomElo(e.target.value); savePersistentData(); });
+    $('btn-elo-minus').addEventListener('click', () => { state.difficulty = 'custom'; setCustomElo(state.customElo - 100); savePersistentData(); });
+    $('btn-elo-plus').addEventListener('click', () => { state.difficulty = 'custom'; setCustomElo(state.customElo + 100); savePersistentData(); });
 
-    document.querySelectorAll('#time-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.timeControl = Number(b.dataset.time); syncConfigModalUI(); }));
-    document.querySelectorAll('#color-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.colorPref = b.dataset.color; syncConfigModalUI(); }));
+    document.querySelectorAll('#time-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.timeControl = Number(b.dataset.time); syncConfigModalUI(); savePersistentData(); }));
+    document.querySelectorAll('#color-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.colorPref = b.dataset.color; syncConfigModalUI(); savePersistentData(); }));
 
-    $('toggle-tabletop').addEventListener('click', () => { state.tabletopMode = !state.tabletopMode; syncConfigModalUI(); });
-    $('toggle-undo').addEventListener('click', () => { state.allowUndo = !state.allowUndo; syncConfigModalUI(); });
-    $('toggle-hints').addEventListener('click', () => { state.allowHints = !state.allowHints; syncConfigModalUI(); });
+    $('toggle-tabletop').addEventListener('click', () => { state.tabletopMode = !state.tabletopMode; syncConfigModalUI(); savePersistentData(); });
+    $('toggle-undo').addEventListener('click', () => { state.allowUndo = !state.allowUndo; syncConfigModalUI(); savePersistentData(); });
+    $('toggle-hints').addEventListener('click', () => { state.allowHints = !state.allowHints; syncConfigModalUI(); savePersistentData(); });
 
     $('btn-start-match').addEventListener('click', () => { sfx.init(); startNewMatch(false); });
     $('btn-hint-mobile').addEventListener('click', triggerHint);
@@ -4605,11 +3974,10 @@
       showToast('PGN copied to clipboard');
     });
 
-    buildBoardDOM();
     loadSavedSettings();
-    updateInstallButtonsVisibility();
-    const restoredMatch = restoreSavedMatchIfAvailable();
-    startNewMatch(restoredMatch);
+    buildBoardDOM();
+    const restored = restoreSavedMatchIfAvailable();
+    startNewMatch(restored);
     requestAnimationFrame(() => resizeBoard(true));
     checkForRemoteUpdate();
   </script>
