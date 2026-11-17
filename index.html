@@ -877,9 +877,27 @@
       #app {
         height: 100%;
         height: 100dvh;
-        padding-top: env(safe-area-inset-top, 0px);
+        padding-top: max(10px, env(safe-area-inset-top, 0px));
+        padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
         justify-content: center;
       }
+      #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
+      #main-workspace {
+        flex: 1 1 auto;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 18px;
+        gap: 20px;
+      }
+      #board-column { width: auto; max-width: none; flex: 0 1 auto; gap: 7px; }
+      #desktop-sidebar { display: flex; }
+      .player-bar { height: 42px; min-height: 42px; padding: 0 14px; }
+      .top-resign-btn { height: 38px; min-height: 38px; }
+    }
       #top-bar, #mobile-status-strip, #mobile-bottom-strip { display: none !important; }
       #main-workspace {
         flex: 0 1 auto;
@@ -2761,7 +2779,7 @@
     const engine = new ChessEngine();
     const ai = new ChessAI();
 
-    const APP_VERSION = '2026.11.17.1';
+    const APP_VERSION = '2026.11.17.2';
     const STORAGE_KEY_SETTINGS = 'lc_chess_settings_v1';
     const STORAGE_KEY_MATCH = 'lc_chess_active_match_v1';
 
@@ -3092,27 +3110,37 @@
       const isDesktop = window.innerWidth >= 900;
       const vw = document.documentElement.clientWidth || window.innerWidth;
       const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const appStyle = getComputedStyle($('app'));
+      const padTop = parseFloat(appStyle.paddingTop) || 0;
+      const padBottom = parseFloat(appStyle.paddingBottom) || 0;
+      const usableH = Math.max(320, vh - padTop - padBottom);
+
       const celebEl = $('celeb-comment-bar');
       const hasCelebComment = celebEl ? celebEl.classList.contains('visible') : false;
-      const celebExtraH = hasCelebComment ? 46 : 0;
+      const celebExtraH = hasCelebComment ? 47 : 0;
 
       let boardSize;
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const extraTopResign = isFriend ? 48 : 0;
-        const sidebarW = Math.min(420, Math.max(340, Math.floor(vw * 0.24)));
+        const extraTopResign = isFriend ? 45 : 0;
+        const sidebarW = vw < 1180 ? 305 : Math.min(430, Math.max(350, Math.floor(vw * 0.23)));
         $('desktop-sidebar').style.width = sidebarW + 'px';
-        const availW = vw - sidebarW - 26 - 72;
-        const availH = vh - 128 - extraTopResign - celebExtraH - 24;
-        boardSize = Math.floor(Math.min(availW, availH, 1080));
+        const gapBetweenCols = 20;
+        const evalAndGapW = 26;
+        const horizPad = 36;
+        const availW = vw - sidebarW - gapBetweenCols - evalAndGapW - horizPad;
+
+        // Exact vertical chrome: top player (42) + bottom player (42) + bottom resign (40) + gaps + safe padding
+        const baseGaps = isFriend ? 28 : 21;
+        const verticalChrome = 42 + 42 + 40 + extraTopResign + celebExtraH + baseGaps + 16;
+        const availH = usableH - verticalChrome;
+        boardSize = Math.floor(Math.min(availW, availH, 1400));
       } else {
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
         const extraTopResign = isFriend ? 46 : 0;
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-        const safeTopOffset = isStandalone ? 66 : 24;
-        const chromeH = safeTopOffset + 46 + 30 + extraTopResign + celebExtraH + 40 + 40 + 40 + 30 + (hasActions ? 40 : 0) + 46;
-        const availH = vh - chromeH;
+        const chromeH = 46 + 30 + extraTopResign + celebExtraH + 40 + 40 + 40 + 30 + (hasActions ? 40 : 0) + 46;
+        const availH = usableH - chromeH;
         const availW = vw - 24 - 8 - 18;
         boardSize = Math.floor(Math.min(availW, availH));
       }
@@ -3126,9 +3154,11 @@
 
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
-        const totalColumnHeight = boardSize + 44 + 44 + 40 + (isFriend ? 48 : 0) + celebExtraH + (isFriend ? 32 : 24);
-        $('desktop-sidebar').style.height = Math.min(totalColumnHeight, vh - 24) + 'px';
-        $('desktop-sidebar').style.maxHeight = (vh - 24) + 'px';
+        const baseGaps = isFriend ? 28 : 21;
+        const totalColumnHeight = boardSize + 42 + 42 + 40 + (isFriend ? 45 : 0) + celebExtraH + baseGaps;
+        const clampedSidebarH = Math.min(totalColumnHeight, usableH - 12);
+        $('desktop-sidebar').style.height = clampedSidebarH + 'px';
+        $('desktop-sidebar').style.maxHeight = (usableH - 12) + 'px';
       }
 
       const barWidth = (boardSize + 8 + 18) + 'px';
