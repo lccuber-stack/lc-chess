@@ -176,6 +176,15 @@
     .icon-btn:hover { background: var(--bg-hover); }
     .icon-btn:active { transform: scale(0.96); }
 
+    .icon-btn.sound-square {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      padding: 0;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
     .icon-btn.primary {
       background: var(--accent-emerald);
       color: #042f2e;
@@ -184,6 +193,17 @@
     }
     .icon-btn.primary:hover { background: #34d399; }
 
+    .icon-btn.sound-square {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      padding: 0;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
     #main-workspace {
       flex: 1;
       display: flex;
@@ -191,7 +211,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 1280px;
+      max-width: 1680px;
       margin: 0 auto;
       padding: 4px 12px;
       gap: 6px;
@@ -745,9 +765,8 @@
     #desktop-sidebar {
       display: none;
       flex-direction: column;
-      width: 340px;
+      width: 360px;
       height: 100%;
-      max-height: 760px;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
@@ -756,13 +775,19 @@
     }
 
     .sidebar-header {
-      padding: 16px;
+      padding: 16px 18px;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .sidebar-title-row { display: flex; align-items: center; justify-content: space-between; }
+    .sidebar-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-right: 2px;
+    }
 
     .status-banner {
       display: flex;
@@ -1188,7 +1213,7 @@
             <button id="btn-install-mobile" class="icon-btn install-accent" title="Install App" aria-label="Install App">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             </button>
-            <button id="btn-sound-mobile" class="icon-btn" title="Toggle Sound">
+            <button id="btn-sound-mobile" class="icon-btn sound-square" title="Toggle Sound">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
             </button>
             <button id="btn-new-mobile" class="icon-btn primary">New Game</button>
@@ -1287,12 +1312,12 @@
                 <div id="desktop-mode-sub" style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">vs Computer • Intermediate (1200)</div>
               </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <button id="btn-install-desktop" class="icon-btn install-accent" title="Install Desktop App">
+            <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+              <button id="btn-install-desktop" class="icon-btn install-accent" title="Install Desktop App" style="display: none;">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 <span>Install</span>
               </button>
-              <button id="btn-sound-desktop" class="icon-btn" title="Toggle Sound">
+              <button id="btn-sound-desktop" class="icon-btn sound-square" title="Toggle Sound">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
               </button>
             </div>
@@ -2539,8 +2564,7 @@
           if (found && !candidates.some(c => this.isSameMove(c, found))) candidates.push(found);
         }
         if (candidates.length === 0) return null;
-        const seed = (typeof state !== 'undefined' && typeof state.matchBookSeed === 'number') ? state.matchBookSeed : 0;
-        return candidates[(seed + ply * 7) % candidates.length];
+        return candidates[Math.floor(Math.random() * candidates.length)];
       }
 
       analyzePositionDeterministic(engine, maxDepth = 6, budgetMs = 1800, minGuaranteedDepth = 4) {
@@ -2759,6 +2783,7 @@
       pendingPromo: null,
       whiteTime: 600,
       blackTime: 600,
+      lastClockTickMs: 0,
       timerInterval: null,
       aiThinking: false,
       gameOver: false
@@ -2766,7 +2791,7 @@
 
     function savePersistentData() {
       try {
-        const settingsPayload = {
+        localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
           mode: state.mode,
           difficulty: state.difficulty,
           customElo: state.customElo,
@@ -2777,32 +2802,16 @@
           allowUndo: state.allowUndo,
           allowHints: state.allowHints,
           soundEnabled: sfx.enabled
-        };
-        localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(settingsPayload));
-
-        const matchPayload = {
+        }));
+        localStorage.setItem(STORAGE_KEY_MATCH, JSON.stringify({
           version: APP_VERSION,
-          mode: state.mode,
-          difficulty: state.difficulty,
-          customElo: state.customElo,
-          customPersona: state.customPersona,
-          timeControl: state.timeControl,
-          colorPref: state.colorPref,
           humanColor: state.humanColor,
-          tabletopMode: state.tabletopMode,
-          allowUndo: state.allowUndo,
-          allowHints: state.allowHints,
           matchBookSeed: state.matchBookSeed,
           whiteTime: state.whiteTime,
           blackTime: state.blackTime,
           gameOver: state.gameOver,
-          moves: engine.history.map(h => ({
-            move: h.move,
-            quality: h.quality || null,
-            moverColor: h.moverColor || null
-          }))
-        };
-        localStorage.setItem(STORAGE_KEY_MATCH, JSON.stringify(matchPayload));
+          history: engine.history.map(h => ({ move: h.move, san: h.san, quality: h.quality || null, moverColor: h.moverColor || null }))
+        }));
       } catch (_) {}
     }
 
@@ -2811,16 +2820,25 @@
         const raw = localStorage.getItem(STORAGE_KEY_SETTINGS);
         if (!raw) return;
         const s = JSON.parse(raw);
-        if (s.mode) state.mode = s.mode;
-        if (s.difficulty) state.difficulty = s.difficulty;
-        if (typeof s.customElo === 'number') state.customElo = s.customElo;
-        if (s.customPersona !== undefined) state.customPersona = s.customPersona;
-        if (typeof s.timeControl === 'number') state.timeControl = s.timeControl;
-        if (s.colorPref) state.colorPref = s.colorPref;
-        if (typeof s.tabletopMode === 'boolean') state.tabletopMode = s.tabletopMode;
-        if (typeof s.allowUndo === 'boolean') state.allowUndo = s.allowUndo;
-        if (typeof s.allowHints === 'boolean') state.allowHints = s.allowHints;
-        if (typeof s.soundEnabled === 'boolean') sfx.enabled = s.soundEnabled;
+        if (s && typeof s === 'object') {
+          if (s.mode === 'ai' || s.mode === 'friend') state.mode = s.mode;
+          if (['easy', 'medium', 'hard', 'custom'].includes(s.difficulty)) state.difficulty = s.difficulty;
+          if (typeof s.customElo === 'number') state.customElo = Math.max(100, Math.min(3000, s.customElo));
+          if (s.customPersona !== undefined) state.customPersona = s.customPersona;
+          if (typeof s.timeControl === 'number') state.timeControl = s.timeControl;
+          if (['w', 'b', 'random'].includes(s.colorPref)) state.colorPref = s.colorPref;
+          if (typeof s.tabletopMode === 'boolean') state.tabletopMode = s.tabletopMode;
+          if (typeof s.allowUndo === 'boolean') state.allowUndo = s.allowUndo;
+          if (typeof s.allowHints === 'boolean') state.allowHints = s.allowHints;
+          if (typeof s.soundEnabled === 'boolean') {
+            sfx.enabled = s.soundEnabled;
+            const svgOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+            const svgOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+            const mBtn = document.getElementById('btn-sound-mobile'), dBtn = document.getElementById('btn-sound-desktop');
+            if (mBtn) mBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
+            if (dBtn) dBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
+          }
+        }
       } catch (_) {}
     }
 
@@ -2828,37 +2846,19 @@
       try {
         const raw = localStorage.getItem(STORAGE_KEY_MATCH);
         if (!raw) return false;
-        const saved = JSON.parse(raw);
-        if (!saved || !Array.isArray(saved.moves) || saved.moves.length === 0) return false;
-
-        state.mode = saved.mode || state.mode;
-        state.difficulty = saved.difficulty || state.difficulty;
-        state.customElo = typeof saved.customElo === 'number' ? saved.customElo : state.customElo;
-        state.customPersona = saved.customPersona !== undefined ? saved.customPersona : state.customPersona;
-        state.timeControl = typeof saved.timeControl === 'number' ? saved.timeControl : state.timeControl;
-        state.colorPref = saved.colorPref || state.colorPref;
-        state.humanColor = saved.humanColor || 'w';
-        state.tabletopMode = typeof saved.tabletopMode === 'boolean' ? saved.tabletopMode : state.tabletopMode;
-        state.allowUndo = typeof saved.allowUndo === 'boolean' ? saved.allowUndo : state.allowUndo;
-        state.allowHints = typeof saved.allowHints === 'boolean' ? saved.allowHints : state.allowHints;
-        state.matchBookSeed = typeof saved.matchBookSeed === 'number' ? saved.matchBookSeed : state.matchBookSeed;
-
+        const m = JSON.parse(raw);
+        if (!m || !Array.isArray(m.history) || m.history.length === 0) return false;
         engine.reset();
-        positionAnalysisCache.clear();
-        for (const item of saved.moves) {
+        for (const item of m.history) {
           const rec = engine.makeMove(item.move);
-          rec.quality = item.quality;
-          rec.moverColor = item.moverColor;
+          rec.quality = item.quality || null;
+          rec.moverColor = item.moverColor || rec.snapshot.turn;
         }
-
-        state.whiteTime = typeof saved.whiteTime === 'number' ? saved.whiteTime : state.timeControl;
-        state.blackTime = typeof saved.blackTime === 'number' ? saved.blackTime : state.timeControl;
-        state.gameOver = Boolean(saved.gameOver);
-        state.selectedSq = null;
-        state.legalMovesForSelected = [];
-        state.hintMove = null;
-        state.pendingPromo = null;
-        state.aiThinking = false;
+        if (m.humanColor === 'w' || m.humanColor === 'b') state.humanColor = m.humanColor;
+        if (typeof m.matchBookSeed === 'number') state.matchBookSeed = m.matchBookSeed;
+        if (typeof m.whiteTime === 'number') state.whiteTime = m.whiteTime;
+        if (typeof m.blackTime === 'number') state.blackTime = m.blackTime;
+        state.gameOver = Boolean(m.gameOver);
         return true;
       } catch (_) {
         return false;
@@ -2866,27 +2866,19 @@
     }
 
     let updateCheckInFlight = false;
-    async function checkForRemoteUpdate(silent = true) {
+    async function checkForRemoteUpdate() {
       if (updateCheckInFlight) return;
-      if (!window.location.protocol.startsWith('http')) return;
+      if (!window.location || !/^https?:/.test(window.location.protocol)) return;
       updateCheckInFlight = true;
       try {
         const baseUrl = window.location.href.split('#')[0].split('?')[0];
-        const res = await fetch(`${baseUrl}?_cb=${Date.now()}`, {
-          cache: 'no-store',
-          headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
-        });
+        const res = await fetch(`${baseUrl}?v=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) return;
         const html = await res.text();
         const match = html.match(/const\s+APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
         if (match && match[1] && match[1] !== APP_VERSION) {
           savePersistentData();
-          showToast('Updating to latest version…');
-          setTimeout(() => {
-            window.location.replace(`${baseUrl}?v=${encodeURIComponent(match[1])}&t=${Date.now()}`);
-          }, 350);
-        } else if (!silent) {
-          showToast(`Up to date (v${APP_VERSION})`);
+          window.location.replace(`${baseUrl}?v=${encodeURIComponent(match[1])}_${Date.now()}`);
         }
       } catch (_) {
       } finally {
@@ -2896,19 +2888,20 @@
 
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
-        checkForRemoteUpdate(true);
+        state.lastClockTickMs = performance.now();
+        checkForRemoteUpdate();
       } else {
         savePersistentData();
       }
     });
-
-    window.addEventListener('pageshow', event => {
-      if (event.persisted) checkForRemoteUpdate(true);
+    window.addEventListener('pageshow', e => {
+      if (e.persisted) checkForRemoteUpdate();
     });
+    window.addEventListener('pagehide', savePersistentData);
 
     const $ = id => document.getElementById(id);
 
-    (function initPwaAndIcons() {
+    (function setupPWAAndIcons() {
       try {
         const c = document.createElement('canvas');
         c.width = 512; c.height = 512;
@@ -2923,27 +2916,29 @@
         const img = new Image();
         img.onload = () => {
           ctx.drawImage(img, 76, 66, 360, 360);
-          const pngDataUrl = c.toDataURL('image/png');
+          const png512 = c.toDataURL('image/png');
           const touchLink = $('apple-touch-icon');
-          if (touchLink) touchLink.href = pngDataUrl;
+          if (touchLink) touchLink.href = png512;
 
-          // Build dynamic Web App Manifest for Chrome Desktop & Android PWA installation
-          const startUrl = window.location.protocol.startsWith('http')
-            ? window.location.href.split('#')[0].split('?')[0]
-            : './';
+          const c192 = document.createElement('canvas');
+          c192.width = 192; c192.height = 192;
+          const ctx192 = c192.getContext('2d');
+          if (ctx192) ctx192.drawImage(c, 0, 0, 192, 192);
+          const png192 = c192.toDataURL('image/png');
+
+          const startUrl = window.location.href.split('#')[0].split('?')[0];
           const manifestObj = {
-            name: 'LC Chess — Tactical Board & Adaptive Engine',
+            name: 'LC Chess',
             short_name: 'LC Chess',
-            description: 'Play tactical chess offline or online against adaptive ELO bots and grandmaster personas.',
+            description: 'Tactical Chess Board & Adaptive 3000-ELO Engine',
             start_url: startUrl,
-            scope: startUrl.substring(0, startUrl.lastIndexOf('/') + 1) || './',
+            scope: startUrl.substring(0, startUrl.lastIndexOf('/') + 1) || '/',
             display: 'standalone',
-            orientation: 'any',
             background_color: '#090d16',
             theme_color: '#090d16',
             icons: [
-              { src: pngDataUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-              { src: pngDataUrl, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+              { src: png192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+              { src: png512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
             ]
           };
           const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
@@ -2952,68 +2947,95 @@
         };
         img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
 
-        // Register lightweight network-first Service Worker on HTTP/HTTPS so Chrome enables full Desktop App installability
-        if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        if ('serviceWorker' in navigator && /^https?:/.test(window.location.protocol)) {
           const swCode = `
             self.addEventListener('install', e => self.skipWaiting());
             self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
             self.addEventListener('fetch', e => {
               if (e.request.method !== 'GET') return;
-              e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+              e.respondWith(fetch(e.request, { cache: 'no-store' }).catch(() => caches.match(e.request)));
             });
           `;
-          const swBlob = new Blob([swCode], { type: 'application/javascript' });
-          navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+          const swUrl = URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }));
+          navigator.serviceWorker.register(swUrl).catch(() => {});
         }
       } catch (_) {}
     })();
 
     let deferredInstallPrompt = null;
+    const STORAGE_KEY_INSTALL_SEEN = 'lc_chess_install_seen_v1';
+
+    function isAppAlreadyInstalled() {
+      const hasWindowControls = Boolean(navigator.windowControlsOverlay && navigator.windowControlsOverlay.visible);
+      const isPwaScreenSize = window.matchMedia('(display-mode: standalone)').matches ||
+                              window.matchMedia('(display-mode: minimal-ui)').matches ||
+                              window.matchMedia('(display-mode: fullscreen)').matches ||
+                              window.matchMedia('(display-mode: window-controls-overlay)').matches;
+      return isPwaScreenSize || hasWindowControls || window.navigator.standalone === true || !window.menubar?.visible;
+    }
+
+    function hasSeenInstallPromptOnce() {
+      try { return localStorage.getItem(STORAGE_KEY_INSTALL_SEEN) === '1'; } catch (_) { return false; }
+    }
+
+    function markInstallPromptSeen() {
+      try { localStorage.setItem(STORAGE_KEY_INSTALL_SEEN, '1'); } catch (_) {}
+    }
+
+    function updateInstallButtonsVisibility() {
+      const hideBtn = isAppAlreadyInstalled() || hasSeenInstallPromptOnce();
+      const mobBtn = $('btn-install-mobile');
+      const deskBtn = $('btn-install-desktop');
+      if (mobBtn) mobBtn.style.display = hideBtn ? 'none' : 'inline-flex';
+      if (deskBtn) deskBtn.style.display = hideBtn ? 'none' : 'inline-flex';
+      if (!hideBtn) markInstallPromptSeen();
+    }
+
+    function updateInstallButtonsVisibility() {
+      const installed = isAppAlreadyInstalled();
+      const mobBtn = $('btn-install-mobile');
+      const deskBtn = $('btn-install-desktop');
+      if (mobBtn) mobBtn.style.display = installed ? 'none' : 'inline-flex';
+      if (deskBtn) deskBtn.style.display = installed ? 'none' : 'inline-flex';
+    }
+
+    function switchInstallModalTab(tab) {
+      const isIOS = tab === 'ios';
+      const tabIos = $('tab-install-ios'), tabDesk = $('tab-install-desktop');
+      const panelIos = $('install-panel-ios'), panelDesk = $('install-panel-desktop');
+      if (tabIos) tabIos.classList.toggle('active', isIOS);
+      if (tabDesk) tabDesk.classList.toggle('active', !isIOS);
+      if (panelIos) panelIos.style.display = isIOS ? 'flex' : 'none';
+      if (panelDesk) panelDesk.style.display = isIOS ? 'none' : 'flex';
+    }
+
+    function openInstallGuideModal(preferredTab = null) {
+      const ua = navigator.userAgent || '';
+      const isAppleMobile = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const tab = preferredTab || (isAppleMobile ? 'ios' : 'desktop');
+      switchInstallModalTab(tab);
+      const directBox = $('chrome-direct-install-box');
+      if (directBox) directBox.style.display = deferredInstallPrompt ? 'flex' : 'none';
+      const modal = $('modal-install');
+      if (modal) modal.classList.add('open');
+    }
+
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       deferredInstallPrompt = e;
+      updateInstallButtonsVisibility();
       const directBox = $('chrome-direct-install-box');
       if (directBox) directBox.style.display = 'flex';
     });
 
     window.addEventListener('appinstalled', () => {
       deferredInstallPrompt = null;
-      const directBox = $('chrome-direct-install-box');
-      if (directBox) directBox.style.display = 'none';
-      $('modal-install').classList.remove('open');
+      markInstallPromptSeen();
+      updateInstallButtonsVisibility();
+      const modal = $('modal-install');
+      if (modal) modal.classList.remove('open');
       showToast('LC Chess installed as an app!');
     });
-
-    function switchInstallTab(platform) {
-      const isIos = platform === 'ios';
-      $('tab-install-ios').classList.toggle('active', isIos);
-      $('tab-install-desktop').classList.toggle('active', !isIos);
-      $('install-panel-ios').style.display = isIos ? 'flex' : 'none';
-      $('install-panel-desktop').style.display = isIos ? 'none' : 'flex';
-    }
-
-    function openInstallModal() {
-      const isAppleTouch = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      switchInstallTab(isAppleTouch ? 'ios' : 'desktop');
-      $('modal-install').classList.add('open');
-    }
-
-    async function handleInstallButtonClick() {
-      const isAppleTouch = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      if (!isAppleTouch && deferredInstallPrompt) {
-        try {
-          deferredInstallPrompt.prompt();
-          const choice = await deferredInstallPrompt.userChoice;
-          if (choice && choice.outcome === 'accepted') {
-            deferredInstallPrompt = null;
-            return;
-          }
-        } catch (_) {}
-      }
-      openInstallModal();
-    }
 
     document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
     document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -3078,9 +3100,11 @@
       if (isDesktop) {
         const isFriend = state.mode === 'friend';
         const extraTopResign = isFriend ? 48 : 0;
-        const availW = vw - 340 - 26 - 72;
-        const availH = vh - 160 - extraTopResign - celebExtraH - 24;
-        boardSize = Math.floor(Math.min(availW, availH, 680));
+        const sidebarW = Math.min(420, Math.max(340, Math.floor(vw * 0.24)));
+        $('desktop-sidebar').style.width = sidebarW + 'px';
+        const availW = vw - sidebarW - 26 - 72;
+        const availH = vh - 128 - extraTopResign - celebExtraH - 24;
+        boardSize = Math.floor(Math.min(availW, availH, 1080));
       } else {
         const isFriend = state.mode === 'friend';
         const hasActions = $('mobile-action-row').style.display !== 'none';
@@ -3361,6 +3385,13 @@
 
     function commitMove(move) {
       const moverColor = engine.turn;
+      if (state.timeControl > 0 && engine.history.length > 0 && state.lastClockTickMs > 0) {
+        const elapsedSec = Math.max(0, (performance.now() - state.lastClockTickMs) / 1000);
+        if (moverColor === 'w') state.whiteTime = Math.max(0, state.whiteTime - elapsedSec);
+        else state.blackTime = Math.max(0, state.blackTime - elapsedSec);
+      }
+      state.lastClockTickMs = performance.now();
+
       const quality = evaluateMoveBeforeCommit(move);
       const record = engine.makeMove(move);
       record.quality = quality;
@@ -3378,6 +3409,7 @@
       updateMoveHistoryUI();
       updateCapturedUI();
       updateStatusUI();
+      savePersistentData();
 
       if (state.mode === 'ai') {
         const ctx = {
@@ -3406,7 +3438,6 @@
 
       if (outcome.over) handleGameOver(outcome);
       else scheduleAITurnIfNeeded();
-      savePersistentData();
     }
 
     function openPromotionModal(baseMove) {
@@ -3447,6 +3478,7 @@
         engine.undoLastMove();
       }
       state.selectedSq = null; state.legalMovesForSelected = []; state.hintMove = null;
+      state.lastClockTickMs = performance.now();
       renderBoard(); updateMoveHistoryUI(); updateCapturedUI(); updateStatusUI();
       savePersistentData();
       showToast('Move undone');
@@ -3540,19 +3572,23 @@
 
     function startClockLoop() {
       clearInterval(state.timerInterval);
+      state.lastClockTickMs = performance.now();
       updateClocksUI();
       if (state.timeControl === 0) return;
       state.timerInterval = setInterval(() => {
+        const now = performance.now();
+        const dt = state.lastClockTickMs > 0 ? (now - state.lastClockTickMs) / 1000 : 0.25;
+        state.lastClockTickMs = now;
         if (state.gameOver || engine.history.length === 0) return;
         if (engine.turn === 'w') {
-          state.whiteTime = Math.max(0, state.whiteTime - 1);
+          state.whiteTime = Math.max(0, state.whiteTime - dt);
           if (state.whiteTime === 0) { handleGameOver({ over: true, type: 'timeout', winner: 'Black', title: 'Time Out!', desc: 'Black wins on time.' }); return; }
         } else {
-          state.blackTime = Math.max(0, state.blackTime - 1);
+          state.blackTime = Math.max(0, state.blackTime - dt);
           if (state.blackTime === 0) { handleGameOver({ over: true, type: 'timeout', winner: 'White', title: 'Time Out!', desc: 'White wins on time.' }); return; }
         }
         updateClocksUI();
-      }, 1000);
+      }, 250);
     }
 
     function updateCapturedUI() {
@@ -4299,10 +4335,10 @@
       state.gameOver = true;
       clearInterval(state.timerInterval);
       updateStatusUI();
+      savePersistentData();
       $('go-icon').textContent = outcome.winner === 'Draw' ? '🤝' : '🏆';
       $('go-title').textContent = outcome.title;
       $('go-desc').textContent = outcome.desc;
-      savePersistentData();
       els.modalGameOver.classList.add('open');
     }
 
@@ -4364,19 +4400,21 @@
 
     function startNewMatch(preserveRestored = false) {
       clearInterval(state.timerInterval);
+      positionAnalysisCache.clear();
       if (!preserveRestored) {
         engine.reset();
-        positionAnalysisCache.clear();
         state.matchBookSeed = Math.floor(Math.random() * 100000);
         if (state.mode === 'ai') {
           state.humanColor = state.colorPref === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : state.colorPref;
         } else {
           state.humanColor = 'w';
         }
-        state.selectedSq = null; state.legalMovesForSelected = []; state.hintMove = null; state.pendingPromo = null;
-        state.aiThinking = false; state.gameOver = false;
-        state.whiteTime = state.timeControl; state.blackTime = state.timeControl;
+        state.whiteTime = state.timeControl;
+        state.blackTime = state.timeControl;
+        state.gameOver = false;
       }
+      state.selectedSq = null; state.legalMovesForSelected = []; state.hintMove = null; state.pendingPromo = null;
+      state.aiThinking = false;
 
       const diffLabel = getDifficultyDisplayLabel();
       if (state.mode === 'ai') {
@@ -4416,15 +4454,13 @@
       if (!state.gameOver) scheduleAITurnIfNeeded();
     }
 
-    function applySoundButtonVisuals() {
-      const svgOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
-      const svgOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
-      $('btn-sound-mobile').innerHTML = $('btn-sound-desktop').innerHTML = sfx.enabled ? svgOn : svgOff;
-    }
-
     function toggleSound() {
       sfx.enabled = !sfx.enabled;
-      applySoundButtonVisuals();
+      const svgOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+      const svgOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+      const mBtn = $('btn-sound-mobile'), dBtn = $('btn-sound-desktop');
+      if (mBtn) mBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
+      if (dBtn) dBtn.innerHTML = sfx.enabled ? svgOn : svgOff;
       savePersistentData();
       showToast(sfx.enabled ? 'Sound enabled' : 'Sound muted');
     }
@@ -4432,33 +4468,60 @@
     $('btn-sound-mobile').addEventListener('click', toggleSound);
     $('btn-sound-desktop').addEventListener('click', toggleSound);
 
-    $('btn-install-mobile').addEventListener('click', handleInstallButtonClick);
-    $('btn-install-desktop').addEventListener('click', handleInstallButtonClick);
-    $('btn-close-install').addEventListener('click', () => $('modal-install').classList.remove('open'));
-    $('btn-install-done').addEventListener('click', () => $('modal-install').classList.remove('open'));
-    $('tab-install-ios').addEventListener('click', () => switchInstallTab('ios'));
-    $('tab-install-desktop').addEventListener('click', () => switchInstallTab('desktop'));
-    $('btn-chrome-native-install').addEventListener('click', async () => {
-      if (!deferredInstallPrompt) return;
-      try {
-        deferredInstallPrompt.prompt();
-        await deferredInstallPrompt.userChoice;
-        deferredInstallPrompt = null;
-      } catch (_) {}
-    });
-
-    (function hideInstallButtonsIfStandalone() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-      if (isStandalone) {
-        $('btn-install-mobile').style.display = 'none';
-        $('btn-install-desktop').style.display = 'none';
-      }
-    })();
-
     const openConfig = () => { syncConfigModalUI(); els.modalConfig.classList.add('open'); };
     $('btn-new-mobile').addEventListener('click', openConfig);
     $('btn-new-desktop').addEventListener('click', openConfig);
     $('btn-close-config').addEventListener('click', () => els.modalConfig.classList.remove('open'));
+
+    const btnInstallMobile = $('btn-install-mobile');
+    if (btnInstallMobile) {
+      btnInstallMobile.addEventListener('click', async () => {
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+          deferredInstallPrompt = null;
+          updateInstallButtonsVisibility();
+        } else {
+          openInstallGuideModal();
+        }
+      });
+    }
+
+    const btnInstallDesktop = $('btn-install-desktop');
+    if (btnInstallDesktop) {
+      btnInstallDesktop.addEventListener('click', async () => {
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+          deferredInstallPrompt = null;
+          updateInstallButtonsVisibility();
+        } else {
+          openInstallGuideModal('desktop');
+        }
+      });
+    }
+
+    const btnChromeNativeInstall = $('btn-chrome-native-install');
+    if (btnChromeNativeInstall) {
+      btnChromeNativeInstall.addEventListener('click', async () => {
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+          deferredInstallPrompt = null;
+          updateInstallButtonsVisibility();
+          $('modal-install').classList.remove('open');
+        }
+      });
+    }
+
+    const tabInstallIos = $('tab-install-ios');
+    if (tabInstallIos) tabInstallIos.addEventListener('click', () => switchInstallModalTab('ios'));
+    const tabInstallDesktop = $('tab-install-desktop');
+    if (tabInstallDesktop) tabInstallDesktop.addEventListener('click', () => switchInstallModalTab('desktop'));
+    const btnCloseInstall = $('btn-close-install');
+    if (btnCloseInstall) btnCloseInstall.addEventListener('click', () => $('modal-install').classList.remove('open'));
+    const btnInstallDone = $('btn-install-done');
+    if (btnInstallDone) btnInstallDone.addEventListener('click', () => $('modal-install').classList.remove('open'));
 
     document.querySelectorAll('#mode-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; syncConfigModalUI(); }));
     document.querySelectorAll('#difficulty-selector .seg-btn').forEach(b => b.addEventListener('click', () => { state.difficulty = b.dataset.diff; syncConfigModalUI(); }));
@@ -4480,7 +4543,7 @@
     $('toggle-undo').addEventListener('click', () => { state.allowUndo = !state.allowUndo; syncConfigModalUI(); });
     $('toggle-hints').addEventListener('click', () => { state.allowHints = !state.allowHints; syncConfigModalUI(); });
 
-    $('btn-start-match').addEventListener('click', () => { sfx.init(); startNewMatch(); });
+    $('btn-start-match').addEventListener('click', () => { sfx.init(); startNewMatch(false); });
     $('btn-hint-mobile').addEventListener('click', triggerHint);
     $('btn-hint-desktop').addEventListener('click', triggerHint);
     $('btn-undo-mobile').addEventListener('click', handleUndo);
@@ -4514,11 +4577,11 @@
 
     buildBoardDOM();
     loadSavedSettings();
-    applySoundButtonVisuals();
-    const hadSavedMatch = restoreSavedMatchIfAvailable();
-    startNewMatch(hadSavedMatch);
+    updateInstallButtonsVisibility();
+    const restoredMatch = restoreSavedMatchIfAvailable();
+    startNewMatch(restoredMatch);
     requestAnimationFrame(() => resizeBoard(true));
-    checkForRemoteUpdate(true);
+    checkForRemoteUpdate();
   </script>
 </body>
 </html>
